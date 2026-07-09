@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+    <linearGradient id="eraserGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FF8A80" />
+      <stop offset="50%" stop-color="#FF5252" />
+      <stop offset="100%" stop-color="#D50000" />
+    </linearGradient>
+    <linearGradient id="eraserBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ECEFF1" />
+      <stop offset="100%" stop-color="#CFD8DC" />
+    </linearGradient>
+  </defs>
+  
+  <rect x="12" y="12" width="104" height="104" rx="20" fill="url(#bgGrad)" />
+  
+  <rect x="24" y="28" width="80" height="12" rx="4" fill="#FFFFFF" fill-opacity="0.2" />
+  <rect x="24" y="48" width="50" height="24" rx="4" fill="#FFFFFF" fill-opacity="0.15" />
+  <rect x="80" y="48" width="24" height="24" rx="4" fill="#FFFFFF" fill-opacity="0.15" />
+  
+  <circle cx="86" cy="80" r="16" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="6 4" opacity="0.8" />
+  
+  <g transform="translate(68, 52) rotate(45)">
+    <rect x="-10" y="0" width="20" height="30" rx="2" fill="#37474F" />
+    <rect x="-10" y="-15" width="20" height="15" rx="3" fill="url(#eraserGrad)" />
+    <rect x="-10" y="10" width="20" height="25" rx="2" fill="url(#eraserBodyGrad)" />
+  </g>
+</svg>

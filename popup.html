@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Ad Purifier</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      width: 340px;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .settings-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 4px;
+      border-radius: 6px;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+    }
+    
+    .settings-btn:hover {
+      color: var(--text-primary);
+      background-color: var(--bg-card);
+    }
+    
+    .site-info {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .domain-name {
+      font-family: monospace;
+      font-weight: 500;
+      color: var(--color-primary);
+    }
+    
+    .main-action {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+      margin-bottom: 20px;
+    }
+    
+    .main-action.active {
+      background-color: var(--color-accent);
+      box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+    }
+    
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: white;
+      border-radius: 50%;
+      display: none;
+      animation: pulse 1.5s infinite;
+    }
+    
+    .main-action.active .pulse-dot {
+      display: inline-block;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+      70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
+      100% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+    
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .rules-list {
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+    
+    .rules-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    .rules-list::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 2px;
+    }
+    
+    .rule-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      animation: fadeIn 0.2s ease-out;
+      transition: var(--transition-fast);
+    }
+    
+    .rule-item:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+    }
+    
+    .rule-details {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .rule-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .rule-selector {
+      font-size: 10px;
+      font-family: monospace;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .rule-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 28px;
+      height: 16px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #374151;
+      transition: .2s;
+      border-radius: 16px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 12px;
+      width: 12px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: var(--color-success);
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(12px);
+    }
+    
+    .delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      padding: 4px;
+      border-radius: 4px;
+      transition: var(--transition-fast);
+      display: flex;
+      align-items: center;
+    }
+    
+    .delete-btn:hover {
+      color: var(--color-accent);
+      background: rgba(255, 82, 82, 0.1);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 24px 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+      border: 1px dashed var(--border-color);
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-area">
+      <svg class="logo-icon" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="128" height="128" rx="24" fill="url(#popupBgGrad)" />
+        <g transform="translate(64, 48) rotate(45)">
+          <rect x="-8" y="0" width="16" height="24" rx="2" fill="#1e293b" />
+          <rect x="-8" y="-12" width="16" height="12" rx="2" fill="#ff5252" />
+          <rect x="-8" y="8" width="16" height="20" rx="2" fill="#e2e8f0" />
+        </g>
+        <defs>
+          <linearGradient id="popupBgGrad" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#6366F1" />
+            <stop offset="1" stop-color="#4F46E5" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="title">AI Ad Purifier</span>
+    </div>
+    <button class="settings-btn" id="open-settings" title="Manage Rules">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- 1. Activation Panel -->
+  <div id="activation-panel" style="display: none; flex-direction: column; gap: 16px;">
+    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center;">
+      <span style="font-size: 28px; display: block; margin-bottom: 8px;">🔑</span>
+      <span style="font-size: 15px; font-weight: 600; color: white; display: block; margin-bottom: 6px;">Activate Premium License</span>
+      <span style="font-size: 12px; color: var(--text-muted); line-height: 1.5; display: block; margin-bottom: 16px;">
+        AI Ad Purifier is a premium utility. Please enter your Waffo Order ID to activate your lifetime access.
+      </span>
+      <button class="btn btn-primary" id="btn-waffo-buy" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; margin-bottom: 12px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);">
+        💳 Buy License on Waffo
+      </button>
+      <div style="display: flex; gap: 6px; margin-top: 8px;">
+        <input type="text" id="activation-code" placeholder="Order ID (ORD_XXXX...)" style="flex: 1; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: white; outline: none; font-size: 12px; text-align: center; text-transform: uppercase;">
+        <button class="btn btn-primary" id="btn-verify-activation" style="padding: 8px 16px; font-size: 13px;">Activate</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Main Cleaner Panel -->
+  <div id="main-panel" style="display: none; flex-direction: column;">
+    <div class="site-info" style="margin-bottom: 12px;">
+      <span>Current Site</span>
+      <span class="domain-name" id="current-domain">Loading...</span>
+    </div>
+
+    <button class="btn btn-primary main-action" id="ai-clean" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); margin-bottom: 20px;" title="Analyze and clean ads with AI">
+      ✨ AI One-Click Clean
+    </button>
+
+    <div class="section-title">
+      <span>Blocked Elements</span>
+      <span id="rules-count">(0)</span>
+    </div>
+
+    <div class="rules-list" id="rules-container">
+      <!-- Will be populated dynamically -->
+      <div class="empty-state">No elements hidden on this site yet. Click the button above to clean up!</div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
