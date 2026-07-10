@@ -191,8 +191,13 @@ app.post('/analyze', async (req, res) => {
       content = arrayMatch[0];
     }
 
-    const selectors = JSON.parse(content);
-    res.json({ selectors });
+    try {
+      const selectors = JSON.parse(content);
+      res.json({ selectors });
+    } catch (parseErr) {
+      console.error("Failed to parse selectors JSON. Raw content was:\n", content);
+      return res.status(500).json({ error: `DeepSeek response parse failure: ${parseErr.message}` });
+    }
   } catch (err) {
     console.error("Error in /analyze secure proxy:", err);
     res.status(500).json({ error: err.message });
