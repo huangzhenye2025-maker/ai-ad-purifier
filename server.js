@@ -196,7 +196,22 @@ app.post('/analyze', async (req, res) => {
       const selectors = JSON.parse(content);
       res.json({ selectors });
     } catch (parseErr) {
-      console.error("Failed to parse selectors JSON. Raw content was:\n", content);
+      console.error("Failed to parse selectors JSON. Attempting auto-repair. Raw content was:\n", content);
+      
+      // Fallback: Extract all fully completed double-quoted strings (selectors)
+      const stringMatches = content.match(/"([^"\\]|\\.)*"/g);
+      if (stringMatches && stringMatches.length > 0) {
+        const selectors = stringMatches.map(str => {
+          try {
+            return JSON.parse(str); // Safely unescape quotes and backslashes
+          } catch (e) {
+            return str.slice(1, -1);
+          }
+        });
+        console.log("Auto-repaired truncated JSON successfully. Recovered selectors:", selectors);
+        return res.json({ selectors });
+      }
+
       return res.status(500).json({ error: `DeepSeek response parse failure: ${parseErr.message}` });
     }
   } catch (err) {
