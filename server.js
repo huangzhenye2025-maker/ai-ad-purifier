@@ -132,6 +132,72 @@ app.post('/webhook', async (req, res) => {
   }
 });
 
+// 3. ROUTE: POST /analyze (Chrome Extension calls this to run DeepSeek secure analysis)
+app.post('/analyze', async (req, res) => {
+  try {
+    const { key, dom } = req.body;
+    if (!key || !dom) {
+      return res.status(400).json({ error: 'Missing required parameters (key or dom).' });
+    }
+
+    const database = await connectDb();
+    if (!database) {
+      return res.status(500).json({ error: 'Database connection failed.' });
+    }
+
+    // Verify client is activated by checking database for the Order ID
+    const license = await database.collection('licenses').findOne({ key: key.toUpperCase().trim() });
+    if (!license) {
+      return res.status(403).json({ error: 'Unauthorized: Invalid or unpaid Order ID.' });
+    }
+
+    // Call DeepSeek Chat API securely using key from environment variables
+    const deepseekKey = process.env.DEEPSEEK_API_KEY;
+    if (!deepseekKey) {
+      return res.status(500).json({ error: 'DeepSeek API key is not configured on the server.' });
+    }
+
+    const response = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${deepseekKey}`
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional web ad-blocking and layout-cleaning AI. Analyze the provided condensed web DOM to identify ads, sponsored content, promotion banners, and popups.\n[LAYOUT REQUIREMENT]:\nIf an ad element is wrapped inside a layout grid cell or parent item (such as ytd-rich-item-renderer, li, or container div), you MUST prefer using CSS `:has()` relational selector to target and hide the outermost cell grid. Example: `ytd-rich-item-renderer:has(ytd-ad-slot-renderer)` or `ytd-rich-item-renderer:has(ytd-display-ad-renderer)`. This ensures that the browser automatically performs native grid reflow and collapses any layout empty spaces!\nReturn ONLY a JSON array containing these selectors. Example: ["ytd-rich-item-renderer:has(ytd-ad-slot-renderer)", "#sponsor-banner"]\nNever wrap the output in markdown code blocks like ```json. Do not include any intro or outro explanation text.'
+          },
+          {
+            role: 'user',
+            content: dom
+          }
+        ],
+        temperature: 0.1
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`DeepSeek API connection failed (HTTP ${response.status}).`);
+    }
+
+    const data = await response.json();
+    let content = data.choices[0].message.content.trim();
+    
+    const arrayMatch = content.match(/\[\s*[\s\S]*?\s*\]/);
+    if (arrayMatch) {
+      content = arrayMatch[0];
+    }
+
+    const selectors = JSON.parse(content);
+    res.json({ selectors });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

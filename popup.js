@@ -213,94 +213,91 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const domString = domResponse.dom;
 
-        // Call DeepSeek Chat API with embedded key
-        fetch('https://api.deepseek.com/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
-          },
-          body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: [
-              {
-                role: 'system',
-                content: 'You are a professional web ad-blocking and layout-cleaning AI. Analyze the provided condensed web DOM to identify ads, sponsored content, promotion banners, and popups.\n[LAYOUT REQUIREMENT]:\nIf an ad element is wrapped inside a layout grid cell or parent item (such as ytd-rich-item-renderer, li, or container div), you MUST prefer using CSS `:has()` relational selector to target and hide the outermost cell grid. Example: `ytd-rich-item-renderer:has(ytd-ad-slot-renderer)` or `ytd-rich-item-renderer:has(ytd-display-ad-renderer)`. This ensures that the browser automatically performs native grid reflow and collapses any layout empty spaces!\nReturn ONLY a JSON array containing these selectors. Example: ["ytd-rich-item-renderer:has(ytd-ad-slot-renderer)", "#sponsor-banner"]\nNever wrap the output in markdown code blocks like ```json. Do not include any intro or outro explanation text.'
-              },
-              {
-                role: 'user',
-                content: `Hostname: ${domain}. Condensed DOM:\n${domString}`
-              }
-            ],
-            temperature: 0.1
+        // Get stored activation code (Order ID) to authorize the API request
+        chrome.storage.local.get(['activationCode'], (storageRes) => {
+          const orderId = storageRes.activationCode || '';
+
+          // Call Render Backend to analyze the DOM securely
+          const cleanUrl = CLOUD_VERIFY_URL.replace('/verify', '/analyze');
+          fetch(cleanUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              key: orderId,
+              dom: `Hostname: ${domain}. Condensed DOM:\n${domString}`
+            })
           })
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`API connection failed (HTTP ${response.status}).`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          let content = data.choices[0].message.content.trim();
-          
-          const arrayMatch = content.match(/\[\s*[\s\S]*?\s*\]/);
-          if (arrayMatch) {
-            content = arrayMatch[0];
-          }
-
-          const selectors = JSON.parse(content);
-          if (!Array.isArray(selectors)) {
-            throw new Error('Response format is not an array.');
-          }
-
-          if (selectors.length === 0) {
-            alert('🤖 AI analysis completed. No obvious ad elements found on this page.');
-            aiCleanBtn.disabled = false;
-            aiCleanBtn.textContent = '✨ AI One-Click Clean';
-            return;
-          }
-
-          // Save selectors to rules
-          chrome.storage.local.get(['rules'], (rulesResult) => {
-            const allRules = rulesResult.rules || {};
-            const domainRules = allRules[domain] || [];
-
-            let addedCount = 0;
-            selectors.forEach((sel, index) => {
-              if (!domainRules.some(r => r.selector === sel)) {
-                domainRules.push({
-                  id: 'rule_ai_' + Date.now() + '_' + index,
-                  name: `AI Clean Block #${index + 1}`,
-                  selector: sel,
-                  enabled: true,
-                  date: new Date().toLocaleDateString()
-                });
-                addedCount++;
-              }
-            });
-
-            if (addedCount > 0) {
-              allRules[domain] = domainRules;
-              chrome.storage.local.set({ rules: allRules }, () => {
-                alert(`🤖 AI Clean Complete! Blocked ${addedCount} ad elements.`);
-                loadDomainRules();
-              });
-            } else {
-              alert('🤖 AI detected ads have already been cleaned.');
+          .then(response => {
+            if (!response.ok) {
+              if (response.status === 403) throw new Error('Unauthorized: Please reactivate with a valid Order ID.');
+              throw new Error(`Cloud server analysis failed (HTTP ${response.status}).`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            const selectors = data.selectors;
+            if (!Array.isArray(selectors)) {
+              throw new Error('Server returned invalid selectors format.');
             }
 
+            if (selectors.length === 0) {
+              alert('🤖 AI analysis completed. No obvious ad elements found on this page.');
+              aiCleanBtn.disabled = false;
+              aiCleanBtn.textContent = '✨ AI One-Click Clean';
+              return;
+            }
+            
+            // Resume the normal save selectors flow below
+            processAISelectors(selectors);
+          })
+          .catch(error => {
+            alert('🤖 AI cleaner error: ' + error.message);
             aiCleanBtn.disabled = false;
             aiCleanBtn.textContent = '✨ AI One-Click Clean';
           });
-        })
-        .catch(err => {
-          alert('AI purification service is currently unavailable. Please try again later.');
-          aiCleanBtn.disabled = false;
-          aiCleanBtn.textContent = '✨ AI One-Click Clean';
         });
       });
     });
+
+    // Handle saving of AI generated selectors
+    function processAISelectors(selectors) {
+      // Save selectors to rules
+      chrome.storage.local.get(['rules'], (rulesResult) => {
+        const allRules = rulesResult.rules || {};
+        const domainRules = allRules[domain] || [];
+
+        let addedCount = 0;
+        selectors.forEach((sel, index) => {
+          if (!domainRules.some(r => r.selector === sel)) {
+            domainRules.push({
+              id: 'rule_ai_' + Date.now() + '_' + index,
+              name: `AI Clean Block #${index + 1}`,
+              selector: sel,
+              enabled: true,
+              date: new Date().toLocaleDateString()
+            });
+            addedCount++;
+          }
+        });
+
+        if (addedCount > 0) {
+          allRules[domain] = domainRules;
+          chrome.storage.local.set({ rules: allRules }, () => {
+            // Apply selectors immediately on tab
+            chrome.tabs.sendMessage(activeTab.id, { action: 'apply-selectors', selectors: domainRules }, () => {
+              aiCleanBtn.disabled = false;
+              aiCleanBtn.textContent = '✨ AI One-Click Clean';
+            });
+          });
+        } else {
+          alert('🤖 AI found ads, but they are already blocked by existing rules!');
+          aiCleanBtn.disabled = false;
+          aiCleanBtn.textContent = '✨ AI One-Click Clean';
+        }
+      });
+    }
   }
 
   // Open options dashboard
@@ -308,3 +305,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     chrome.runtime.openOptionsPage();
   });
 });
+
+
