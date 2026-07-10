@@ -30,8 +30,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Cloudflare Worker API URL for license verification
-  const CLOUD_VERIFY_URL = "https://shrill-disk-bf0c.huangzhenye2025.workers.dev/verify";
+  // Cloudflare Worker/Render API URL for license verification
+  const CLOUD_VERIFY_URL = "https://ai-ad-purifier.onrender.com/verify";
 
   btnVerifyActivation.addEventListener('click', () => {
     const code = activationCodeInput.value.trim().toUpperCase();
