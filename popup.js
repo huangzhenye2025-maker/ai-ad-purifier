@@ -229,10 +229,19 @@ document.addEventListener('DOMContentLoaded', async () => {
               dom: `Hostname: ${domain}. Condensed DOM:\n${domString}`
             })
           })
-          .then(response => {
+          .then(async response => {
             if (!response.ok) {
-              if (response.status === 403) throw new Error('Unauthorized: Please reactivate with a valid Order ID.');
-              throw new Error(`Cloud server analysis failed (HTTP ${response.status}).`);
+              if (response.status === 403) {
+                throw new Error('Unauthorized: Please reactivate with a valid Order ID.');
+              }
+              let errMsg = `Cloud server analysis failed (HTTP ${response.status}).`;
+              try {
+                const errData = await response.json();
+                if (errData && errData.error) {
+                  errMsg = errData.error;
+                }
+              } catch (e) {}
+              throw new Error(errMsg);
             }
             return response.json();
           })

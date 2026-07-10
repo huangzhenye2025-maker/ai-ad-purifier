@@ -194,6 +194,7 @@ app.post('/analyze', async (req, res) => {
     const selectors = JSON.parse(content);
     res.json({ selectors });
   } catch (err) {
+    console.error("Error in /analyze secure proxy:", err);
     res.status(500).json({ error: err.message });
   }
 });
