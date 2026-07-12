@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "AI Ad Purifier - One-Click Ad Blocker",
   "version": "1.0.0",
-  "description": "Intelligently identify and force-remove web ads, sponsored content, and cluttered banners using DeepSeek AI. Restores a clean, reflowed layout.",
+  "description": "Intelligently identify and remove web ads, sponsored banners, and popups using DeepSeek AI. Restores a clean, reflowed layout.",
   "permissions": [
     "storage",
     "activeTab",
