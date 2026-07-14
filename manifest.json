@@ -5,8 +5,7 @@
   "description": "Intelligently identify and remove web ads, sponsored banners, and popups using DeepSeek AI. Restores a clean, reflowed layout.",
   "permissions": [
     "storage",
-    "activeTab",
-    "scripting"
+    "activeTab"
   ],
   "host_permissions": [
     "<all_urls>"
