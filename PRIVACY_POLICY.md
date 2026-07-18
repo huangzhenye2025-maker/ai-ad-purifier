@@ -21,20 +21,22 @@ To function properly, the AI Ad Purifier extension accesses and collects the fol
 * **Why We Store It:** To remember your activation status and automatically apply ad-blocking rules on future page loads without re-running the AI analyze API.
 * **No Sharing:** This data remains strictly local on your device and is never uploaded or shared with any third party.
 
-### C. Personal Data & Payment Information
-* **What We Collect:** When you purchase a license code, we collect your email address and payment receipt metadata.
-* **Payment Processor:** All payment processing is handled securely by **Waffo Pancake**. We do not collect, process, or store credit card details or financial credentials on our servers.
-* **How We Use It:** Your email address is stored in our secure database to manage active license subscriptions, send confirmation receipts, and handle customer support requests.
+### C. Payment & Billing Information Collection
+* **Merchant of Record:** All checkout and transaction operations are securely processed by our Merchant of Record, **Waffo Pancake** (Waffo Technology Ltd).
+* **What Waffo Collects:** Payment transaction data including full name, billing address, email address, IP address, and credit/debit card numbers or digital wallet details.
+* **What We Store:** We do **not** collect or store credit card numbers or banking information on our servers. We collect and retain only your customer email address, generated Order ID (`ORD_xxx`), transaction timestamp, license status (`active` or `refunded`), and gross purchase amount to manage premium entitlements and process refunds.
 
 ---
 
-## 2. Data Sharing and Third-Party Disclosures
+## 2. Third-Party Data Sharing and Disclosure
 
-We share information only in the following scenarios required to provide our services:
+We share minimal necessary data with specific third-party service providers solely to operate our product:
 
-1. **AI Service Providers:** Page DOM structures are sent securely to **DeepSeek API** or **OpenAI API** to process analysis. We do not pass user names, emails, IPs, or any other identifying credentials to the AI providers.
-2. **Payment Integrator:** Email addresses and order details are processed by **Waffo Pancake** for billing.
-3. **No Commercial Sharing:** We do not sell, trade, or share user data, browsing history, or page text with third-party advertisers, advertising networks, or data brokers.
+1. **Merchant of Record & Payment Gateway (Waffo Pancake):** Billing details, purchase amounts, customer email, and payment tokens are shared with **Waffo Pancake** to authorize payments, prevent fraud, issue receipts, and process refunds.
+2. **AI Infrastructure Providers (DeepSeek / OpenAI):** Non-identifiable text snippets or DOM page structures are transmitted securely over TLS to AI inference providers (such as DeepSeek API). No personal billing information, IP addresses, or customer account details are ever transmitted to AI providers.
+3. **Cloud Hosting & Database Infrastructure (MongoDB Atlas & Render):** License keys and Order IDs are stored in encrypted cloud database collections (MongoDB Atlas) hosted on secure cloud servers (Render) to perform API key authentication.
+
+**We never sell, rent, or trade your personal data to third-party data brokers or advertising networks.**
 
 ---
 
@@ -42,7 +44,8 @@ We share information only in the following scenarios required to provide our ser
 
 * **Transmission Security:** All network requests are encrypted using industry-standard Transport Layer Security (TLS/HTTPS).
 * **Local Controls:** You can delete all local rules, settings, and activation keys by clearing your browser's extension data or uninstalling the extension.
-* **Retention:** User email records and order histories are kept securely on our database for license management until you request deletion.
+* **Retention:** User email records and order histories are kept securely on our MongoDB Atlas database for license management and financial accounting/tax verification purposes.
+
 
 ---
 
