@@ -14,6 +14,11 @@ To function properly, the AI Ad Purifier extension accesses and collects the fol
 * **Data Transmission:** The webpage DOM structure is transmitted securely over encrypted HTTPS to our backend server (`https://ai-ad-purifier.onrender.com/analyze`), which proxies the request to the AI model provider.
 * **No Storage:** The DOM content is processed entirely in-memory on our backend server. It is **never** saved to database records, log files, or disk storage. Once the response is sent back, the DOM data is permanently deleted.
 
+### A2. Network Request Blocking (declarativeNetRequest)
+* **What We Access:** With your permission, the extension applies a built-in list of network-blocking rules that prevent requests to known advertising/tracking domains (such as googleads, doubleclick.net, and similar ad networks) from being sent at all.
+* **Why We Access It:** Blocking ad requests at the network level saves bandwidth, prevents ad trackers from loading, and removes the underlying cause of most ads.
+* **Data Transmission:** **None.** The blocking rules are stored locally in the extension and evaluated by your browser. No browsing data, URLs, or request information is ever transmitted to us or to any third party as a result of this feature.
+
 ### B. Browser Storage (Local Storage)
 * **What We Store:** The extension stores the following values locally on your device via Chrome's `chrome.storage.local` API:
   * **Activation Key (Order ID):** A premium license identifier used to verify your subscription status.
@@ -24,7 +29,7 @@ To function properly, the AI Ad Purifier extension accesses and collects the fol
 ### C. Payment & Billing Information Collection
 * **Merchant of Record:** All checkout and transaction operations are securely processed by our Merchant of Record, **Waffo Pancake** (Waffo Technology Ltd).
 * **What Waffo Collects:** Payment transaction data including full name, billing address, email address, IP address, and credit/debit card numbers or digital wallet details.
-* **What We Store:** We do **not** collect or store credit card numbers or banking information on our servers. We collect and retain only your customer email address, generated Order ID (`ORD_xxx`), transaction timestamp, license status (`active` or `refunded`), and gross purchase amount to manage premium entitlements and process refunds.
+* **What We Store:** We do **not** collect or store credit card numbers or banking information on our servers. We collect and retain only your customer email address, generated Order ID (`ORD_xxx`), subscription expiry timestamp (`expiresAt`), transaction timestamp, license status (`active`, `refunded`, or `cancelled`), and gross purchase amount to manage premium entitlements and process refunds.
 
 ---
 

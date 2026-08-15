@@ -25,9 +25,13 @@ jspm_packages/
 .env.*.local
 
 # Output zips and assets
+*.zip
 AI_Ad_Purifier.zip
 waffo-cover.jpg
 ai_ad_purifier_cover_*.jpg
+
+# Chrome metadata
+_metadata/
 
 # OS metadata
 .DS_Store

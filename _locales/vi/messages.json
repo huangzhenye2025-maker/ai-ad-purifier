@@ -1,0 +1,290 @@
+{
+  "appName": {
+    "message": "AI Ad Purifier - Trình chặn quảng cáo một chạm"
+  },
+  "appDesc": {
+    "message": "Tự động nhận diện và xóa quảng cáo web, biểu ngữ và popup bằng DeepSeek AI. Khôi phục bố cục trang sạch sẽ."
+  },
+  "currentDomain": {
+    "message": "Tên miền hiện tại"
+  },
+  "loading": {
+    "message": "Đang tải..."
+  },
+  "planFree": {
+    "message": "🌱 Bản Miễn Phí (Chắn Tiêu Chuẩn)"
+  },
+  "planPro": {
+    "message": "👑 Bản Pro Cao Cấp"
+  },
+  "planProUntil": {
+    "message": "👑 Bản Pro · Hạn đến "
+  },
+  "upgradeBtn": {
+    "message": "Nâng cấp Pro ($$7.99/tháng)"
+  },
+  "localCleanBtn": {
+    "message": "⚡ Dọn Dẹp Nhanh Cục Bộ (Miễn Phí)"
+  },
+  "localCleanBtnScanning": {
+    "message": "⚡ Đang quét quảng cáo..."
+  },
+  "aiCleanBtn": {
+    "message": "✨ Tinh Lọc DeepSeek AI ($$7.99/tháng)"
+  },
+  "aiCleanBtnScanning": {
+    "message": "🤖 DeepSeek AI đang phân tích trang..."
+  },
+  "pickerBtn": {
+    "message": "🎯 Chọn & Ẩn Phần Tử"
+  },
+  "pickerBtnActive": {
+    "message": "🎯 Nhấp vào bất kỳ phần tử nào…"
+  },
+  "undoBtn": {
+    "message": "↩ Hoàn tác phần tử trước"
+  },
+  "sitePauseBtn": {
+    "message": "⏸ Tạm dừng trang này"
+  },
+  "siteResumeBtn": {
+    "message": "▶ Tiếp tục bảo vệ"
+  },
+  "blockedElements": {
+    "message": "Phần tử đã chặn"
+  },
+  "emptyStateRules": {
+    "message": "Chưa có phần tử nào bị ẩn trên trang này. Nhấp dọn dẹp ở trên để bắt đầu!"
+  },
+  "rateTitle": {
+    "message": "⭐ Bạn thích AI Ad Purifier chứ?"
+  },
+  "rateDesc": {
+    "message": "Hãy để lại đánh giá 5 sao trên Chrome Web Store nhé!"
+  },
+  "rateBtn": {
+    "message": "Đánh giá 5 sao ⭐"
+  },
+  "modalTitle": {
+    "message": "Nâng cấp lên DeepSeek AI Pro"
+  },
+  "modalSubtitle": {
+    "message": "Chỉ $$7.99 USD / tháng"
+  },
+  "modalFreeTitle": {
+    "message": "🌱 Bản Miễn Phí:"
+  },
+  "modalFree1": {
+    "message": "✅ Chặn quảng cáo & popup phổ biến (100% Miễn phí)"
+  },
+  "modalFree2": {
+    "message": "✅ Ẩn phần tử thông minh cục bộ"
+  },
+  "modalFree3": {
+    "message": "❌ Không hỗ trợ mô hình AI DeepSeek"
+  },
+  "modalProTitle": {
+    "message": "👑 Bản Pro Trả Phí ($$7.99/tháng):"
+  },
+  "modalPro1": {
+    "message": "✨ Bao gồm tất cả tính năng miễn phí"
+  },
+  "modalPro2": {
+    "message": "✨ Phân tích cấu trúc DOM chuyên sâu bằng DeepSeek AI"
+  },
+  "modalPro3": {
+    "message": "✨ Tự động sắp xếp lại bố cục & thu gọn khoảng trắng"
+  },
+  "modalPro4": {
+    "message": "✨ Dọn dẹp trang bằng AI không giới hạn"
+  },
+  "modalBuyBtn": {
+    "message": "💳 Đăng ký Pro ($$7.99/tháng)"
+  },
+  "modalOrderPlaceholder": {
+    "message": "Đã mua? Nhập mã đơn hàng (ORD_...)"
+  },
+  "modalActivateBtn": {
+    "message": "Kích hoạt"
+  },
+  "modalActivatingBtn": {
+    "message": "Đang kích hoạt..."
+  },
+  "unsupportedPageSys": {
+    "message": "Không thể dọn dẹp các trang hệ thống của trình duyệt."
+  },
+  "unsupportedPageGen": {
+    "message": "Trang này không hỗ trợ dọn dẹp quảng cáo."
+  },
+  "sitePausedMsg": {
+    "message": "Đã tạm dừng dọn dẹp trên trang này"
+  },
+  "globalDisabledMsg": {
+    "message": "Bảo vệ toàn cầu đã bị tắt"
+  },
+  "undoNoRules": {
+    "message": "Không có quy tắc nào để hoàn tác trên trang này."
+  },
+  "undoSuccess": {
+    "message": "Đã hoàn tác: "
+  },
+  "enterOrderId": {
+    "message": "Vui lòng nhập mã đơn hàng Waffo của bạn."
+  },
+  "invalidOrderId": {
+    "message": "Định dạng mã đơn hàng không hợp lệ (bắt đầu bằng 'ORD_')."
+  },
+  "activationSuccess": {
+    "message": "🎉 Kích hoạt gói Premium thành công! Cảm ơn bạn đã ủng hộ."
+  },
+  "activationFailed": {
+    "message": "Mã đơn hàng không hợp lệ hoặc chưa thanh toán."
+  },
+  "serverConnFailed": {
+    "message": "Không thể kết nối với máy chủ xác thực."
+  },
+  "subExpired": {
+    "message": "Gói đăng ký đã hết hạn. Vui lòng gia hạn để tiếp tục."
+  },
+  "rateLimited": {
+    "message": "Quá nhiều yêu cầu. Vui lòng thử lại sau."
+  },
+  "subInvalidOrExpired": {
+    "message": "Gói đăng ký đã hết hạn hoặc mã đơn hàng không hợp lệ."
+  },
+  "serverErrorHttp": {
+    "message": "Lỗi dịch vụ phân tích đám mây (HTTP "
+  },
+  "aiCleanApplied": {
+    "message": "🤖 Phân tích trang hoàn tất. Đã áp dụng quy tắc chặn."
+  },
+  "smartRulePrefix": {
+    "message": "Quy tắc thông minh #"
+  },
+  "restoreHiddenElement": {
+    "message": "Khôi phục phần tử bị ẩn"
+  },
+  "optionsTitle": {
+    "message": "Bảng Điều Khiển"
+  },
+  "navRateBtn": {
+    "message": "⭐ Đánh giá 5 sao"
+  },
+  "navImportBtn": {
+    "message": "📥 Nhập cấu hình"
+  },
+  "navExportBtn": {
+    "message": "📤 Xuất cấu hình"
+  },
+  "navClearAllBtn": {
+    "message": "🗑️ Xóa tất cả quy tắc"
+  },
+  "statProtectedSites": {
+    "message": "Trang web được bảo vệ"
+  },
+  "statBlockedElements": {
+    "message": "Phần tử đã chặn"
+  },
+  "statPlanStatus": {
+    "message": "Trạng thái gói"
+  },
+  "statGlobalToggle": {
+    "message": "Công tắc bảo vệ toàn diện"
+  },
+  "statusEnabled": {
+    "message": "Đang bật"
+  },
+  "statusDisabled": {
+    "message": "Đã tắt"
+  },
+  "whitelistTitle": {
+    "message": "Trang web tạm dừng (Danh sách trắng)"
+  },
+  "whitelistDesc": {
+    "message": "Tiện ích sẽ không thực hiện dọn dẹp quảng cáo trên các trang này."
+  },
+  "whitelistEmpty": {
+    "message": "Không có trang web nào bị tạm dừng."
+  },
+  "resumeCleanBtn": {
+    "message": "Tiếp tục"
+  },
+  "sidebarTitle": {
+    "message": "Danh sách trang web"
+  },
+  "noActiveDomains": {
+    "message": "Chưa có trang web nào"
+  },
+  "panelDefaultTitle": {
+    "message": "Chọn trang web để quản lý"
+  },
+  "panelDefaultDesc": {
+    "message": "Nhấp vào trang web để xem quy tắc. Nhấp đúp để chỉnh sửa trực tiếp tên hoặc bộ chọn."
+  },
+  "panelNoSitesTitle": {
+    "message": "Chưa có trang web nào được cấu hình"
+  },
+  "panelNoSitesDesc": {
+    "message": "Lướt web và nhấp vào biểu tượng tiện ích để bắt đầu chặn quảng cáo!"
+  },
+  "searchPlaceholder": {
+    "message": "Tìm kiếm quy tắc hoặc bộ chọn..."
+  },
+  "thDisplayName": {
+    "message": "Tên hiển thị"
+  },
+  "thSelector": {
+    "message": "Bộ chọn CSS"
+  },
+  "thDate": {
+    "message": "Ngày chặn"
+  },
+  "thStatus": {
+    "message": "Trạng thái"
+  },
+  "thAction": {
+    "message": "Hành động"
+  },
+  "noMatchingRules": {
+    "message": "Không tìm thấy quy tắc phù hợp."
+  },
+  "noRulesConfigured": {
+    "message": "Chưa có quy tắc chặn quảng cáo nào."
+  },
+  "selectSitePrompt": {
+    "message": "Chọn một trang web từ bảng điều khiển bên trái."
+  },
+  "confirmDeleteRule": {
+    "message": "Bạn có chắc chắn muốn xóa quy tắc chặn này không?"
+  },
+  "confirmClearAll": {
+    "message": "⚠️ Cảnh báo: Thao tác này sẽ xóa vĩnh viễn tất cả các quy tắc. Tiếp tục?"
+  },
+  "allRulesCleared": {
+    "message": "Đã xóa tất cả các quy tắc chặn quảng cáo."
+  },
+  "confirmImport": {
+    "message": "Bạn có muốn nhập các quy tắc này không? Chúng sẽ được hợp nhất."
+  },
+  "importSuccess": {
+    "message": "Nhập cấu hình thành công!"
+  },
+  "importParseError": {
+    "message": "Không thể phân tích tệp sao lưu: "
+  },
+  "importFormatError": {
+    "message": "Định dạng JSON không khớp với cấu trúc quy tắc."
+  },
+  "invalidSelectorAlert": {
+    "message": "Định dạng bộ chọn CSS không hợp lệ."
+  },
+  "pickerHint": {
+    "message": "Nhấp vào phần tử để ẩn (Nhấn Esc để hủy)"
+  },
+  "pickerNoSelector": {
+    "message": "Không có class/id khả dụng. Vui lòng chọn phần tử nhỏ hơn."
+  },
+  "pickerRuleDefaultName": {
+    "message": "Phần tử đã chọn"
+  }
+}

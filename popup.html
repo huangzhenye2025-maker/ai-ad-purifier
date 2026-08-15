@@ -279,46 +279,98 @@
     </button>
   </div>
 
-  <!-- 1. Activation Panel -->
-  <div id="activation-panel" style="display: none; flex-direction: column; gap: 16px;">
-    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; text-align: center;">
-      <span style="font-size: 28px; display: block; margin-bottom: 8px;">🔑</span>
-      <span style="font-size: 15px; font-weight: 600; color: white; display: block; margin-bottom: 6px;">Activate Premium License</span>
-      <span style="font-size: 12px; color: var(--text-muted); line-height: 1.5; display: block; margin-bottom: 16px;">
-        AI Ad Purifier is a premium utility. Please enter your Waffo Order ID to activate your lifetime access.
-      </span>
-      <button class="btn btn-primary" id="btn-waffo-buy" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; margin-bottom: 12px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);">
-        💳 Buy License on Waffo
+  <!-- Main Cleaner Panel -->
+  <div id="main-panel" style="display: flex; flex-direction: column;">
+    <div class="site-info" style="margin-bottom: 10px;">
+      <span data-i18n="currentDomain">Current Domain</span>
+      <span class="domain-name" id="current-domain" data-i18n="loading">Loading...</span>
+    </div>
+
+    <!-- Plan & Status Badge Bar -->
+    <div id="status-bar" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); padding: 8px 12px; border-radius: 8px; font-size: 11px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+      <span id="quota-text" style="color: #a5b4fc; font-weight: 500;" data-i18n="planFree">🌱 Free Edition (Standard Shield)</span>
+      <span id="hidden-count" style="color: #94a3b8;">🛡 0</span>
+      <button id="upgrade-btn-link" style="background: none; border: none; color: #818cf8; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0; font-size: 11px;" data-i18n="upgradeBtn">Upgrade Pro ($7.99/mo)</button>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+      <button class="btn btn-secondary" id="local-clean" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px;" data-i18n="localCleanBtn">
+        ⚡ Instant Local Clean (Free)
       </button>
-      <div style="display: flex; gap: 6px; margin-top: 8px;">
-        <input type="text" id="activation-code" placeholder="Order ID (ORD_XXXX...)" style="flex: 1; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: white; outline: none; font-size: 12px; text-align: center; text-transform: uppercase;">
-        <button class="btn btn-primary" id="btn-verify-activation" style="padding: 8px 16px; font-size: 13px;">Activate</button>
+      <button class="btn btn-primary" id="ai-clean" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);" data-i18n="aiCleanBtn">
+        ✨ DeepSeek AI Purify (Pro $7.99/mo)
+      </button>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-secondary" id="btn-picker" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 8px;" data-i18n="pickerBtn">
+          🎯 Pick & Hide
+        </button>
+        <button class="btn btn-secondary" id="btn-undo" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 8px;" data-i18n="undoBtn">
+          ↩ Undo Last
+        </button>
+        <button class="btn btn-secondary" id="btn-site-toggle" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 8px;" data-i18n="sitePauseBtn">
+          ⏸ Pause on Site
+        </button>
       </div>
     </div>
-  </div>
-
-  <!-- 2. Main Cleaner Panel -->
-  <div id="main-panel" style="display: none; flex-direction: column;">
-    <div class="site-info" style="margin-bottom: 12px;">
-      <span>Current Site</span>
-      <span class="domain-name" id="current-domain">Loading...</span>
-    </div>
-
-    <button class="btn btn-primary main-action" id="ai-clean" style="width: 100%; padding: 14px; font-size: 15px; font-weight: 600; border-radius: 10px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3); margin-bottom: 20px;" title="Analyze and clean ads with AI">
-      ✨ AI One-Click Clean
-    </button>
 
     <div class="section-title">
-      <span>Blocked Elements</span>
+      <span data-i18n="blockedElements">Blocked Elements</span>
       <span id="rules-count">(0)</span>
     </div>
 
     <div class="rules-list" id="rules-container">
       <!-- Will be populated dynamically -->
-      <div class="empty-state">No elements hidden on this site yet. Click the button above to clean up!</div>
+      <div class="empty-state" data-i18n="emptyStateRules">No hidden elements on this website yet. Click a clean button above to start!</div>
+    </div>
+
+    <!-- Review / Rate Us Banner -->
+    <div id="review-banner" style="margin-top: 16px; padding: 10px 12px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+      <div style="text-align: left;">
+        <div style="font-size: 12px; font-weight: 600; color: #fbbf24; display: flex; align-items: center; gap: 4px;">
+          <span data-i18n="rateTitle">⭐ Enjoying AI Ad Purifier?</span>
+        </div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;" data-i18n="rateDesc">Leave us a 5-star review on the Chrome Web Store!</div>
+      </div>
+      <button id="btn-rate-store" style="padding: 6px 10px; font-size: 11px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3); transition: var(--transition-fast);" data-i18n="rateBtn">
+        Rate 5 Stars ⭐
+      </button>
     </div>
   </div>
 
+  <!-- 3. Upgrade Pro Modal Overlay -->
+  <div id="upgrade-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.92); z-index: 100; padding: 16px; flex-direction: column; justify-content: center; backdrop-filter: blur(4px);">
+    <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; text-align: center; position: relative; max-height: 90vh; overflow-y: auto;">
+      <button id="modal-close-btn" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">✕</button>
+      <span style="font-size: 32px; display: block; margin-bottom: 4px;">🧠</span>
+      <span style="font-size: 16px; font-weight: 700; color: white; display: block; margin-bottom: 4px;" data-i18n="modalTitle">Upgrade to DeepSeek AI Pro</span>
+      <span style="font-size: 12px; color: #818cf8; font-weight: 600; display: block; margin-bottom: 12px;" data-i18n="modalSubtitle">Subscription is only $7.99 / month</span>
+      
+      <!-- Feature Comparison List -->
+      <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px; font-size: 11px; text-align: left; margin-bottom: 14px; line-height: 1.6;">
+        <div style="font-weight: 600; color: #94a3b8; margin-bottom: 4px;" data-i18n="modalFreeTitle">🌱 Free Edition:</div>
+        <div style="color: #cbd5e1;" data-i18n="modalFree1">✅ General ad & popup blocking (100% Free)</div>
+        <div style="color: #cbd5e1;" data-i18n="modalFree2">✅ Local smart element hiding</div>
+        <div style="color: #ef4444; margin-bottom: 6px;" data-i18n="modalFree3">❌ No DeepSeek AI model support</div>
+        
+        <div style="font-weight: 600; color: #a78bfa; margin-bottom: 4px;" data-i18n="modalProTitle">👑 Paid Pro Edition ($7.99/mo):</div>
+        <div style="color: #a78bfa;" data-i18n="modalPro1">✨ Includes all Free features</div>
+        <div style="color: #a78bfa;" data-i18n="modalPro2">✨ DeepSeek AI deep DOM layout analysis</div>
+        <div style="color: #a78bfa;" data-i18n="modalPro3">✨ Auto layout reflow & empty grid collapse</div>
+        <div style="color: #a78bfa;" data-i18n="modalPro4">✨ Unlimited DeepSeek AI page cleans</div>
+      </div>
+
+      <button class="btn btn-primary" id="modal-waffo-buy" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px; margin-bottom: 12px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border: none; cursor: pointer; color: white;" data-i18n="modalBuyBtn">
+        💳 Subscribe to Pro ($7.99/mo)
+      </button>
+      <div style="display: flex; gap: 6px;">
+        <input type="text" id="modal-order-id" placeholder="Purchased? Enter Order ID (ORD_...)" data-i18n-placeholder="modalOrderPlaceholder" style="flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 6px 10px; color: white; outline: none; font-size: 11px; text-align: center; text-transform: uppercase;">
+        <button class="btn btn-primary" id="modal-btn-activate" style="padding: 6px 12px; font-size: 11px; border-radius: 6px; background: #4f46e5; color: white; border: none; cursor: pointer;" data-i18n="modalActivateBtn">Activate</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

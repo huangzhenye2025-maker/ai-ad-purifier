@@ -1,0 +1,290 @@
+{
+  "appName": {
+    "message": "AI Ad Purifier - Bloqueur de Publicités Intelligent"
+  },
+  "appDesc": {
+    "message": "Identifie et supprime intelligemment les publicités web, bannières et popups avec DeepSeek AI. Restaure une mise en page propre."
+  },
+  "currentDomain": {
+    "message": "Domaine actuel"
+  },
+  "loading": {
+    "message": "Chargement..."
+  },
+  "planFree": {
+    "message": "🌱 Édition Gratuite (Protection Standard)"
+  },
+  "planPro": {
+    "message": "👑 Édition Pro"
+  },
+  "planProUntil": {
+    "message": "👑 Édition Pro · Jusqu'au "
+  },
+  "upgradeBtn": {
+    "message": "Passer à Pro ($$7.99/mois)"
+  },
+  "localCleanBtn": {
+    "message": "⚡ Nettoyage Local Rapide (Gratuit)"
+  },
+  "localCleanBtnScanning": {
+    "message": "⚡ Analyse des publicités en cours..."
+  },
+  "aiCleanBtn": {
+    "message": "✨ Purification DeepSeek AI ($$7.99/mois)"
+  },
+  "aiCleanBtnScanning": {
+    "message": "🤖 DeepSeek AI analyse la page..."
+  },
+  "pickerBtn": {
+    "message": "🎯 Sélectionner et Masquer"
+  },
+  "pickerBtnActive": {
+    "message": "🎯 Cliquez sur un élément…"
+  },
+  "undoBtn": {
+    "message": "↩ Annuler le Dernier"
+  },
+  "sitePauseBtn": {
+    "message": "⏸ Pause sur ce site"
+  },
+  "siteResumeBtn": {
+    "message": "▶ Reprendre sur ce site"
+  },
+  "blockedElements": {
+    "message": "Éléments Bloqués"
+  },
+  "emptyStateRules": {
+    "message": "Aucun élément masqué sur ce site. Cliquez sur nettoyer pour commencer !"
+  },
+  "rateTitle": {
+    "message": "⭐ Vous aimez AI Ad Purifier ?"
+  },
+  "rateDesc": {
+    "message": "Laissez-nous un avis 5 étoiles sur le Chrome Web Store !"
+  },
+  "rateBtn": {
+    "message": "Noter 5 Étoiles ⭐"
+  },
+  "modalTitle": {
+    "message": "Passer à DeepSeek AI Pro"
+  },
+  "modalSubtitle": {
+    "message": "Abonnement à seulement $$7.99 USD / mois"
+  },
+  "modalFreeTitle": {
+    "message": "🌱 Édition Gratuite :"
+  },
+  "modalFree1": {
+    "message": "✅ Blocage général des pubs et popups (100% Gratuit)"
+  },
+  "modalFree2": {
+    "message": "✅ Masquage intelligent local d'éléments"
+  },
+  "modalFree3": {
+    "message": "❌ Pas de support du modèle DeepSeek AI"
+  },
+  "modalProTitle": {
+    "message": "👑 Édition Pro Payante ($$7.99/mois) :"
+  },
+  "modalPro1": {
+    "message": "✨ Inclut toutes les fonctionnalités gratuites"
+  },
+  "modalPro2": {
+    "message": "✨ Analyse approfondie du DOM par DeepSeek AI"
+  },
+  "modalPro3": {
+    "message": "✨ Réagencement automatique et suppression des espaces vides"
+  },
+  "modalPro4": {
+    "message": "✨ Nettoyages de pages par IA illimités"
+  },
+  "modalBuyBtn": {
+    "message": "💳 S'abonner à Pro ($$7.99/mois)"
+  },
+  "modalOrderPlaceholder": {
+    "message": "Déjà acheté ? Entrez le n° de commande (ORD_...)"
+  },
+  "modalActivateBtn": {
+    "message": "Activer"
+  },
+  "modalActivatingBtn": {
+    "message": "Activation..."
+  },
+  "unsupportedPageSys": {
+    "message": "Les pages système du navigateur ne peuvent pas être nettoyées."
+  },
+  "unsupportedPageGen": {
+    "message": "Cette page ne prend pas en charge le nettoyage des pubs."
+  },
+  "sitePausedMsg": {
+    "message": "Nettoyage en pause sur ce site"
+  },
+  "globalDisabledMsg": {
+    "message": "La protection globale est désactivée"
+  },
+  "undoNoRules": {
+    "message": "Aucune règle à annuler sur ce site."
+  },
+  "undoSuccess": {
+    "message": "Annulé : "
+  },
+  "enterOrderId": {
+    "message": "Veuillez saisir votre numéro de commande Waffo."
+  },
+  "invalidOrderId": {
+    "message": "Format de commande invalide (doit commencer par 'ORD_')."
+  },
+  "activationSuccess": {
+    "message": "🎉 Accès Premium activé avec succès ! Merci de votre abonnement."
+  },
+  "activationFailed": {
+    "message": "Numéro de commande invalide ou impayé."
+  },
+  "serverConnFailed": {
+    "message": "Échec de connexion au serveur de vérification."
+  },
+  "subExpired": {
+    "message": "L'abonnement a expiré. Veuillez renouveler."
+  },
+  "rateLimited": {
+    "message": "Trop de requêtes. Veuillez réessayer plus tard."
+  },
+  "subInvalidOrExpired": {
+    "message": "Abonnement expiré ou commande invalide."
+  },
+  "serverErrorHttp": {
+    "message": "Erreur du serveur d'analyse cloud (HTTP "
+  },
+  "aiCleanApplied": {
+    "message": "🤖 Analyse terminée. Règles de blocage appliquées."
+  },
+  "smartRulePrefix": {
+    "message": "Règle Intelligente #"
+  },
+  "restoreHiddenElement": {
+    "message": "Restaurer l'élément masqué"
+  },
+  "optionsTitle": {
+    "message": "Panneau de Contrôle"
+  },
+  "navRateBtn": {
+    "message": "⭐ Noter 5 Étoiles"
+  },
+  "navImportBtn": {
+    "message": "📥 Importer la Config"
+  },
+  "navExportBtn": {
+    "message": "📤 Exporter la Config"
+  },
+  "navClearAllBtn": {
+    "message": "🗑️ Supprimer Toutes les Règles"
+  },
+  "statProtectedSites": {
+    "message": "Sites Protégés"
+  },
+  "statBlockedElements": {
+    "message": "Éléments Bloqués"
+  },
+  "statPlanStatus": {
+    "message": "Statut du Forfait"
+  },
+  "statGlobalToggle": {
+    "message": "Protection Globale"
+  },
+  "statusEnabled": {
+    "message": "Activé"
+  },
+  "statusDisabled": {
+    "message": "Désactivé"
+  },
+  "whitelistTitle": {
+    "message": "Sites en Pause (Liste Blanche)"
+  },
+  "whitelistDesc": {
+    "message": "L'extension n'effectuera aucun nettoyage sur ces sites."
+  },
+  "whitelistEmpty": {
+    "message": "Aucun site en pause."
+  },
+  "resumeCleanBtn": {
+    "message": "Reprendre"
+  },
+  "sidebarTitle": {
+    "message": "Liste des Sites"
+  },
+  "noActiveDomains": {
+    "message": "Aucun site actif"
+  },
+  "panelDefaultTitle": {
+    "message": "Sélectionnez un site à gérer"
+  },
+  "panelDefaultDesc": {
+    "message": "Cliquez sur un site pour voir ses règles. Double-cliquez pour modifier directement."
+  },
+  "panelNoSitesTitle": {
+    "message": "Aucun site configuré"
+  },
+  "panelNoSitesDesc": {
+    "message": "Naviguez sur le Web et cliquez sur l'icône pour commencer !"
+  },
+  "searchPlaceholder": {
+    "message": "Rechercher des règles ou sélecteurs..."
+  },
+  "thDisplayName": {
+    "message": "Nom"
+  },
+  "thSelector": {
+    "message": "Sélecteur CSS"
+  },
+  "thDate": {
+    "message": "Date"
+  },
+  "thStatus": {
+    "message": "Statut"
+  },
+  "thAction": {
+    "message": "Action"
+  },
+  "noMatchingRules": {
+    "message": "Aucune règle correspondante trouvée."
+  },
+  "noRulesConfigured": {
+    "message": "Aucune règle configurée pour l'instant."
+  },
+  "selectSitePrompt": {
+    "message": "Sélectionnez un site dans le panneau de gauche."
+  },
+  "confirmDeleteRule": {
+    "message": "Voulez-vous vraiment supprimer cette règle ?"
+  },
+  "confirmClearAll": {
+    "message": "⚠️ Attention : Cela supprimera définitivement toutes vos règles. Continuer ?"
+  },
+  "allRulesCleared": {
+    "message": "Toutes les règles ont été effacées."
+  },
+  "confirmImport": {
+    "message": "Importer ces règles ? Elles seront fusionnées avec vos règles actuelles."
+  },
+  "importSuccess": {
+    "message": "Configuration importée avec succès !"
+  },
+  "importParseError": {
+    "message": "Impossible de lire le fichier de sauvegarde : "
+  },
+  "importFormatError": {
+    "message": "Le format JSON ne correspond pas à la structure requise."
+  },
+  "invalidSelectorAlert": {
+    "message": "Format de sélecteur CSS invalide."
+  },
+  "pickerHint": {
+    "message": "Cliquez sur l'élément à masquer (Échap pour annuler)"
+  },
+  "pickerNoSelector": {
+    "message": "Pas de class/id utilisable. Choisissez un élément plus précis."
+  },
+  "pickerRuleDefaultName": {
+    "message": "Élément Sélectionné"
+  }
+}

@@ -1,0 +1,290 @@
+{
+  "appName": {
+    "message": "AI Ad Purifier - ワンクリック広告ブロッカー"
+  },
+  "appDesc": {
+    "message": "DeepSeek AIを活用してWeb広告、スポンサーバナー、ポップアップを自動検出・削除し、美しいレイアウトを復元します。"
+  },
+  "currentDomain": {
+    "message": "現在のドメイン"
+  },
+  "loading": {
+    "message": "読み込み中..."
+  },
+  "planFree": {
+    "message": "🌱 永久無料版 (標準ブロック)"
+  },
+  "planPro": {
+    "message": "👑 プロ版 (DeepSeek AI搭載)"
+  },
+  "planProUntil": {
+    "message": "👑 プロ版 · 有効期限: "
+  },
+  "upgradeBtn": {
+    "message": "プロ版にアップグレード ($$7.99/月)"
+  },
+  "localCleanBtn": {
+    "message": "⚡ 高速ローカルクリーン (無料)"
+  },
+  "localCleanBtnScanning": {
+    "message": "⚡ 広告要素をスキャン中..."
+  },
+  "aiCleanBtn": {
+    "message": "✨ DeepSeek AI 高度浄化 ($$7.99/月)"
+  },
+  "aiCleanBtnScanning": {
+    "message": "🤖 DeepSeek AI がページを分析中..."
+  },
+  "pickerBtn": {
+    "message": "🎯 クリックして非表示"
+  },
+  "pickerBtnActive": {
+    "message": "🎯 隠したい要素をクリック…"
+  },
+  "undoBtn": {
+    "message": "↩ 1つ元に戻す"
+  },
+  "sitePauseBtn": {
+    "message": "⏸ このサイトで一時停止"
+  },
+  "siteResumeBtn": {
+    "message": "▶ 保護を再開"
+  },
+  "blockedElements": {
+    "message": "ブロックされた要素"
+  },
+  "emptyStateRules": {
+    "message": "このサイトではまだブロックされていません。上のボタンをクリックして開始してください！"
+  },
+  "rateTitle": {
+    "message": "⭐ AI Ad Purifier を気に入りましたか？"
+  },
+  "rateDesc": {
+    "message": "Chrome ウェブストアで5つ星の高評価をお願いします！"
+  },
+  "rateBtn": {
+    "message": "★5 レビューを書く ⭐"
+  },
+  "modalTitle": {
+    "message": "DeepSeek AI プロ版へアップグレード"
+  },
+  "modalSubtitle": {
+    "message": "月額わずか $$7.99 USD"
+  },
+  "modalFreeTitle": {
+    "message": "🌱 無料版："
+  },
+  "modalFree1": {
+    "message": "✅ 一般的な広告・ポップアップのブロック (完全無料)"
+  },
+  "modalFree2": {
+    "message": "✅ ローカル要素非表示ツール"
+  },
+  "modalFree3": {
+    "message": "❌ DeepSeek AI 大規模モデル非対応"
+  },
+  "modalProTitle": {
+    "message": "👑 プロ版 ($$7.99/月)："
+  },
+  "modalPro1": {
+    "message": "✨ 無料版の全機能を含む"
+  },
+  "modalPro2": {
+    "message": "✨ DeepSeek AI による高度なDOMレイアウト解析"
+  },
+  "modalPro3": {
+    "message": "✨ 空白グリッドの自動折りたたみとリフロー"
+  },
+  "modalPro4": {
+    "message": "✨ 無制限のAIページ浄化"
+  },
+  "modalBuyBtn": {
+    "message": "💳 プロ版を購読する ($$7.99/月)"
+  },
+  "modalOrderPlaceholder": {
+    "message": "購入済み？注文番号 (ORD_...) を入力"
+  },
+  "modalActivateBtn": {
+    "message": "有効化"
+  },
+  "modalActivatingBtn": {
+    "message": "有効化中..."
+  },
+  "unsupportedPageSys": {
+    "message": "ブラウザのシステムページはクリーンアップできません。"
+  },
+  "unsupportedPageGen": {
+    "message": "このページは広告クリーンアップに対応していません。"
+  },
+  "sitePausedMsg": {
+    "message": "このサイトでは一時停止中"
+  },
+  "globalDisabledMsg": {
+    "message": "拡張機能全体が無効です"
+  },
+  "undoNoRules": {
+    "message": "元に戻すルールがありません。"
+  },
+  "undoSuccess": {
+    "message": "元に戻しました："
+  },
+  "enterOrderId": {
+    "message": "Waffo 注文番号を入力してください。"
+  },
+  "invalidOrderId": {
+    "message": "注文番号の形式が無効です ('ORD_' で始まる番号を入力してください)。"
+  },
+  "activationSuccess": {
+    "message": "🎉 プロ版が正常に有効化されました！ご購読ありがとうございます。"
+  },
+  "activationFailed": {
+    "message": "無効または未払いの注文番号です。購入レシートをご確認ください。"
+  },
+  "serverConnFailed": {
+    "message": "認証サーバーに接続できませんでした。ネットワークを確認してください。"
+  },
+  "subExpired": {
+    "message": "サブスクリプションの有効期限が切れました。更新してください。"
+  },
+  "rateLimited": {
+    "message": "リクエストが多すぎます。しばらく待ってから再試行してください。"
+  },
+  "subInvalidOrExpired": {
+    "message": "期限切れまたは無効な注文番号です。"
+  },
+  "serverErrorHttp": {
+    "message": "クラウド分析サーバーエラー (HTTP "
+  },
+  "aiCleanApplied": {
+    "message": "🤖 ページ分析完了。広告ブロックルールが適用されました。"
+  },
+  "smartRulePrefix": {
+    "message": "スマートルール #"
+  },
+  "restoreHiddenElement": {
+    "message": "隠した要素を復元"
+  },
+  "optionsTitle": {
+    "message": "コントロールパネル"
+  },
+  "navRateBtn": {
+    "message": "⭐ ★5評価"
+  },
+  "navImportBtn": {
+    "message": "📥 設定をインポート"
+  },
+  "navExportBtn": {
+    "message": "📤 設定をエクスポート"
+  },
+  "navClearAllBtn": {
+    "message": "🗑️ 全ルール削除"
+  },
+  "statProtectedSites": {
+    "message": "保護中のサイト"
+  },
+  "statBlockedElements": {
+    "message": "ブロック要素数"
+  },
+  "statPlanStatus": {
+    "message": "プラン状態"
+  },
+  "statGlobalToggle": {
+    "message": "全体保護スイッチ"
+  },
+  "statusEnabled": {
+    "message": "有効"
+  },
+  "statusDisabled": {
+    "message": "無効"
+  },
+  "whitelistTitle": {
+    "message": "一時停止中サイト (ホワイトリスト)"
+  },
+  "whitelistDesc": {
+    "message": "リスト内のサイトでは広告クリーンアップを実行しません"
+  },
+  "whitelistEmpty": {
+    "message": "一時停止中のサイトはありません。"
+  },
+  "resumeCleanBtn": {
+    "message": "保護を再開"
+  },
+  "sidebarTitle": {
+    "message": "Webサイト一覧"
+  },
+  "noActiveDomains": {
+    "message": "登録サイトなし"
+  },
+  "panelDefaultTitle": {
+    "message": "管理するWebサイトを選択"
+  },
+  "panelDefaultDesc": {
+    "message": "左のリストからサイトを選択してください。ダブルクリックでルール名やセレクタを編集できます。"
+  },
+  "panelNoSitesTitle": {
+    "message": "設定済みサイトがありません"
+  },
+  "panelNoSitesDesc": {
+    "message": "Webサイト閲覧中に拡張機能アイコンをクリックしてブロックを開始してください！"
+  },
+  "searchPlaceholder": {
+    "message": "ルールやセレクタを検索..."
+  },
+  "thDisplayName": {
+    "message": "ルール名"
+  },
+  "thSelector": {
+    "message": "CSS セレクタ"
+  },
+  "thDate": {
+    "message": "ブロック日"
+  },
+  "thStatus": {
+    "message": "状態"
+  },
+  "thAction": {
+    "message": "操作"
+  },
+  "noMatchingRules": {
+    "message": "一致するルールが見つかりません。"
+  },
+  "noRulesConfigured": {
+    "message": "広告ブロックルールはまだありません。"
+  },
+  "selectSitePrompt": {
+    "message": "左のパネルからWebサイトを選択してください。"
+  },
+  "confirmDeleteRule": {
+    "message": "この広告ブロックルールを削除してもよろしいですか？"
+  },
+  "confirmClearAll": {
+    "message": "⚠️ 警告：すべての広告ブロックルールが完全に削除されます。続行しますか？"
+  },
+  "allRulesCleared": {
+    "message": "すべての広告ブロックルールがクリアされました。"
+  },
+  "confirmImport": {
+    "message": "これらのルールをインポートしますか？既存の設定とマージされます。"
+  },
+  "importSuccess": {
+    "message": "設定が正常にインポートされました！"
+  },
+  "importParseError": {
+    "message": "バックアップファイルの読み込みに失敗しました: "
+  },
+  "importFormatError": {
+    "message": "JSON形式がルールエクスポート構造と一致しません。"
+  },
+  "invalidSelectorAlert": {
+    "message": "無効なCSSセレクタ形式です。構文を確認してください。"
+  },
+  "pickerHint": {
+    "message": "非表示にする要素をクリック (Esc でキャンセル)"
+  },
+  "pickerNoSelector": {
+    "message": "利用可能な class/id がありません。別の要素を選択してください。"
+  },
+  "pickerRuleDefaultName": {
+    "message": "ピックした要素"
+  }
+}

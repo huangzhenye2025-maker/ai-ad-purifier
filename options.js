@@ -1,4 +1,7 @@
+// options.js - AI Ad Purifier 控制面板 (支持 Chrome i18n 多语言)
 document.addEventListener('DOMContentLoaded', () => {
+  const CEE = globalThis.CEE;
+
   const globalToggle = document.getElementById('global-toggle');
   const globalStatusText = document.getElementById('global-status-text');
   
@@ -16,28 +19,78 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnExport = document.getElementById('btn-export');
   const btnClearAll = document.getElementById('btn-clear-all');
   const btnImport = document.getElementById('btn-import');
+  const whitelistContainer = document.getElementById('whitelist-container');
 
   let allRules = {};
+  let siteDisabled = {};
   let selectedDomain = '';
 
-  // Initialize
+  // ---------- i18n 辅助函数 ----------
+
+  function t(key, fallback) {
+    return (chrome.i18n && chrome.i18n.getMessage(key)) || fallback || '';
+  }
+
+  function localizeDocument() {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.getAttribute('data-i18n');
+      const msg = t(key, el.textContent);
+      if (msg) el.textContent = msg;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      const msg = t(key, el.placeholder);
+      if (msg) el.placeholder = msg;
+    });
+    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-title');
+      const msg = t(key, el.title);
+      if (msg) el.title = msg;
+    });
+  }
+
+  localizeDocument();
   loadSettings();
 
   // 1. Load data from local storage
   function loadSettings() {
-    chrome.storage.local.get(['rules', 'globalEnabled'], (result) => {
-      allRules = result.rules || {};
+    chrome.storage.local.get(['rules', 'globalEnabled', 'isPro', 'siteDisabled'], (result) => {
+      allRules = CEE.normalizeRules(result.rules || {});
+      // 归一化（合并 www、去重、容量上限）后若与存储不一致，回写以自愈
+      if (JSON.stringify(allRules) !== JSON.stringify(result.rules || {})) {
+        chrome.storage.local.set({ rules: allRules });
+      }
+      siteDisabled = result.siteDisabled || {};
       const globalEnabled = result.globalEnabled !== false;
+      const isPro = result.isPro === true;
       
       // Update global toggle state
       globalToggle.checked = globalEnabled;
       updateGlobalStatusText(globalEnabled);
+      
+      // Update plan status badge
+      const statPlanStatus = document.getElementById('stat-plan-status');
+      const btnUpgradeOptions = document.getElementById('btn-upgrade-options');
+      if (statPlanStatus) {
+        if (isPro) {
+          statPlanStatus.innerHTML = `👑 <b>${t('planPro', '👑 Pro Edition')}</b>`;
+          statPlanStatus.style.color = '#818cf8';
+          if (btnUpgradeOptions) btnUpgradeOptions.style.display = 'none';
+        } else {
+          statPlanStatus.innerHTML = `${t('planFree', '🌱 Free Edition (Standard Shield)')}`;
+          statPlanStatus.style.color = '#a5b4fc';
+          if (btnUpgradeOptions) btnUpgradeOptions.style.display = 'inline-block';
+        }
+      }
       
       // Calculate Stats
       updateStats();
       
       // Render Domain list
       renderDomainList();
+
+      // Render paused-site whitelist
+      renderWhitelist();
       
       // If a domain was already selected, refresh its rules. Otherwise select the first one.
       const domains = Object.keys(allRules).filter(dom => allRules[dom] && allRules[dom].length > 0);
@@ -47,19 +100,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         selectDomain(selectedDomain);
       } else {
-        panelDomainTitle.textContent = 'No configurations yet';
-        panelDomainDesc.textContent = 'Visit websites and click the extension icon to start blocking ad elements!';
-        tableBody.innerHTML = `<tr><td colspan="5" class="no-rules-state">No blocking rules configured yet.</td></tr>`;
+        panelDomainTitle.textContent = t('panelNoSitesTitle', 'No websites configured yet');
+        panelDomainDesc.textContent = t('panelNoSitesDesc', 'Browse the web and click the extension icon to start blocking ads!');
+        tableBody.innerHTML = `<tr><td colspan="5" class="no-rules-state">${escapeHtml(t('noRulesConfigured', 'No ad blocking rules configured yet.'))}</td></tr>`;
       }
+    });
+  }
+
+  const btnUpgradeOptions = document.getElementById('btn-upgrade-options');
+  if (btnUpgradeOptions) {
+    btnUpgradeOptions.addEventListener('click', () => {
+      chrome.tabs.create({ url: 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=subscription&currency=USD' });
     });
   }
 
   function updateGlobalStatusText(enabled) {
     if (enabled) {
-      globalStatusText.textContent = 'Enabled';
+      globalStatusText.textContent = t('statusEnabled', 'Enabled');
       globalStatusText.style.color = 'var(--color-success)';
     } else {
-      globalStatusText.textContent = 'Disabled';
+      globalStatusText.textContent = t('statusDisabled', 'Disabled');
       globalStatusText.style.color = 'var(--color-accent)';
     }
   }
@@ -82,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const domains = Object.keys(allRules).filter(dom => allRules[dom] && allRules[dom].length > 0);
     
     if (domains.length === 0) {
-      domainListContainer.innerHTML = `<div style="font-size:13px; color:var(--text-muted); padding: 8px;">No active domains</div>`;
+      domainListContainer.innerHTML = `<div style="font-size:13px; color:var(--text-muted); padding: 8px;">${escapeHtml(t('noActiveDomains', 'No active domains'))}</div>`;
       return;
     }
     
@@ -90,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = document.createElement('div');
       item.className = `domain-item ${dom === selectedDomain ? 'active' : ''}`;
       item.innerHTML = `
-        <span>${dom}</span>
+        <span>${escapeHtml(dom)}</span>
         <span class="domain-badge">${allRules[dom].length}</span>
       `;
       item.addEventListener('click', () => {
@@ -113,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     panelDomainTitle.textContent = dom;
-    panelDomainDesc.textContent = `Manage blocking rules for this website. Double click text fields to rename rule or edit CSS selector directly.`;
+    panelDomainDesc.textContent = t('panelDefaultDesc', 'Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly.');
     renderRulesTable();
   }
 
@@ -130,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tableBody.innerHTML = '';
 
     if (filteredRules.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="5" class="no-rules-state">No matching rules found.</td></tr>`;
+      tableBody.innerHTML = `<tr><td colspan="5" class="no-rules-state">${escapeHtml(t('noMatchingRules', 'No matching rules found.'))}</td></tr>`;
       return;
     }
 
@@ -139,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tr.innerHTML = `
         <td class="rule-name-cell" id="name-${rule.id}" title="Double click to edit name">${escapeHtml(rule.name)}</td>
         <td class="rule-selector-cell" id="selector-${rule.id}" title="Double click to edit selector">${escapeHtml(rule.selector)}</td>
-        <td class="rule-date-cell">${rule.date || 'Unknown'}</td>
+        <td class="rule-date-cell">${escapeHtml(rule.date || 'Unknown')}</td>
         <td>
           <label class="switch">
             <input type="checkbox" id="toggle-${rule.id}" ${rule.enabled !== false ? 'checked' : ''}>
@@ -147,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </label>
         </td>
         <td class="actions-cell">
-          <button class="action-btn delete" id="delete-${rule.id}" title="Delete rule">
+          <button class="action-btn delete" id="delete-${rule.id}" title="${escapeHtml(t('restoreHiddenElement', 'Delete rule'))}">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="3 6 5 6 21 6"></polyline>
               <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -200,10 +260,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // If editing selector, perform validation
       if (field === 'selector') {
         try {
-          // Simple validation test for selector format syntax
+          if (!CEE.isSafeSelector(newValue)) {
+            throw new Error('Unsafe selector');
+          }
           document.querySelector(newValue);
         } catch (e) {
-          alert('Invalid CSS selector format. Please verify the syntax and try again.');
+          alert(t('invalidSelectorAlert', 'Invalid CSS selector format. Please verify the syntax and try again.'));
           cell.textContent = currentValue; // Revert
           return;
         }
@@ -242,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function deleteRule(ruleId) {
-    if (!confirm('Are you sure you want to delete this ad-blocking rule?')) return;
+    if (!confirm(t('confirmDeleteRule', 'Are you sure you want to delete this ad-blocking rule?'))) return;
     
     const rules = allRules[selectedDomain] || [];
     const filtered = rules.filter(r => r.id !== ruleId);
@@ -303,13 +365,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Simple structural validation
         if (typeof imported !== 'object' || Array.isArray(imported)) {
-          throw new Error('JSON format does not match rule export structure.');
+          throw new Error(t('importFormatError', 'JSON format does not match rule export structure.'));
         }
         
-        if (confirm('Are you sure you want to import these rules? They will be merged with your existing configuration.')) {
+        if (confirm(t('confirmImport', 'Are you sure you want to import these rules? They will be merged with your existing configuration.'))) {
           // Merge imported rules with current rules
           chrome.storage.local.get(['rules'], (result) => {
-            const currentRules = result.rules || {};
+            let currentRules = CEE.normalizeRules(result.rules || {});
             
             for (const domain in imported) {
               if (Array.isArray(imported[domain])) {
@@ -318,28 +380,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 
                 imported[domain].forEach(importedRule => {
+                  // 安全过滤：非法/危险选择器一律丢弃（防止导入隐藏 body/#root 的坏规则）
+                  if (!importedRule || typeof importedRule.selector !== 'string') return;
+                  const sel = importedRule.selector.trim();
+                  if (!CEE.isSafeSelector(sel)) return;
+
                   // Avoid duplicating exact selectors in the same domain
-                  if (!currentRules[domain].some(r => r.selector === importedRule.selector)) {
+                  if (!currentRules[domain].some(r => r.selector === sel)) {
+                    // 重新生成 ID，避免与现有规则冲突或包含非法字符
                     currentRules[domain].push({
-                      id: importedRule.id || 'rule_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                      id: CEE.makeRuleId('rule_imp_'),
                       name: importedRule.name || 'Imported Rule',
-                      selector: importedRule.selector,
+                      selector: sel,
                       enabled: importedRule.enabled !== false,
-                      date: importedRule.date || new Date().toLocaleDateString()
+                      date: importedRule.date || new Date().toLocaleDateString(),
+                      ts: Date.now()
                     });
                   }
                 });
               }
             }
 
+            // 容量上限归一化（每域/总数/域名合并 www）
+            currentRules = CEE.normalizeRules(currentRules);
+
             chrome.storage.local.set({ rules: currentRules }, () => {
-              alert('Configuration imported successfully!');
+              alert(t('importSuccess', 'Configuration imported successfully!'));
               loadSettings();
             });
           });
         }
       } catch (err) {
-        alert('Failed to parse backup file: ' + err.message);
+        alert(t('importParseError', 'Failed to parse backup file: ') + err.message);
       }
       fileInput.value = ''; // Reset file input
     };
@@ -348,23 +420,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Clear all rules completely
   btnClearAll.addEventListener('click', () => {
-    if (confirm('⚠️ Warning: This will permanently delete all of your ad blocking rules. This action cannot be undone! Proceed?')) {
+    if (confirm(t('confirmClearAll', '⚠️ Warning: This will permanently delete all of your ad blocking rules. This action cannot be undone! Proceed?'))) {
       chrome.storage.local.set({ rules: {} }, () => {
         selectedDomain = '';
         loadSettings();
-        alert('All ad-blocking rules have been cleared.');
+        alert(t('allRulesCleared', 'All ad-blocking rules have been cleared.'));
       });
     }
   });
 
+  // Open Chrome Web Store review page
+  const btnRateStoreOptions = document.getElementById('btn-rate-store-options');
+  if (btnRateStoreOptions) {
+    btnRateStoreOptions.addEventListener('click', () => {
+      const extensionId = chrome.runtime.id;
+      const storeReviewUrl = `https://chromewebstore.google.com/detail/${extensionId}`;
+      chrome.tabs.create({ url: storeReviewUrl });
+    });
+  }
+
+  // ---------- 暂停站点（白名单）管理 ----------
+  function renderWhitelist() {
+    if (!whitelistContainer) return;
+    const domains = Object.keys(siteDisabled).sort();
+    if (domains.length === 0) {
+      whitelistContainer.innerHTML = `<div class="no-rules-state" style="padding:16px !important;margin:0;">${escapeHtml(t('whitelistEmpty', "No paused websites. Click 'Pause on Site' in the popup to whitelist a website."))}</div>`;
+      return;
+    }
+    whitelistContainer.innerHTML = '';
+    domains.forEach(dom => {
+      const item = document.createElement('div');
+      item.className = 'whitelist-item';
+      item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;background:rgba(0,0,0,0.1);';
+      item.innerHTML = `
+        <span style="font-family:monospace;font-size:12px;color:var(--text-secondary);word-break:break-all;">${CEE.escapeHtml(dom)}</span>
+        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;white-space:nowrap;" data-whitelist-remove="${CEE.escapeHtml(dom)}">${escapeHtml(t('resumeCleanBtn', 'Resume Shield'))}</button>
+      `;
+      whitelistContainer.appendChild(item);
+    });
+    whitelistContainer.querySelectorAll('[data-whitelist-remove]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        delete siteDisabled[btn.dataset.whitelistRemove];
+        chrome.storage.local.set({ siteDisabled }, renderWhitelist);
+      });
+    });
+  }
+
   // Helper utility to sanitize HTML output
   function escapeHtml(str) {
-    if (!str) return '';
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+    return CEE.escapeHtml(str);
   }
 });

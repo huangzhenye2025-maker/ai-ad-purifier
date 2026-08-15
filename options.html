@@ -55,15 +55,15 @@
     
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
     }
     
     .stat-card {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 20px;
+      padding: 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -77,7 +77,7 @@
     }
     
     .stat-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--text-secondary);
       text-transform: uppercase;
@@ -85,7 +85,7 @@
     }
     
     .stat-value {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--text-primary);
     }
@@ -260,7 +260,7 @@
     
     .rule-name-cell {
       font-weight: 500;
-      cursor: pointer;
+      color: var(--text-primary);
     }
     
     .rule-name-cell input {
@@ -271,12 +271,13 @@
       font-size: 13px;
       padding: 2px 6px;
       outline: none;
-      font-family: inherit;
+      width: 100%;
     }
     
     .rule-selector-cell {
       font-family: monospace;
-      color: var(--text-secondary);
+      font-size: 12px;
+      color: var(--color-primary);
       max-width: 320px;
       white-space: nowrap;
       overflow: hidden;
@@ -369,30 +370,38 @@
           </linearGradient>
         </defs>
       </svg>
-      <span class="brand-name">AI Ad Purifier <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);">Control Panel</span></span>
+      <span class="brand-name">AI Ad Purifier <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);" data-i18n="optionsTitle">Control Panel</span></span>
     </div>
     <div class="nav-actions">
-      <button class="btn btn-secondary" id="btn-import">📥 Import Config</button>
+      <button class="btn btn-secondary" id="btn-rate-store-options" style="color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.08);" data-i18n="navRateBtn">⭐ Rate 5 Stars</button>
+      <button class="btn btn-secondary" id="btn-import" data-i18n="navImportBtn">📥 Import Config</button>
       <input type="file" id="import-file" accept=".json">
-      <button class="btn btn-secondary" id="btn-export">📤 Export Config</button>
-      <button class="btn btn-danger" id="btn-clear-all">🗑️ Clear All Rules</button>
+      <button class="btn btn-secondary" id="btn-export" data-i18n="navExportBtn">📤 Export Config</button>
+      <button class="btn btn-danger" id="btn-clear-all" data-i18n="navClearAllBtn">🗑️ Clear All Rules</button>
     </div>
   </div>
 
   <!-- Stats row -->
   <div class="stats-row">
     <div class="stat-card">
-      <span class="stat-title">Configured Domains</span>
+      <span class="stat-title" data-i18n="statProtectedSites">Protected Sites</span>
       <span class="stat-value" id="stat-domains">0</span>
     </div>
     <div class="stat-card">
-      <span class="stat-title">Blocked Elements</span>
+      <span class="stat-title" data-i18n="statBlockedElements">Blocked Elements</span>
       <span class="stat-value" id="stat-elements">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-title" data-i18n="statPlanStatus">Plan Status</span>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+        <span class="stat-value" style="font-size: 15px; color: #a5b4fc;" id="stat-plan-status" data-i18n="planFree">🌱 Free Edition (Standard Shield)</span>
+        <button id="btn-upgrade-options" style="padding: 4px 8px; font-size: 11px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;" data-i18n="upgradeBtn">Upgrade Pro ($7.99/mo)</button>
+      </div>
     </div>
     <div class="stat-card" style="flex-direction: row; align-items: center; justify-content: space-between;">
       <div>
-        <span class="stat-title" style="display: block; margin-bottom: 4px;">Global Extension Status</span>
-        <span class="stat-value" style="font-size: 16px; color: var(--color-success);" id="global-status-text">Enabled</span>
+        <span class="stat-title" style="display: block; margin-bottom: 4px;" data-i18n="statGlobalToggle">Global Extension Shield</span>
+        <span class="stat-value" style="font-size: 15px; color: var(--color-success);" id="global-status-text" data-i18n="statusEnabled">Enabled</span>
       </div>
       <label class="switch" style="width: 44px; height: 24px;">
         <input type="checkbox" id="global-toggle" checked>
@@ -401,14 +410,23 @@
     </div>
   </div>
 
+  <!-- Paused Sites (Whitelist) -->
+  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span class="stat-title" data-i18n="whitelistTitle">Paused Websites (Whitelist)</span>
+      <span style="font-size: 11px; color: var(--text-muted);" data-i18n="whitelistDesc">The extension will not perform any ad cleaning on these sites.</span>
+    </div>
+    <div id="whitelist-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
+  </div>
+
   <!-- Dashboard Layout -->
   <div class="dashboard-layout">
     <!-- Sidebar -->
     <div class="sidebar glass-panel">
-      <div class="sidebar-title">Website List</div>
+      <div class="sidebar-title" data-i18n="sidebarTitle">Website List</div>
       <div class="domain-list" id="domain-list-container">
         <!-- Will be populated dynamically -->
-        <div style="font-size:13px; color:var(--text-muted);">No configurations yet</div>
+        <div style="font-size:13px; color:var(--text-muted);" data-i18n="noActiveDomains">No active domains</div>
       </div>
     </div>
     
@@ -416,8 +434,8 @@
     <div class="main-panel glass-panel">
       <div class="panel-header">
         <div class="panel-title-area">
-          <div class="panel-title" id="panel-domain-title">Select a website to manage</div>
-          <div class="panel-desc" id="panel-domain-desc">Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly.</div>
+          <div class="panel-title" id="panel-domain-title" data-i18n="panelDefaultTitle">Select a website to manage</div>
+          <div class="panel-desc" id="panel-domain-desc" data-i18n="panelDefaultDesc">Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly.</div>
         </div>
         
         <div class="search-box">
@@ -425,7 +443,7 @@
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" class="search-input" id="search-rules" placeholder="Search rules or selectors...">
+          <input type="text" class="search-input" id="search-rules" placeholder="Search rules or selectors..." data-i18n-placeholder="searchPlaceholder">
         </div>
       </div>
       
@@ -433,17 +451,17 @@
         <table id="rules-table">
           <thead>
             <tr>
-              <th width="30%">Display Name</th>
-              <th width="40%">CSS Selector</th>
-              <th width="15%">Date Blocked</th>
-              <th width="8%">Status</th>
-              <th width="7%">Action</th>
+              <th width="30%" data-i18n="thDisplayName">Display Name</th>
+              <th width="40%" data-i18n="thSelector">CSS Selector</th>
+              <th width="15%" data-i18n="thDate">Date Blocked</th>
+              <th width="8%" data-i18n="thStatus">Status</th>
+              <th width="7%" data-i18n="thAction">Action</th>
             </tr>
           </thead>
           <tbody id="rules-table-body">
             <!-- Will be populated dynamically -->
             <tr>
-              <td colspan="5" class="no-rules-state">Select a website from the left panel to inspect rules.</td>
+              <td colspan="5" class="no-rules-state" data-i18n="selectSitePrompt">Select a website from the left panel to inspect rules.</td>
             </tr>
           </tbody>
         </table>
@@ -451,6 +469,7 @@
     </div>
   </div>
 
+  <script src="shared.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

@@ -1,0 +1,290 @@
+{
+  "appName": {
+    "message": "AI Ad Purifier - Умный блокировщик рекламы"
+  },
+  "appDesc": {
+    "message": "Интеллектуальное обнаружение и удаление рекламы, баннеров и всплывающих окон с помощью DeepSeek AI."
+  },
+  "currentDomain": {
+    "message": "Текущий домен"
+  },
+  "loading": {
+    "message": "Загрузка..."
+  },
+  "planFree": {
+    "message": "🌱 Бесплатная версия (Базовая защита)"
+  },
+  "planPro": {
+    "message": "👑 Про-версия"
+  },
+  "planProUntil": {
+    "message": "👑 Про-версия · До "
+  },
+  "upgradeBtn": {
+    "message": "Перейти на Про ($$7.99/мес)"
+  },
+  "localCleanBtn": {
+    "message": "⚡ Быстрая локальная очистка (Бесплатно)"
+  },
+  "localCleanBtnScanning": {
+    "message": "⚡ Сканирование рекламы..."
+  },
+  "aiCleanBtn": {
+    "message": "✨ Очистка с DeepSeek AI ($$7.99/мес)"
+  },
+  "aiCleanBtnScanning": {
+    "message": "🤖 DeepSeek AI анализирует страницу..."
+  },
+  "pickerBtn": {
+    "message": "🎯 Выбрать и скрыть"
+  },
+  "pickerBtnActive": {
+    "message": "🎯 Нажмите на любой элемент…"
+  },
+  "undoBtn": {
+    "message": "↩ Отменить последнее"
+  },
+  "sitePauseBtn": {
+    "message": "⏸ Приостановить на этом сайте"
+  },
+  "siteResumeBtn": {
+    "message": "▶ Возобновить защиту"
+  },
+  "blockedElements": {
+    "message": "Заблокировано элементов"
+  },
+  "emptyStateRules": {
+    "message": "На этом сайте пока нет скрытых элементов. Нажмите кнопку очистки выше!"
+  },
+  "rateTitle": {
+    "message": "⭐ Нравится AI Ad Purifier?"
+  },
+  "rateDesc": {
+    "message": "Оставьте нам отзыв с 5 звездами в Chrome Web Store!"
+  },
+  "rateBtn": {
+    "message": "Оценить на 5 звезд ⭐"
+  },
+  "modalTitle": {
+    "message": "Переход на DeepSeek AI Pro"
+  },
+  "modalSubtitle": {
+    "message": "Подписка всего за $$7.99 USD / месяц"
+  },
+  "modalFreeTitle": {
+    "message": "🌱 Бесплатная версия:"
+  },
+  "modalFree1": {
+    "message": "✅ Блокировка рекламы и всплывающих окон (100% Бесплатно)"
+  },
+  "modalFree2": {
+    "message": "✅ Локальное скрытие элементов"
+  },
+  "modalFree3": {
+    "message": "❌ Без поддержки нейросети DeepSeek AI"
+  },
+  "modalProTitle": {
+    "message": "👑 Платная Про-версия ($$7.99/мес):"
+  },
+  "modalPro1": {
+    "message": "✨ Включает все бесплатные функции"
+  },
+  "modalPro2": {
+    "message": "✨ Глубокий анализ DOM-структуры с DeepSeek AI"
+  },
+  "modalPro3": {
+    "message": "✨ Автоматическая перекомпоновка и схлопывание пустых мест"
+  },
+  "modalPro4": {
+    "message": "✨ Безлимитная очистка страниц с помощью ИИ"
+  },
+  "modalBuyBtn": {
+    "message": "💳 Оформить подписку ($$7.99/мес)"
+  },
+  "modalOrderPlaceholder": {
+    "message": "Уже купили? Введите номер заказа (ORD_...)"
+  },
+  "modalActivateBtn": {
+    "message": "Активировать"
+  },
+  "modalActivatingBtn": {
+    "message": "Активация..."
+  },
+  "unsupportedPageSys": {
+    "message": "Системные страницы браузера не могут быть очищены."
+  },
+  "unsupportedPageGen": {
+    "message": "Эта страница не поддерживает очистку рекламы."
+  },
+  "sitePausedMsg": {
+    "message": "Очистка приостановлена на этом сайте"
+  },
+  "globalDisabledMsg": {
+    "message": "Глобальная защита отключена"
+  },
+  "undoNoRules": {
+    "message": "Нет правил для отмены на этом сайте."
+  },
+  "undoSuccess": {
+    "message": "Отменено: "
+  },
+  "enterOrderId": {
+    "message": "Пожалуйста, введите номер заказа Waffo."
+  },
+  "invalidOrderId": {
+    "message": "Неверный формат номера заказа (должен начинаться с 'ORD_')."
+  },
+  "activationSuccess": {
+    "message": "🎉 Премиум-доступ успешно активирован! Спасибо за подписку."
+  },
+  "activationFailed": {
+    "message": "Недействительный или неоплаченный номер заказа."
+  },
+  "serverConnFailed": {
+    "message": "Не удалось подключиться к серверу проверки."
+  },
+  "subExpired": {
+    "message": "Срок действия подписки истек. Пожалуйста, продлите подписку."
+  },
+  "rateLimited": {
+    "message": "Слишком много запросов. Попробуйте позже."
+  },
+  "subInvalidOrExpired": {
+    "message": "Подписка истекла или недействительный номер заказа."
+  },
+  "serverErrorHttp": {
+    "message": "Ошибка сервиса облачного анализа (HTTP "
+  },
+  "aiCleanApplied": {
+    "message": "🤖 Анализ страницы завершен. Правила блокировки применены."
+  },
+  "smartRulePrefix": {
+    "message": "Умное правило #"
+  },
+  "restoreHiddenElement": {
+    "message": "Восстановить скрытый элемент"
+  },
+  "optionsTitle": {
+    "message": "Панель управления"
+  },
+  "navRateBtn": {
+    "message": "⭐ Оценить на 5 звезд"
+  },
+  "navImportBtn": {
+    "message": "📥 Импорт настроек"
+  },
+  "navExportBtn": {
+    "message": "📤 Экспорт настроек"
+  },
+  "navClearAllBtn": {
+    "message": "🗑️ Удалить все правила"
+  },
+  "statProtectedSites": {
+    "message": "Защищенные сайты"
+  },
+  "statBlockedElements": {
+    "message": "Заблокировано"
+  },
+  "statPlanStatus": {
+    "message": "Статус плана"
+  },
+  "statGlobalToggle": {
+    "message": "Глобальная защита"
+  },
+  "statusEnabled": {
+    "message": "Включено"
+  },
+  "statusDisabled": {
+    "message": "Отключено"
+  },
+  "whitelistTitle": {
+    "message": "Приостановленные сайты (Белый список)"
+  },
+  "whitelistDesc": {
+    "message": "На этих сайтах расширение не выполняет очистку рекламы."
+  },
+  "whitelistEmpty": {
+    "message": "Нет приостановленных сайтов."
+  },
+  "resumeCleanBtn": {
+    "message": "Возобновить"
+  },
+  "sidebarTitle": {
+    "message": "Список сайтов"
+  },
+  "noActiveDomains": {
+    "message": "Нет активных сайтов"
+  },
+  "panelDefaultTitle": {
+    "message": "Выберите сайт для управления"
+  },
+  "panelDefaultDesc": {
+    "message": "Нажмите на сайт слева для просмотра правил. Двойной клик для редактирования."
+  },
+  "panelNoSitesTitle": {
+    "message": "Сайты еще не настроены"
+  },
+  "panelNoSitesDesc": {
+    "message": "Переходите по сайтам и нажимайте на иконку расширения для блокировки!"
+  },
+  "searchPlaceholder": {
+    "message": "Поиск правил или селекторов..."
+  },
+  "thDisplayName": {
+    "message": "Название"
+  },
+  "thSelector": {
+    "message": "CSS-селектор"
+  },
+  "thDate": {
+    "message": "Дата"
+  },
+  "thStatus": {
+    "message": "Статус"
+  },
+  "thAction": {
+    "message": "Действие"
+  },
+  "noMatchingRules": {
+    "message": "Совпадающих правил не найдено."
+  },
+  "noRulesConfigured": {
+    "message": "Правила блокировки еще не настроены."
+  },
+  "selectSitePrompt": {
+    "message": "Выберите сайт на панели слева."
+  },
+  "confirmDeleteRule": {
+    "message": "Вы уверены, что хотите удалить это правило блокировки?"
+  },
+  "confirmClearAll": {
+    "message": "⚠️ Внимание: Это навсегда удалит все ваши правила. Продолжить?"
+  },
+  "allRulesCleared": {
+    "message": "Все правила блокировки удалены."
+  },
+  "confirmImport": {
+    "message": "Импортировать эти правила? Они будут объединены с текущими."
+  },
+  "importSuccess": {
+    "message": "Конфигурация успешно импортирована!"
+  },
+  "importParseError": {
+    "message": "Не удалось прочитать файл резервной копии: "
+  },
+  "importFormatError": {
+    "message": "Формат JSON не соответствует структуре экспорта."
+  },
+  "invalidSelectorAlert": {
+    "message": "Неверный формат CSS-селектора."
+  },
+  "pickerHint": {
+    "message": "Нажмите на элемент, чтобы скрыть (Esc для отмены)"
+  },
+  "pickerNoSelector": {
+    "message": "Нет подходящего class/id. Выберите элемент поменьше."
+  },
+  "pickerRuleDefaultName": {
+    "message": "Выбранный элемент"
+  }
+}
