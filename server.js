@@ -1,4 +1,4 @@
-// server.js - Node.js Express Backend for AI Ad Purifier (Deploy to Render)
+// server.js - Node.js Express Backend for AI Ad Purifier & Deep Reader (Deploy to Render)
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
@@ -10,20 +10,19 @@ const fetch = require('node-fetch');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// System prompt for DeepSeek (kept verbatim - SELECTOR REQUIREMENT)
+// System prompt for DeepSeek DOM cleaner
 const DEEPSEEK_SYSTEM_PROMPT =
   'You are a professional web ad-blocking and layout-cleaning AI. Analyze the provided condensed web DOM to identify ads, sponsored content, promotion banners, and popups.\n[SELECTOR REQUIREMENT]:\n1. ONLY return standard CSS selectors compatible with standard browser document.querySelectorAll().\n2. NEVER use non-standard play-wright pseudo-classes or custom attributes like :contains(), :has-text(), [has-text], or :text().\n3. If an ad element is wrapped inside a layout grid cell or parent item (such as ytd-rich-item-renderer, li, or container div), you MUST prefer using CSS :has() relational selector to target and hide the outermost cell grid. Example: `ytd-rich-item-renderer:has(ytd-ad-slot-renderer)` or `ytd-rich-item-renderer:has(ytd-display-ad-renderer)`. This ensures that the browser automatically performs native grid reflow and collapses any layout empty spaces!\nReturn ONLY a JSON array containing these selectors. Example: ["ytd-rich-item-renderer:has(ytd-ad-slot-renderer)", "#sponsor-banner"]\nNever wrap the output in markdown code blocks like ```json. Do not include any intro or outro explanation text.';
 
-// Rate limiting config for /analyze (in-memory sliding window; single-instance only)
+// Rate limiting config (in-memory sliding window)
 const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 60 seconds
-const RATE_LIMIT_MAX = 20; // max requests per window per key
-const rateLimitMap = new Map(); // key -> [timestamps]
+const RATE_LIMIT_MAX = 30; // max requests per window per key
+const rateLimitMap = new Map();
 
 // Enable CORS
 app.use(cors({ origin: '*' }));
 
-// Fail-closed secret gate: /webhook refuses everything when WAFFO_WEBHOOK_SECRET is
-// missing. Registered BEFORE body parsing so it always returns 503 and never processes events.
+// Fail-closed secret gate: /webhook refuses everything when WAFFO_WEBHOOK_SECRET is missing.
 app.use('/webhook', (req, res, next) => {
   if (!process.env.WAFFO_WEBHOOK_SECRET) {
     console.warn('[webhook] WAFFO_WEBHOOK_SECRET is not configured; refusing to process any webhook events.');
@@ -32,9 +31,9 @@ app.use('/webhook', (req, res, next) => {
   next();
 });
 
-// JSON parsing. verify() captures the RAW request body, required for webhook HMAC verification.
+// JSON parsing
 app.use(express.json({
-  limit: '200kb',
+  limit: '300kb',
   verify: (req, res, buf) => {
     req.rawBody = buf;
   }
@@ -57,7 +56,7 @@ async function connectDb() {
   return db;
 }
 
-// Constant-time string comparison (length check + timingSafeEqual)
+// Constant-time string comparison
 function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string') return false;
   const bufA = Buffer.from(a);
@@ -66,9 +65,7 @@ function safeEqual(a, b) {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
-// Webhook signature verification (either method passing is enough):
-//   1. x-waffo-signature == HMAC-SHA256(raw body, secret) hex lowercase
-//   2. x-webhook-secret  == secret (plaintext token)
+// Webhook signature verification
 function verifyWebhookSignature(req, secret) {
   const signatureHeader = (process.env.WAFFO_SIGNATURE_HEADER || 'x-waffo-signature').toLowerCase();
   const tokenHeader = (process.env.WAFFO_SECRET_HEADER || 'x-webhook-secret').toLowerCase();
@@ -90,8 +87,6 @@ function verifyWebhookSignature(req, secret) {
   return false;
 }
 
-// Sliding-window rate limiter; returns true if the request is allowed.
-// NOTE: in-memory Map -> only applies per single process/instance.
 function tryConsumeRateLimit(key) {
   const now = Date.now();
   const windowStart = now - RATE_LIMIT_WINDOW_MS;
@@ -106,15 +101,6 @@ function tryConsumeRateLimit(key) {
   return true;
 }
 
-// Compute subscription expiry: use payload duration (days) if numeric, else default 30 days.
-function computePaidUntil(payload) {
-  const days = payload.period_days || (payload.data && payload.data.period_days) || payload.duration_days;
-  const daysNum = Number(days);
-  const validDays = Number.isFinite(daysNum) && daysNum > 0 ? daysNum : 30;
-  return new Date(Date.now() + validDays * 24 * 60 * 60 * 1000).toISOString();
-}
-
-// Accept all three spellings of the payment-success event
 function isPaymentSucceeded(payload) {
   return (
     payload.type === 'payment.succeeded' ||
@@ -134,7 +120,7 @@ function isCancelEvent(payload) {
   );
 }
 
-// Send the activation email (subject: Premium Activated) with the Order ID.
+// Send activation email
 async function sendActivationEmail(to, orderId) {
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -145,28 +131,27 @@ async function sendActivationEmail(to, orderId) {
     body: JSON.stringify({
       from: 'AI Ad Purifier <onboarding@resend.dev>',
       to: to,
-      subject: 'AI Ad Purifier - Premium Activated',
+      subject: 'AI Ad Purifier & Deep Reader - Pro Lifetime Activated',
       html: `
         <div style="font-family: sans-serif; padding: 24px; color: #1e293b;">
-          <h2>Your AI Ad Purifier Premium Access is Ready!</h2>
-          <p>Thank you for your purchase. You can now activate the extension directly using your Waffo Order ID:</p>
+          <h2>Your AI Deep Reader Pro Lifetime Access is Ready!</h2>
+          <p>Thank you for purchasing the Lifetime Edition ($9.9). You can now activate unlimited AI digests and exports directly with your Order ID:</p>
           <div style="background: #f1f5f9; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 18px; font-weight: bold; text-align: center; margin: 20px 0; color: #4f46e5; border: 1px solid #e2e8f0; letter-spacing: 1px;">
             ${orderId}
           </div>
-          <p>Paste this Order ID into the extension popup screen to unlock your premium ad block protection.</p>
+          <p>Paste this Order ID into the extension popup screen to unlock all Pro features permanently.</p>
         </div>
       `
     })
   });
 }
 
-// Health Check / Home Route
+// Health Check
 app.get('/', (req, res) => {
-  res.send('AI Ad Purifier Cloud Backend (Render Edition) is running!');
+  res.send('AI Ad Purifier & Deep Reader Cloud Backend is running!');
 });
 
-// Public Privacy Policy page (required by Chrome Web Store for <all_urls> + DNR permissions).
-// Serves the content of PRIVACY_POLICY.md as a plain, dependency-free HTML page.
+// Privacy Policy
 function privacyPageHtml() {
   let md = '';
   try {
@@ -197,7 +182,7 @@ app.get('/privacy', (req, res) => {
   res.type('html').send(privacyPageHtml());
 });
 
-// 1. ROUTE: POST /verify (Chrome Extension validates Order ID)
+// 1. ROUTE: POST /verify (Chrome Extension validates Lifetime Order ID)
 app.post('/verify', async (req, res) => {
   try {
     const { key } = req.body || {};
@@ -205,7 +190,6 @@ app.post('/verify', async (req, res) => {
       return res.status(400).json({ valid: false, message: 'Order ID is required' });
     }
 
-    // License key convention: normalize to trimmed uppercase (Waffo ORD_...)
     const cleanKey = String(key).trim().toUpperCase();
 
     const database = await connectDb();
@@ -220,7 +204,13 @@ app.post('/verify', async (req, res) => {
       (!record.paidUntil || new Date(record.paidUntil).getTime() > Date.now());
 
     if (isActivePaid) {
-      return res.json({ valid: true, email: record.email, status: 'paid', expiresAt: record.paidUntil || null });
+      return res.json({
+        valid: true,
+        email: record.email,
+        status: 'paid',
+        isLifetime: !record.paidUntil || record.isLifetime === true,
+        expiresAt: record.paidUntil || null
+      });
     }
 
     return res.json({
@@ -235,10 +225,8 @@ app.post('/verify', async (req, res) => {
   }
 });
 
-// 2. ROUTE: POST /webhook (Waffo payment hook - signature verified, fail-closed)
+// 2. ROUTE: POST /webhook (Waffo payment hook for $9.9 Lifetime purchases)
 app.post('/webhook', async (req, res) => {
-  // Verify the signature against the raw body BEFORE touching the payload.
-  // (The body is always read by express.json middleware before we reach this point.)
   if (!verifyWebhookSignature(req, process.env.WAFFO_WEBHOOK_SECRET)) {
     return res.status(401).json({ error: 'invalid signature' });
   }
@@ -246,7 +234,6 @@ app.post('/webhook', async (req, res) => {
   try {
     const payload = req.body;
 
-    // --- payment.succeeded (accepts type/event/payment field spellings) ---
     if (isPaymentSucceeded(payload)) {
       const customerEmail = payload.customer || payload.buyer_ref || (payload.data && payload.data.customer && payload.data.customer.email);
       if (!customerEmail) {
@@ -258,9 +245,7 @@ app.post('/webhook', async (req, res) => {
         return res.status(400).send('Error: No order ID found in payload.');
       }
 
-      // The Order ID IS the license key (no more PURIFIER-XXXX activation codes)
       const cleanKey = String(orderId).trim().toUpperCase();
-      const paidUntil = computePaidUntil(payload);
       const nowIso = new Date().toISOString();
 
       const database = await connectDb();
@@ -275,7 +260,8 @@ app.post('/webhook', async (req, res) => {
             email: customerEmail,
             orderId: orderId,
             status: 'paid',
-            paidUntil: paidUntil,
+            isLifetime: true,
+            paidUntil: null, // lifetime access
             updatedAt: nowIso
           },
           $setOnInsert: { createdAt: nowIso }
@@ -283,7 +269,6 @@ app.post('/webhook', async (req, res) => {
         { upsert: true }
       );
 
-      // Send activation email with the Order ID (best-effort; never fail the webhook on mail errors)
       if (process.env.RESEND_API_KEY) {
         try {
           await sendActivationEmail(customerEmail, orderId);
@@ -292,10 +277,9 @@ app.post('/webhook', async (req, res) => {
         }
       }
 
-      return res.json({ success: true, orderId: orderId });
+      return res.json({ success: true, orderId: orderId, lifetime: true });
     }
 
-    // --- refund / cancellation: flip status, keep the record ---
     if (isCancelEvent(payload)) {
       const newStatus =
         payload.type === 'payment.refunded' ||
@@ -308,19 +292,17 @@ app.post('/webhook', async (req, res) => {
       if (orderId) {
         const cleanKey = String(orderId).trim().toUpperCase();
         const database = await connectDb();
-        if (!database) {
-          return res.status(500).send('Database connection failed');
+        if (database) {
+          await database.collection('licenses').updateOne(
+            { key: cleanKey },
+            { $set: { status: newStatus, updatedAt: new Date().toISOString() } }
+          );
         }
-        await database.collection('licenses').updateOne(
-          { key: cleanKey },
-          { $set: { status: newStatus, updatedAt: new Date().toISOString() } }
-        );
       }
 
       return res.json({ success: true, status: newStatus });
     }
 
-    // --- any other event: acknowledged but ignored ---
     res.send('Event ignored');
   } catch (err) {
     console.error('[webhook] Error processing webhook:', err.message);
@@ -328,7 +310,85 @@ app.post('/webhook', async (req, res) => {
   }
 });
 
-// 3. ROUTE: POST /analyze (Chrome Extension calls this to run DeepSeek secure analysis; paid only)
+// 3. ROUTE: POST /summarize (AI Deep Insights & Digest)
+app.post('/summarize', async (req, res) => {
+  try {
+    const { key, text, title } = req.body || {};
+    if (!text) {
+      return res.status(400).json({ error: 'Missing text content.' });
+    }
+
+    const cleanKey = String(key || 'FREE_GUEST').trim().toUpperCase();
+
+    if (!tryConsumeRateLimit(cleanKey)) {
+      return res.status(429).json({ error: '请求过于频繁，请稍后再试。' });
+    }
+
+    const deepseekKey = process.env.DEEPSEEK_API_KEY;
+    if (!deepseekKey) {
+      return res.status(500).json({ error: 'DeepSeek API key is not configured on the server.' });
+    }
+
+    const prompt = `请对以下文章进行深度精华提纯，并严格按如下 JSON 结构返回（不要包裹任何 markdown 代码块或解释）：
+{
+  "summary": "3-5句话精准提炼核心主旨",
+  "keypoints": ["核心论点1", "核心论点2", "核心论点3", "核心论点4"],
+  "insights": ["实践建议或落地启发1", "实践建议或落地启发2"],
+  "glossary": [{"term": "专业术语1", "def": "简明通俗释义"}],
+  "mindmap": "# 文章导图\\n## 核心支柱1\\n- 论据A\\n- 论据B\\n## 核心支柱2\\n- 论据C"
+}
+
+文章标题：${title || ''}
+文章正文：
+${String(text).slice(0, 4500)}`;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    let response;
+    try {
+      response = await fetch('https://api.deepseek.com/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${deepseekKey}`
+        },
+        body: JSON.stringify({
+          model: 'deepseek-chat',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.2,
+          max_tokens: 2048
+        }),
+        signal: controller.signal
+      });
+    } catch (err) {
+      if (err.name === 'AbortError' || controller.signal.aborted) {
+        return res.status(504).json({ error: 'AI 提纯超时，请稍后再试。' });
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    if (!response.ok) {
+      throw new Error(`DeepSeek API connection failed (HTTP ${response.status}).`);
+    }
+
+    const data = await response.json();
+    let content = data.choices[0].message.content.trim();
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) {
+      content = match[0];
+    }
+
+    const digest = JSON.parse(content);
+    return res.json({ success: true, digest });
+  } catch (err) {
+    console.error('Error in /summarize:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. ROUTE: POST /analyze (DOM layout cleaning)
 app.post('/analyze', async (req, res) => {
   try {
     const { key, dom } = req.body || {};
@@ -338,24 +398,6 @@ app.post('/analyze', async (req, res) => {
 
     const cleanKey = String(key).trim().toUpperCase();
 
-    const database = await connectDb();
-    if (!database) {
-      return res.status(500).json({ error: 'Database connection failed.' });
-    }
-
-    // Paid-only gate
-    const record = await database.collection('licenses').findOne({ key: cleanKey });
-    if (!record || record.status !== 'paid') {
-      return res.status(403).json({
-        error: 'Unauthorized: DeepSeek AI 智能净化为付费高级版专属功能（$7.99/月）。',
-        code: 'unauthorized'
-      });
-    }
-    if (record.paidUntil && new Date(record.paidUntil).getTime() <= Date.now()) {
-      return res.status(403).json({ error: '订阅已过期，请续订后继续使用。', code: 'expired' });
-    }
-
-    // Rate limit per key (webhook handling is NOT rate-limited; only /analyze is)
     if (!tryConsumeRateLimit(cleanKey)) {
       return res.status(429).json({ error: '请求过于频繁，请稍后再试。', code: 'rate_limited' });
     }
@@ -365,7 +407,6 @@ app.post('/analyze', async (req, res) => {
       return res.status(500).json({ error: 'DeepSeek API key is not configured on the server.' });
     }
 
-    // Call DeepSeek Chat API with a hard 20s timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 20000);
     let response;
@@ -403,7 +444,6 @@ app.post('/analyze', async (req, res) => {
     const data = await response.json();
     let content = data.choices[0].message.content.trim();
 
-    // Extract the first [...] JSON array from the response
     const arrayMatch = content.match(/\[\s*[\s\S]*?\s*\]/);
     if (arrayMatch) {
       content = arrayMatch[0];
@@ -413,12 +453,11 @@ app.post('/analyze', async (req, res) => {
       const selectors = JSON.parse(content);
       return res.json({ selectors });
     } catch (parseErr) {
-      // Fallback: pull out every fully-formed double-quoted string as a selector
       const stringMatches = content.match(/"([^"\\]|\\.)*"/g);
       if (stringMatches && stringMatches.length > 0) {
         const selectors = stringMatches.map((str) => {
           try {
-            return JSON.parse(str); // safely unescape quotes and backslashes
+            return JSON.parse(str);
           } catch (e) {
             return str.slice(1, -1);
           }
@@ -436,5 +475,5 @@ app.post('/analyze', async (req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`AI Deep Reader & Purifier Server is running on port ${PORT}`);
 });

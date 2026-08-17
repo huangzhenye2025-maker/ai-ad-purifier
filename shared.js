@@ -1,16 +1,24 @@
 /**
- * shared.js — AI Ad Purifier 共享纯逻辑模块
+ * shared.js — AI Ad Purifier / AI 深度阅读与提纯助手 共享纯逻辑模块
  *
  * 不依赖任何 chrome.* / DOM API，可在 Node 中直接 require（用于单元测试）。
  * 通过 globalThis.CEE 暴露给所有扩展脚本：
  *   - content script / popup / options：在页面中用 <script src="shared.js"> 先加载
  *   - background service worker：importScripts('shared.js')
  *
- * 统一维护：选择器安全校验、规则库归一化与容量上限、域名归一化、HTML 转义、
- * 带超时的 fetch、激活码格式校验。
+ * 维护核心逻辑：
+ * 1. 每日免费 AI 配额管理（每日 3 次，跨天自动重置）
+ * 2. 选择器安全校验（防误删 root / body / main 容器）
+ * 3. 规则库归一化、容量控制与域名清洗
+ * 4. Markdown 转换与 Frontmatter 元数据生成
+ * 5. HTML 转义与安全清洗
+ * 6. 激活码 / 订单号校验 ($9.9 买断版兼容)
  */
 (function (global) {
   'use strict';
+
+  // 免费版每日 AI 额度上限
+  var FREE_DAILY_AI_LIMIT = 3;
 
   // 危险根节点黑名单：这些选择器绝不能用于整块隐藏
   var DANGEROUS_ROOTS = [
@@ -18,7 +26,8 @@
     'div', 'span', 'p', 'a', 'img', 'svg', 'button', 'input', 'ul', 'ol', 'li',
     '.style-scope', '.ytd-app', 'ytd-app', 'ytd-page-manager', '#page-manager',
     '#content', '#app', '#root', '#main', '#body', '.container', '.wrapper',
-    '.content', '.main', '.page', '.layout', '.view', '.app'
+    '.content', '.main', '.page', '.layout', '.view', '.app',
+    '#cee-reader-overlay', '#cee-reader-capsule', '#cee-picker-highlight'
   ];
 
   // 允许作为“裸标签”选择器（无 class/id/属性）使用的广告自定义元素
@@ -37,9 +46,6 @@
 
   /**
    * 选择器安全校验：防止误把整页布局/容器隐藏。
-   *  - 黑名单只拦“精确匹配”的危险根选择器
-   *  - 裸标签选择器（无 class/id/属性）只允许白名单内的广告自定义元素
-   *  - 纯标签组合器（如 "div > div"、"body *"）直接拒绝，除非含 :has()
    */
   function isSafeSelector(sel) {
     if (!sel || typeof sel !== 'string') return false;
@@ -63,15 +69,14 @@
   }
 
   /**
-   * 域名归一化：小写 + 去除 www. 前缀，
-   * 避免 www.example.com 与 example.com 各存一套规则。
+   * 域名归一化：小写 + 去除 www. 前缀
    */
   function normalizeDomain(host) {
     if (!host) return '';
     return String(host).trim().toLowerCase().replace(/^www\./, '');
   }
 
-  /** 生成规则 ID（默认前缀 rule_） */
+  /** 生成规则 ID */
   function makeRuleId(prefix) {
     return (prefix || 'rule_') + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   }
@@ -81,12 +86,7 @@
   }
 
   /**
-   * 规则库归一化 + 容量控制（防存储无限膨胀）：
-   *  - 域名归一化（自动合并 www. 与裸域）
-   *  - 过滤非法规则、同域同选择器去重
-   *  - 每域上限 maxPerDomain（默认 100，保留最新追加的）
-   *  - 总条数上限 maxTotal（默认 3000）、域数量上限 maxDomains（默认 500）
-   *  - 清空/超限的域自动移除；返回全新对象，不修改入参
+   * 规则库归一化 + 容量控制
    */
   function normalizeRules(rules, opts) {
     var maxDomains = (opts && opts.maxDomains) || 500;
@@ -95,7 +95,7 @@
     var out = {};
     if (!rules || typeof rules !== 'object' || Array.isArray(rules)) return out;
 
-    var merged = {}; // 归一化域名 -> 合并后的规则数组（保持追加顺序）
+    var merged = {};
     var keys = Object.keys(rules);
     for (var i = 0; i < keys.length; i++) {
       var dom = normalizeDomain(keys[i]);
@@ -110,7 +110,7 @@
         var r = arr[k];
         if (!isRule(r)) continue;
         var sel = r.selector.trim();
-        if (!isSafeSelector(sel)) continue; // 安全过滤：危险/非法选择器直接丢弃（自愈）
+        if (!isSafeSelector(sel)) continue;
         if (seen[sel]) continue;
         seen[sel] = true;
         target.push({
@@ -129,13 +129,11 @@
       var list = merged[doms[d]];
       if (list.length === 0) continue;
       if (list.length > maxPerDomain) {
-        // 保留最新追加的 maxPerDomain 条
         merged[doms[d]] = list.slice(list.length - maxPerDomain);
       }
       out[doms[d]] = merged[doms[d]];
     }
 
-    // 总条数超限：按域内条数从少到多保留，尽量不让单一站点独占配额
     var entries = Object.keys(out).map(function (dom) { return [dom, out[dom].length]; });
     entries.sort(function (a, b) { return a[1] - b[1]; });
     var total = 0;
@@ -149,7 +147,7 @@
     return capped;
   }
 
-  /** HTML 转义（防 XSS / 属性逃逸） */
+  /** HTML 安全转义 */
   function escapeHtml(str) {
     if (str === null || str === undefined) return '';
     return String(str)
@@ -161,11 +159,10 @@
   }
 
   /**
-   * 带超时的 fetch（浏览器与 Node 18+ 通用）。
-   * 超时自动 abort，避免按钮/请求永久挂起。
+   * 带超时的 fetch
    */
   function fetchWithTimeout(url, options, timeoutMs) {
-    var ms = timeoutMs || 20000;
+    var ms = timeoutMs || 25000;
     var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
     var opts = options || {};
     if (ctrl) {
@@ -183,17 +180,98 @@
   }
 
   /**
-   * 激活码格式校验：兼容 Waffo 订单号（ORD_...）与旧版 CF Worker 生成的
-   * PURIFIER-... 激活码。
+   * 激活码 / 订单号校验：
+   * 兼容 Waffo 订单号（ORD_...）、买断激活码（PRO-LIFETIME-... / PURIFIER-...）
    */
   function isPlausibleKey(code) {
     if (!code || typeof code !== 'string') return false;
     var c = code.trim().toUpperCase();
-    if (!/^(ORD_|PURIFIER-)/.test(c)) return false;
+    if (!/^(ORD_|PURIFIER-|PRO-|LIFETIME-)/.test(c)) return false;
     return c.length >= 6;
   }
 
+  /**
+   * 获取今日日期字符串 YYYY-MM-DD
+   */
+  function getTodayDateStr() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = String(now.getMonth() + 1).padStart(2, '0');
+    var day = String(now.getDate()).padStart(2, '0');
+    return year + '-' + month + '-' + day;
+  }
+
+  /**
+   * 计算每日 AI 配额状态：
+   * @param {Object} quotaStorage { date: string, count: number }
+   * @param {boolean} isPro 是否为 Pro 买断用户
+   * @returns {{ isPro: boolean, used: number, total: number, remaining: number, canUse: boolean }}
+   */
+  function computeAiQuota(quotaStorage, isPro) {
+    if (isPro) {
+      return {
+        isPro: true,
+        used: 0,
+        total: 999999,
+        remaining: 999999,
+        canUse: true
+      };
+    }
+    var today = getTodayDateStr();
+    var used = 0;
+    if (quotaStorage && quotaStorage.date === today && typeof quotaStorage.count === 'number') {
+      used = Math.max(0, quotaStorage.count);
+    }
+    var remaining = Math.max(0, FREE_DAILY_AI_LIMIT - used);
+    return {
+      isPro: false,
+      used: used,
+      total: FREE_DAILY_AI_LIMIT,
+      remaining: remaining,
+      canUse: remaining > 0
+    };
+  }
+
+  /**
+   * 将提取的文章对象转换为带 YAML Frontmatter 的标准 Markdown
+   * @param {Object} article { title, author, date, url, contentMarkdown, aiSummary }
+   */
+  function formatArticleToMarkdown(article) {
+    var title = (article.title || 'Untitled Article').trim();
+    var author = (article.author || '').trim();
+    var date = (article.date || new Date().toISOString().split('T')[0]).trim();
+    var url = (article.url || '').trim();
+    var md = (article.contentMarkdown || article.text || '').trim();
+
+    var frontmatter = [
+      '---',
+      'title: "' + title.replace(/"/g, '\\"') + '"',
+      author ? 'author: "' + author.replace(/"/g, '\\"') + '"' : null,
+      'date: ' + date,
+      url ? 'source: "' + url + '"' : null,
+      'purified_by: "AI Ad Purifier & Deep Reader"',
+      '---',
+      ''
+    ].filter(function (line) { return line !== null; }).join('\n');
+
+    var header = '# ' + title + '\n\n';
+    if (author || date || url) {
+      var meta = [];
+      if (author) meta.push('**作者**: ' + author);
+      if (date) meta.push('**日期**: ' + date);
+      if (url) meta.push('**原文**: [' + title + '](' + url + ')');
+      header += meta.join(' | ') + '\n\n---\n\n';
+    }
+
+    if (article.aiSummary) {
+      header += '## 🧠 AI 核心提要\n\n' + article.aiSummary + '\n\n---\n\n';
+    }
+
+    return frontmatter + header + md;
+  }
+
   var CEE = {
+    FREE_DAILY_AI_LIMIT: FREE_DAILY_AI_LIMIT,
     isSafeSelector: isSafeSelector,
     DANGEROUS_ROOTS: DANGEROUS_ROOTS,
     SAFE_AD_TAGS: SAFE_AD_TAGS,
@@ -202,7 +280,10 @@
     makeRuleId: makeRuleId,
     escapeHtml: escapeHtml,
     fetchWithTimeout: fetchWithTimeout,
-    isPlausibleKey: isPlausibleKey
+    isPlausibleKey: isPlausibleKey,
+    getTodayDateStr: getTodayDateStr,
+    computeAiQuota: computeAiQuota,
+    formatArticleToMarkdown: formatArticleToMarkdown
   };
 
   global.CEE = CEE;

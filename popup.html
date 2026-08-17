@@ -1,110 +1,244 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>AI Ad Purifier</title>
+  <title>AI Ad Purifier & Deep Reader</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      width: 340px;
-      padding: 16px;
-      overflow-x: hidden;
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #151d2f;
+      --bg-card-hover: #1c263c;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --color-primary: #6366f1;
+      --color-primary-hover: #4f46e5;
+      --color-accent: #10b981;
+      --color-warning: #f59e0b;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
     }
-    
+
+    body {
+      width: 360px;
+      margin: 0;
+      padding: 16px;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", sans-serif;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
-    
+
     .logo-area {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    
-    .logo-icon {
-      width: 24px;
-      height: 24px;
-    }
-    
-    .title {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    
-    .settings-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-secondary);
-      padding: 4px;
-      border-radius: 6px;
-      transition: var(--transition-fast);
+
+    .logo-icon-wrap {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
       display: flex;
       align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
     }
-    
-    .settings-btn:hover {
-      color: var(--text-primary);
-      background-color: var(--bg-card);
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
     }
-    
-    .site-info {
-      font-size: 12px;
-      color: var(--text-secondary);
+
+    .title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+
+    .subtitle {
+      font-size: 10px;
+      color: #818cf8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 8px 12px;
-      border-radius: 8px;
-      margin-bottom: 16px;
+      color: var(--text-secondary);
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .icon-btn:hover {
+      background: var(--bg-card-hover);
+      color: #ffffff;
+      border-color: var(--border-hover);
+    }
+
+    /* Site Info & Quota Card */
+    .site-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .site-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 8px;
     }
-    
-    .domain-name {
+
+    .domain-badge {
       font-family: monospace;
-      font-weight: 500;
-      color: var(--color-primary);
-    }
-    
-    .main-action {
-      width: 100%;
-      padding: 14px;
-      font-size: 15px;
+      font-size: 12px;
       font-weight: 600;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-      margin-bottom: 20px;
+      color: #a5b4fc;
+      background: rgba(99, 102, 241, 0.12);
+      padding: 3px 8px;
+      border-radius: 6px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    
-    .main-action.active {
-      background-color: var(--color-accent);
-      box-shadow: 0 4px 12px rgba(255, 82, 82, 0.3);
+
+    .shield-status {
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--color-accent);
+      font-weight: 600;
     }
-    
-    .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background-color: white;
-      border-radius: 50%;
-      display: none;
-      animation: pulse 1.5s infinite;
+    .shield-status.paused {
+      color: #f87171;
     }
-    
-    .main-action.active .pulse-dot {
-      display: inline-block;
+
+    .quota-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--text-secondary);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 8px;
     }
-    
-    @keyframes pulse {
-      0% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-      70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
-      100% { transform: scale(0.95); opacity: 0.5; box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+
+    .upgrade-link {
+      color: #fbbf24;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
     }
-    
+    .upgrade-link:hover {
+      color: #fef08a;
+    }
+
+    /* Action Buttons */
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .btn-hero {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-sizing: border-box;
+    }
+
+    .btn-reader {
+      background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+    .btn-reader:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.45);
+    }
+
+    .btn-ai-digest {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    }
+    .btn-ai-digest:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+    }
+
+    .sub-tools {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .btn-sub {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 8px 4px;
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .btn-sub:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Rules Section */
     .section-title {
       font-size: 11px;
       font-weight: 600;
@@ -115,58 +249,41 @@
       display: flex;
       justify-content: space-between;
     }
-    
+
     .rules-list {
-      max-height: 180px;
+      max-height: 140px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      padding-right: 4px;
+      gap: 6px;
+      padding-right: 2px;
     }
-    
-    .rules-list::-webkit-scrollbar {
-      width: 4px;
-    }
-    
-    .rules-list::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 2px;
-    }
-    
+
     .rule-item {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
-      padding: 10px;
-      border-radius: 8px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      animation: fadeIn 0.2s ease-out;
-      transition: var(--transition-fast);
+      gap: 8px;
+      font-size: 12px;
     }
-    
-    .rule-item:hover {
-      border-color: var(--border-hover);
-      background: var(--bg-card-hover);
-    }
-    
+
     .rule-details {
       flex: 1;
       min-width: 0;
     }
-    
+
     .rule-name {
-      font-size: 13px;
       font-weight: 500;
       color: var(--text-primary);
-      margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     .rule-selector {
       font-size: 10px;
       font-family: monospace;
@@ -175,197 +292,153 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
-    .rule-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    /* Toggle Switch */
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 28px;
-      height: 16px;
-    }
-    
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #374151;
-      transition: .2s;
-      border-radius: 16px;
-    }
-    
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 12px;
-      width: 12px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .2s;
-      border-radius: 50%;
-    }
-    
-    input:checked + .slider {
-      background-color: var(--color-success);
-    }
-    
-    input:checked + .slider:before {
-      transform: translateX(12px);
-    }
-    
-    .delete-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-muted);
-      padding: 4px;
-      border-radius: 4px;
-      transition: var(--transition-fast);
-      display: flex;
-      align-items: center;
-    }
-    
-    .delete-btn:hover {
-      color: var(--color-accent);
-      background: rgba(255, 82, 82, 0.1);
-    }
-    
+
     .empty-state {
       text-align: center;
-      padding: 24px 8px;
-      font-size: 13px;
+      padding: 16px 8px;
+      font-size: 12px;
       color: var(--text-muted);
       border: 1px dashed var(--border-color);
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Upgrade Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(11, 15, 25, 0.92);
+      z-index: 100;
+      padding: 16px;
+      flex-direction: column;
+      justify-content: center;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-box {
+      background: #151d2f;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      text-align: center;
+      position: relative;
+      max-height: 94vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <div class="header">
     <div class="logo-area">
-      <svg class="logo-icon" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="128" height="128" rx="24" fill="url(#popupBgGrad)" />
-        <g transform="translate(64, 48) rotate(45)">
-          <rect x="-8" y="0" width="16" height="24" rx="2" fill="#1e293b" />
-          <rect x="-8" y="-12" width="16" height="12" rx="2" fill="#ff5252" />
-          <rect x="-8" y="8" width="16" height="20" rx="2" fill="#e2e8f0" />
-        </g>
-        <defs>
-          <linearGradient id="popupBgGrad" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#6366F1" />
-            <stop offset="1" stop-color="#4F46E5" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="title">AI Ad Purifier</span>
+      <div class="logo-icon-wrap">🛡️</div>
+      <div class="title-group">
+        <span class="title">AI Ad Purifier</span>
+        <span class="subtitle">AI Deep Reader & Web Cleaner</span>
+      </div>
     </div>
-    <button class="settings-btn" id="open-settings" title="Manage Rules">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"></circle>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-      </svg>
+    <div class="header-actions">
+      <button class="icon-btn" id="open-options-btn" title="打开控制台">
+        ⚙️
+      </button>
+    </div>
+  </div>
+
+  <!-- Site Info & Quota Card -->
+  <div class="site-card">
+    <div class="site-row">
+      <span class="domain-badge" id="current-domain">example.com</span>
+      <span class="shield-status" id="site-status-badge">
+        <span>●</span>
+        <span id="site-status-text">防护中 (0)</span>
+      </span>
+    </div>
+    <div class="quota-row">
+      <span id="quota-display">🌱 免费版 · 今日提纯: 3/3 次</span>
+      <span class="upgrade-link" id="btn-show-upgrade">升级买断版 ($9.9)</span>
+    </div>
+  </div>
+
+  <!-- Hero Actions -->
+  <div class="hero-actions">
+    <button class="btn-hero btn-reader" id="btn-open-reader">
+      <span>📖 开启沉浸阅读模式</span>
+      <span style="font-size: 11px; opacity: 0.85;">提纯正文 + 多主题 ➔</span>
+    </button>
+    <button class="btn-hero btn-ai-digest" id="btn-ai-purify">
+      <span>🧠 AI 深度精华提纯</span>
+      <span style="font-size: 11px; opacity: 0.85;">3句摘要 + 导图 ➔</span>
     </button>
   </div>
 
-  <!-- Main Cleaner Panel -->
-  <div id="main-panel" style="display: flex; flex-direction: column;">
-    <div class="site-info" style="margin-bottom: 10px;">
-      <span data-i18n="currentDomain">Current Domain</span>
-      <span class="domain-name" id="current-domain" data-i18n="loading">Loading...</span>
-    </div>
-
-    <!-- Plan & Status Badge Bar -->
-    <div id="status-bar" style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); padding: 8px 12px; border-radius: 8px; font-size: 11px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
-      <span id="quota-text" style="color: #a5b4fc; font-weight: 500;" data-i18n="planFree">🌱 Free Edition (Standard Shield)</span>
-      <span id="hidden-count" style="color: #94a3b8;">🛡 0</span>
-      <button id="upgrade-btn-link" style="background: none; border: none; color: #818cf8; font-weight: 600; cursor: pointer; text-decoration: underline; padding: 0; font-size: 11px;" data-i18n="upgradeBtn">Upgrade Pro ($7.99/mo)</button>
-    </div>
-
-    <!-- Action Buttons -->
-    <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
-      <button class="btn btn-secondary" id="local-clean" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px;" data-i18n="localCleanBtn">
-        ⚡ Instant Local Clean (Free)
-      </button>
-      <button class="btn btn-primary" id="ai-clean" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 8px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);" data-i18n="aiCleanBtn">
-        ✨ DeepSeek AI Purify (Pro $7.99/mo)
-      </button>
-      <div style="display: flex; gap: 8px;">
-        <button class="btn btn-secondary" id="btn-picker" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 8px;" data-i18n="pickerBtn">
-          🎯 Pick & Hide
-        </button>
-        <button class="btn btn-secondary" id="btn-undo" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 8px;" data-i18n="undoBtn">
-          ↩ Undo Last
-        </button>
-        <button class="btn btn-secondary" id="btn-site-toggle" style="flex: 1; padding: 8px; font-size: 12px; font-weight: 600; border-radius: 8px;" data-i18n="sitePauseBtn">
-          ⏸ Pause on Site
-        </button>
-      </div>
-    </div>
-
-    <div class="section-title">
-      <span data-i18n="blockedElements">Blocked Elements</span>
-      <span id="rules-count">(0)</span>
-    </div>
-
-    <div class="rules-list" id="rules-container">
-      <!-- Will be populated dynamically -->
-      <div class="empty-state" data-i18n="emptyStateRules">No hidden elements on this website yet. Click a clean button above to start!</div>
-    </div>
-
-    <!-- Review / Rate Us Banner -->
-    <div id="review-banner" style="margin-top: 16px; padding: 10px 12px; background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-      <div style="text-align: left;">
-        <div style="font-size: 12px; font-weight: 600; color: #fbbf24; display: flex; align-items: center; gap: 4px;">
-          <span data-i18n="rateTitle">⭐ Enjoying AI Ad Purifier?</span>
-        </div>
-        <div style="font-size: 10px; color: var(--text-muted); margin-top: 2px;" data-i18n="rateDesc">Leave us a 5-star review on the Chrome Web Store!</div>
-      </div>
-      <button id="btn-rate-store" style="padding: 6px 10px; font-size: 11px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; font-weight: 600; border-radius: 6px; border: none; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.3); transition: var(--transition-fast);" data-i18n="rateBtn">
-        Rate 5 Stars ⭐
-      </button>
-    </div>
+  <!-- Sub Tools -->
+  <div class="sub-tools">
+    <button class="btn-sub" id="btn-gate-buster" title="破除知乎/CSDN/Cookie弹窗及免关注复制">
+      <span style="font-size: 14px;">🛡️</span>
+      <span>一键破壁</span>
+    </button>
+    <button class="btn-sub" id="btn-picker" title="视觉化点选网页任意广告元素并隐藏">
+      <span style="font-size: 14px;">🎯</span>
+      <span>点选隐藏</span>
+    </button>
+    <button class="btn-sub" id="btn-toggle-site" title="在此网站暂停或恢复清理">
+      <span style="font-size: 14px;" id="site-toggle-icon">⏸</span>
+      <span id="site-toggle-label">暂停此站</span>
+    </button>
   </div>
 
-  <!-- 3. Upgrade Pro Modal Overlay -->
-  <div id="upgrade-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.92); z-index: 100; padding: 16px; flex-direction: column; justify-content: center; backdrop-filter: blur(4px);">
-    <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 16px; text-align: center; position: relative; max-height: 90vh; overflow-y: auto;">
-      <button id="modal-close-btn" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #94a3b8; font-size: 16px; cursor: pointer;">✕</button>
-      <span style="font-size: 32px; display: block; margin-bottom: 4px;">🧠</span>
-      <span style="font-size: 16px; font-weight: 700; color: white; display: block; margin-bottom: 4px;" data-i18n="modalTitle">Upgrade to DeepSeek AI Pro</span>
-      <span style="font-size: 12px; color: #818cf8; font-weight: 600; display: block; margin-bottom: 12px;" data-i18n="modalSubtitle">Subscription is only $7.99 / month</span>
-      
-      <!-- Feature Comparison List -->
-      <div style="background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px; font-size: 11px; text-align: left; margin-bottom: 14px; line-height: 1.6;">
-        <div style="font-weight: 600; color: #94a3b8; margin-bottom: 4px;" data-i18n="modalFreeTitle">🌱 Free Edition:</div>
-        <div style="color: #cbd5e1;" data-i18n="modalFree1">✅ General ad & popup blocking (100% Free)</div>
-        <div style="color: #cbd5e1;" data-i18n="modalFree2">✅ Local smart element hiding</div>
-        <div style="color: #ef4444; margin-bottom: 6px;" data-i18n="modalFree3">❌ No DeepSeek AI model support</div>
-        
-        <div style="font-weight: 600; color: #a78bfa; margin-bottom: 4px;" data-i18n="modalProTitle">👑 Paid Pro Edition ($7.99/mo):</div>
-        <div style="color: #a78bfa;" data-i18n="modalPro1">✨ Includes all Free features</div>
-        <div style="color: #a78bfa;" data-i18n="modalPro2">✨ DeepSeek AI deep DOM layout analysis</div>
-        <div style="color: #a78bfa;" data-i18n="modalPro3">✨ Auto layout reflow & empty grid collapse</div>
-        <div style="color: #a78bfa;" data-i18n="modalPro4">✨ Unlimited DeepSeek AI page cleans</div>
+  <!-- Blocked Rules -->
+  <div class="section-title">
+    <span>本站拦截规则</span>
+    <span id="rules-count">(0)</span>
+  </div>
+
+  <div class="rules-list" id="rules-container">
+    <div class="empty-state">当前网站无额外规则，内置规则防护中</div>
+  </div>
+
+  <!-- Upgrade Modal ($9.9 Lifetime) -->
+  <div class="modal-overlay" id="upgrade-modal">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close-btn">✕</button>
+      <div style="font-size: 32px; margin-bottom: 4px;">👑</div>
+      <div style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 2px;">
+        升级 AI 深度阅读 Pro 终身买断版
+      </div>
+      <div style="font-size: 12px; color: #fbbf24; font-weight: 600; margin-bottom: 12px;">
+        一次性买断仅需 $9.9 (¥69)，终身畅享
       </div>
 
-      <button class="btn btn-primary" id="modal-waffo-buy" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px; margin-bottom: 12px; background: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%); border: none; cursor: pointer; color: white;" data-i18n="modalBuyBtn">
-        💳 Subscribe to Pro ($7.99/mo)
+      <div style="background: #0b0f19; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; font-size: 11px; text-align: left; margin-bottom: 12px; line-height: 1.6;">
+        <div style="color: #94a3b8; font-weight: 600; margin-bottom: 2px;">🌱 免费版包含：</div>
+        <div style="color: #cbd5e1;">✅ 广告与 Cookie/知乎/CSDN 遮罩自动破除</div>
+        <div style="color: #cbd5e1;">✅ 沉浸式阅读模式与基础排版</div>
+        <div style="color: #fbbf24; margin-bottom: 6px;">⚡ 每日 3 次免费 AI 深度精华提纯</div>
+
+        <div style="color: #818cf8; font-weight: 600; margin-bottom: 2px;">👑 Pro 终身买断版特权 ($9.9)：</div>
+        <div style="color: #a5b4fc;">✨ 无限次 AI 深度精华提炼与逻辑链梳理</div>
+        <div style="color: #a5b4fc;">✨ 无限次一键导出 Markdown / Notion / 纯净 PDF</div>
+        <div style="color: #a5b4fc;">✨ 极客 BYOK 模式：支持配置自定义 API Key</div>
+        <div style="color: #a5b4fc;">✨ 解锁全套阅读主题（极简墨水屏、复古羊皮纸等）</div>
+      </div>
+
+      <button id="modal-buy-link" style="width: 100%; padding: 10px; font-size: 13px; font-weight: 700; border-radius: 8px; margin-bottom: 10px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; cursor: pointer; color: #ffffff;">
+        💳 立即 $9.9 终身买断
       </button>
+
       <div style="display: flex; gap: 6px;">
-        <input type="text" id="modal-order-id" placeholder="Purchased? Enter Order ID (ORD_...)" data-i18n-placeholder="modalOrderPlaceholder" style="flex: 1; background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 6px 10px; color: white; outline: none; font-size: 11px; text-align: center; text-transform: uppercase;">
-        <button class="btn btn-primary" id="modal-btn-activate" style="padding: 6px 12px; font-size: 11px; border-radius: 6px; background: #4f46e5; color: white; border: none; cursor: pointer;" data-i18n="modalActivateBtn">Activate</button>
+        <input type="text" id="modal-order-id" placeholder="已购买？输入订单号 (ORD_...)" style="flex: 1; background: #0b0f19; border: 1px solid #334155; border-radius: 6px; padding: 6px 8px; color: #ffffff; font-size: 11px; outline: none; text-align: center; text-transform: uppercase;">
+        <button id="modal-activate-btn" style="padding: 6px 12px; font-size: 11px; border-radius: 6px; background: #4f46e5; color: #ffffff; border: none; font-weight: 600; cursor: pointer;">激活</button>
       </div>
     </div>
   </div>

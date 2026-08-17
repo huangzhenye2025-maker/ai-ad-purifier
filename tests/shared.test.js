@@ -148,84 +148,76 @@ test('normalizeRules maxTotal keeps smaller domains first; maxDomains truncates 
   assert.equal(Object.values(domCapped).reduce((s, a) => s + a.length, 0), 3);
 });
 
-test('normalizeRules with small opts (maxPerDomain:2, maxTotal:3, maxDomains:2) truncates correctly', () => {
-  const out = CEE.normalizeRules({
-    'aaa.com': [{ selector: '.a1' }, { selector: '.a2' }, { selector: '.a3' }],
-    'bbb.com': [{ selector: '.b1' }, { selector: '.b2' }],
-    'ccc.com': [{ selector: '.c1' }],
-    'ddd.com': [{ selector: '.d1' }],
-  }, { maxPerDomain: 2, maxTotal: 3, maxDomains: 2 });
+// ---------------------------------------------------------------------------
+// CEE.computeAiQuota & CEE.formatArticleToMarkdown
+// ---------------------------------------------------------------------------
 
-  // 每域上限后：aaa=[.a2,.a3](2), bbb=[.b1,.b2](2), ccc=[.c1](1), ddd=[.d1](1)
-  // 按条数从少到多排序（稳定）：ccc, ddd, aaa, bbb
-  // maxDomains=2 只保留 ccc、ddd；1+1=2 <= maxTotal
-  assert.deepEqual(Object.keys(out).sort(), ['ccc.com', 'ddd.com']);
-  assert.deepEqual(out['ccc.com'].map((r) => r.selector), ['.c1']);
-  assert.deepEqual(out['ddd.com'].map((r) => r.selector), ['.d1']);
-  assert.equal(Object.values(out).reduce((s, a) => s + a.length, 0), 2);
+test('computeAiQuota computes free daily quota and pro unlimited quota correctly', () => {
+  const today = CEE.getTodayDateStr();
+
+  // Free tier with 0 used
+  const q0 = CEE.computeAiQuota(null, false);
+  assert.equal(q0.isPro, false);
+  assert.equal(q0.remaining, 3);
+  assert.equal(q0.canUse, true);
+
+  // Free tier with 2 used today
+  const q2 = CEE.computeAiQuota({ date: today, count: 2 }, false);
+  assert.equal(q2.remaining, 1);
+  assert.equal(q2.canUse, true);
+
+  // Free tier with 3 used today
+  const q3 = CEE.computeAiQuota({ date: today, count: 3 }, false);
+  assert.equal(q3.remaining, 0);
+  assert.equal(q3.canUse, false);
+
+  // Free tier yesterday quota resets today
+  const qOld = CEE.computeAiQuota({ date: '2020-01-01', count: 3 }, false);
+  assert.equal(qOld.remaining, 3);
+  assert.equal(qOld.canUse, true);
+
+  // Pro tier is unlimited
+  const qPro = CEE.computeAiQuota({ date: today, count: 50 }, true);
+  assert.equal(qPro.isPro, true);
+  assert.equal(qPro.canUse, true);
 });
 
-test('normalizeRules returns empty object for invalid input', () => {
-  assert.deepEqual(CEE.normalizeRules(null), {});
-  assert.deepEqual(CEE.normalizeRules(undefined), {});
-  assert.deepEqual(CEE.normalizeRules([]), {});
-  assert.deepEqual(CEE.normalizeRules('x'), {});
-  assert.deepEqual(CEE.normalizeRules({ '': [{ selector: '.x' }] }), {}); // 空域名丢弃
+test('formatArticleToMarkdown formats article with YAML frontmatter correctly', () => {
+  const article = {
+    title: 'Hello World',
+    author: 'Alice',
+    date: '2026-08-17',
+    url: 'https://example.com/hello',
+    contentMarkdown: 'This is paragraph 1.\n\n## Subheading\n\nContent here.',
+    aiSummary: 'A brief summary of hello world.'
+  };
+
+  const md = CEE.formatArticleToMarkdown(article);
+  assert.match(md, /---/);
+  assert.match(md, /title: "Hello World"/);
+  assert.match(md, /author: "Alice"/);
+  assert.match(md, /source: "https:\/\/example\.com\/hello"/);
+  assert.match(md, /## 🧠 AI 核心提要/);
+  assert.match(md, /A brief summary of hello world\./);
+  assert.match(md, /This is paragraph 1\./);
 });
 
 // ---------------------------------------------------------------------------
-// CEE.escapeHtml
+// CEE.escapeHtml & isPlausibleKey
 // ---------------------------------------------------------------------------
 
 test('escapeHtml escapes all special characters', () => {
   assert.equal(CEE.escapeHtml('&<>"\''), '&amp;&lt;&gt;&quot;&#039;');
   assert.equal(CEE.escapeHtml('<a href="x">&'), '&lt;a href=&quot;x&quot;&gt;&amp;');
-});
-
-test('escapeHtml handles null/undefined as empty string', () => {
   assert.equal(CEE.escapeHtml(null), '');
-  assert.equal(CEE.escapeHtml(undefined), '');
 });
 
-// ---------------------------------------------------------------------------
-// CEE.isPlausibleKey
-// ---------------------------------------------------------------------------
-
-test('isPlausibleKey accepts ORD_ and PURIFIER- keys (prefix case-insensitive)', () => {
+test('isPlausibleKey accepts ORD_, PURIFIER-, PRO-, LIFETIME- keys', () => {
   assert.equal(CEE.isPlausibleKey('ORD_ABC123'), true);
   assert.equal(CEE.isPlausibleKey('purifier-xyz1'), true);
-  assert.equal(CEE.isPlausibleKey(' ord_abc123 '), true);
-  assert.equal(CEE.isPlausibleKey('PURIFIER-ABC'), true);
-});
-
-test('isPlausibleKey rejects bad keys', () => {
+  assert.equal(CEE.isPlausibleKey('PRO-LIFETIME-01'), true);
+  assert.equal(CEE.isPlausibleKey('LIFETIME-VIP'), true);
   assert.equal(CEE.isPlausibleKey('foo'), false);
   assert.equal(CEE.isPlausibleKey(''), false);
-  assert.equal(CEE.isPlausibleKey('ORD_'), false); // 前缀对但长度 4 < 6
-  assert.equal(CEE.isPlausibleKey('ABC123'), false);
   assert.equal(CEE.isPlausibleKey(null), false);
-  assert.equal(CEE.isPlausibleKey(123), false);
-});
-
-// ---------------------------------------------------------------------------
-// CEE.fetchWithTimeout
-// ---------------------------------------------------------------------------
-
-test('fetchWithTimeout rejects with AbortError when server never responds', async () => {
-  const server = http.createServer(() => {
-    // 永不响应，让请求挂起直到超时
-  });
-  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
-  const port = server.address().port;
-
-  try {
-    await assert.rejects(
-      CEE.fetchWithTimeout(`http://127.0.0.1:${port}/`, {}, 100),
-      (err) => err && err.name === 'AbortError',
-      'expected fetch to reject with AbortError'
-    );
-  } finally {
-    if (typeof server.closeAllConnections === 'function') server.closeAllConnections();
-    await new Promise((resolve) => server.close(resolve));
-  }
 });

@@ -1,470 +1,357 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>AI Ad Purifier - Control Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Ad Purifier - 控制台与阅读设置</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body {
-      padding: 32px;
-      max-width: 1200px;
-      margin: 0 auto;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-    
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 24px;
-      border-radius: 16px;
-    }
-    
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-    }
-    
-    .brand-name {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .nav-actions {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    
-    #import-file {
-      display: none;
-    }
-    
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 16px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: var(--transition-fast);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-    
-    .stat-card:hover {
-      border-color: var(--border-hover);
-      transform: translateY(-2px);
-    }
-    
-    .stat-title {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .stat-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-    
-    .dashboard-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 24px;
-      flex: 1;
-      min-height: 0;
-    }
-    
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 24px;
-      border-radius: 16px;
-      max-height: calc(100vh - 200px);
-      overflow-y: auto;
-    }
-    
-    .sidebar-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    
-    .domain-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    
-    .domain-item {
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: var(--transition-fast);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .domain-item:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-primary);
-    }
-    
-    .domain-item.active {
-      background: var(--color-primary);
-      color: white;
-      font-weight: 500;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-    }
-    
-    .domain-badge {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 2px 6px;
-      border-radius: 12px;
-      font-size: 10px;
-      color: inherit;
-    }
-    
-    .domain-item.active .domain-badge {
-      background: rgba(0, 0, 0, 0.15);
-    }
-    
-    .main-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      padding: 24px;
-      border-radius: 16px;
-      min-height: 0;
-    }
-    
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
-    
-    .panel-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-    
-    .panel-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    
-    .search-box {
-      position: relative;
-      width: 260px;
-    }
-    
-    .search-input {
-      width: 100%;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 8px 12px 8px 36px;
-      color: white;
-      font-size: 13px;
-      outline: none;
-      transition: var(--transition-fast);
-    }
-    
-    .search-input:focus {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
-    
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      pointer-events: none;
-    }
-    
-    .table-container {
-      flex: 1;
-      overflow-y: auto;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      background: rgba(0,0,0,0.1);
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 13px;
-    }
-    
-    th {
-      background: rgba(255, 255, 255, 0.02);
-      border-bottom: 1px solid var(--border-color);
-      padding: 14px 16px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      font-size: 11px;
-      letter-spacing: 0.05em;
-    }
-    
-    td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-primary);
-    }
-    
-    tr:last-child td {
-      border-bottom: none;
-    }
-    
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.01);
-    }
-    
-    .rule-name-cell {
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-    
-    .rule-name-cell input {
-      background: var(--bg-primary);
-      border: 1px solid var(--color-primary);
-      border-radius: 4px;
-      color: white;
-      font-size: 13px;
-      padding: 2px 6px;
-      outline: none;
-      width: 100%;
-    }
-    
-    .rule-selector-cell {
-      font-family: monospace;
-      font-size: 12px;
-      color: var(--color-primary);
-      max-width: 320px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      cursor: pointer;
-    }
-    
-    .rule-selector-cell input {
-      background: var(--bg-primary);
-      border: 1px solid var(--color-primary);
-      border-radius: 4px;
-      color: white;
-      font-size: 12px;
-      padding: 2px 6px;
-      outline: none;
-      font-family: monospace;
-      width: 100%;
-    }
-    
-    .rule-date-cell {
-      color: var(--text-muted);
+    :root {
+      --bg-body: #0b0f19;
+      --bg-card: #151d2f;
+      --bg-card-hover: #1c263c;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: #6366f1;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --color-primary: #6366f1;
+      --color-accent: #10b981;
+      --color-warning: #f59e0b;
+      --color-danger: #ef4444;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
     }
 
-    /* Switch toggle in table */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 40px auto;
+      padding: 0 24px;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .setting-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .setting-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-width: 75%;
+    }
+
+    .setting-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .setting-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Switch */
     .switch {
       position: relative;
       display: inline-block;
-      width: 32px;
-      height: 18px;
+      width: 44px;
+      height: 24px;
     }
-    
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    
+    .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #374151;
+      position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #334155;
       transition: .2s;
-      border-radius: 18px;
+      border-radius: 24px;
     }
-    
     .slider:before {
-      position: absolute;
-      content: "";
-      height: 14px;
-      width: 14px;
-      left: 2px;
-      bottom: 2px;
-      background-color: white;
-      transition: .2s;
-      border-radius: 50%;
+      position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+      background-color: white; transition: .2s; border-radius: 50%;
     }
-    
-    input:checked + .slider {
-      background-color: var(--color-success);
+    input:checked + .slider { background-color: var(--color-primary); }
+    input:checked + .slider:before { transform: translateX(20px); }
+
+    /* Inputs & Selects */
+    .form-control {
+      background: #0b0f19;
+      border: 1px solid #334155;
+      border-radius: var(--radius-sm);
+      color: #ffffff;
+      padding: 8px 12px;
+      font-size: 13px;
+      outline: none;
+      transition: border 0.15s;
     }
-    
-    input:checked + .slider:before {
-      transform: translateX(14px);
+    .form-control:focus {
+      border-color: var(--color-primary);
     }
-    
-    .no-rules-state {
-      text-align: center;
-      padding: 40px !important;
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--color-primary); color: #fff; }
+    .btn-primary:hover { background: var(--color-primary-hover); }
+    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-primary); }
+    .btn-outline:hover { background: var(--bg-card-hover); border-color: var(--border-focus); }
+    .btn-warning { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #fff; }
+
+    /* Rules Table */
+    .rules-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 12px;
+    }
+    .rules-table th, .rules-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .rules-table th {
       color: var(--text-muted);
-      font-style: italic;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
     }
   </style>
 </head>
 <body>
-  <!-- Navbar Header -->
-  <div class="navbar glass-panel">
-    <div class="logo-area">
-      <svg class="logo-icon" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="128" height="128" rx="28" fill="url(#brandBgGrad)" />
-        <g transform="translate(64, 48) rotate(45)">
-          <rect x="-8" y="0" width="16" height="24" rx="2" fill="#1e293b" />
-          <rect x="-8" y="-12" width="16" height="12" rx="2" fill="#ff5252" />
-          <rect x="-8" y="8" width="16" height="20" rx="2" fill="#e2e8f0" />
-        </g>
-        <defs>
-          <linearGradient id="brandBgGrad" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#6366F1" />
-            <stop offset="1" stop-color="#4F46E5" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="brand-name">AI Ad Purifier <span style="font-size: 12px; font-weight: normal; color: var(--text-secondary);" data-i18n="optionsTitle">Control Panel</span></span>
-    </div>
-    <div class="nav-actions">
-      <button class="btn btn-secondary" id="btn-rate-store-options" style="color: #fbbf24; border-color: rgba(245, 158, 11, 0.3); background: rgba(245, 158, 11, 0.08);" data-i18n="navRateBtn">⭐ Rate 5 Stars</button>
-      <button class="btn btn-secondary" id="btn-import" data-i18n="navImportBtn">📥 Import Config</button>
-      <input type="file" id="import-file" accept=".json">
-      <button class="btn btn-secondary" id="btn-export" data-i18n="navExportBtn">📤 Export Config</button>
-      <button class="btn btn-danger" id="btn-clear-all" data-i18n="navClearAllBtn">🗑️ Clear All Rules</button>
-    </div>
-  </div>
-
-  <!-- Stats row -->
-  <div class="stats-row">
-    <div class="stat-card">
-      <span class="stat-title" data-i18n="statProtectedSites">Protected Sites</span>
-      <span class="stat-value" id="stat-domains">0</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-title" data-i18n="statBlockedElements">Blocked Elements</span>
-      <span class="stat-value" id="stat-elements">0</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-title" data-i18n="statPlanStatus">Plan Status</span>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
-        <span class="stat-value" style="font-size: 15px; color: #a5b4fc;" id="stat-plan-status" data-i18n="planFree">🌱 Free Edition (Standard Shield)</span>
-        <button id="btn-upgrade-options" style="padding: 4px 8px; font-size: 11px; background: #6366f1; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;" data-i18n="upgradeBtn">Upgrade Pro ($7.99/mo)</button>
-      </div>
-    </div>
-    <div class="stat-card" style="flex-direction: row; align-items: center; justify-content: space-between;">
-      <div>
-        <span class="stat-title" style="display: block; margin-bottom: 4px;" data-i18n="statGlobalToggle">Global Extension Shield</span>
-        <span class="stat-value" style="font-size: 15px; color: var(--color-success);" id="global-status-text" data-i18n="statusEnabled">Enabled</span>
-      </div>
-      <label class="switch" style="width: 44px; height: 24px;">
-        <input type="checkbox" id="global-toggle" checked>
-        <span class="slider" style="border-radius: 24px;"></span>
-      </label>
-    </div>
-  </div>
-
-  <!-- Paused Sites (Whitelist) -->
-  <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 16px 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-      <span class="stat-title" data-i18n="whitelistTitle">Paused Websites (Whitelist)</span>
-      <span style="font-size: 11px; color: var(--text-muted);" data-i18n="whitelistDesc">The extension will not perform any ad cleaning on these sites.</span>
-    </div>
-    <div id="whitelist-container" style="display: flex; flex-direction: column; gap: 8px;"></div>
-  </div>
-
-  <!-- Dashboard Layout -->
-  <div class="dashboard-layout">
-    <!-- Sidebar -->
-    <div class="sidebar glass-panel">
-      <div class="sidebar-title" data-i18n="sidebarTitle">Website List</div>
-      <div class="domain-list" id="domain-list-container">
-        <!-- Will be populated dynamically -->
-        <div style="font-size:13px; color:var(--text-muted);" data-i18n="noActiveDomains">No active domains</div>
-      </div>
-    </div>
-    
-    <!-- Main panel -->
-    <div class="main-panel glass-panel">
-      <div class="panel-header">
-        <div class="panel-title-area">
-          <div class="panel-title" id="panel-domain-title" data-i18n="panelDefaultTitle">Select a website to manage</div>
-          <div class="panel-desc" id="panel-domain-desc" data-i18n="panelDefaultDesc">Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly.</div>
-        </div>
-        
-        <div class="search-box">
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" class="search-input" id="search-rules" placeholder="Search rules or selectors..." data-i18n-placeholder="searchPlaceholder">
+  <div class="container">
+    <div class="header-bar">
+      <div class="brand-area">
+        <div class="brand-logo">🛡️</div>
+        <div>
+          <div class="brand-title">AI Ad Purifier & Deep Reader</div>
+          <div class="brand-sub">AI 深度阅读与提纯助手 · 全局控制中心</div>
         </div>
       </div>
-      
-      <div class="table-container">
-        <table id="rules-table">
-          <thead>
-            <tr>
-              <th width="30%" data-i18n="thDisplayName">Display Name</th>
-              <th width="40%" data-i18n="thSelector">CSS Selector</th>
-              <th width="15%" data-i18n="thDate">Date Blocked</th>
-              <th width="8%" data-i18n="thStatus">Status</th>
-              <th width="7%" data-i18n="thAction">Action</th>
-            </tr>
-          </thead>
-          <tbody id="rules-table-body">
-            <!-- Will be populated dynamically -->
-            <tr>
-              <td colspan="5" class="no-rules-state" data-i18n="selectSitePrompt">Select a website from the left panel to inspect rules.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-outline" id="btn-export-rules">📤 导出规则</button>
+        <button class="btn btn-outline" id="btn-import-rules">📥 导入规则</button>
+        <input type="file" id="file-import" accept=".json" style="display: none;">
+      </div>
+    </div>
+
+    <!-- 1. 破壁与防反爬设置 -->
+    <div class="section-card">
+      <div class="section-header">
+        <span>🛡️ 智能破壁与反爬/弹窗解除</span>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">国内平台自动破壁 (知乎 / CSDN / 简书 / 掘金)</span>
+          <span class="setting-desc">自动展开“阅读全文”、解除知乎“APP内查看”弹窗、去除 CSDN“关注博主阅读全文”限制。</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-gate-buster" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">全网自由复制与右键解锁</span>
+          <span class="setting-desc">破解网页 user-select: none 禁用选区，解除限制复制代码与防右键。</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-enable-copy" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">网页右下角快捷悬浮胶囊</span>
+          <span class="setting-desc">在浏览长文时显示极轻量「📖 深度阅读 | 🛡️ 破除遮罩」悬浮按钮。</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="toggle-capsule" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- 2. 阅读器偏好 -->
+    <div class="section-card">
+      <div class="section-header">
+        <span>📖 默认阅读器偏好 (Reader Mode Defaults)</span>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">默认排版主题</span>
+          <span class="setting-desc">开启阅读模式时预设的色彩视觉风格。</span>
+        </div>
+        <select class="form-control" id="select-theme">
+          <option value="light">☀️ Clean Paper (明亮素雅白)</option>
+          <option value="dark">🌙 Obsidian (深空专注黑)</option>
+          <option value="sepia">📜 Warm Sepia (护眼复古羊皮纸)</option>
+          <option value="ink">📱 Minimalist E-Ink (极简墨水屏模式)</option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">默认字体风格</span>
+          <span class="setting-desc">选择符合阅读习惯的字体字形。</span>
+        </div>
+        <select class="form-control" id="select-font">
+          <option value="sans">无衬线体 (Sans-Serif 系统字体)</option>
+          <option value="serif">典雅衬线体 (Serif 宋体/Georgia)</option>
+          <option value="mono">极客等宽 (Monospace 代码字体)</option>
+        </select>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">默认正文行宽</span>
+          <span class="setting-desc">控制居中文章阅读容器的最大宽度。</span>
+        </div>
+        <select class="form-control" id="select-width">
+          <option value="narrow">紧凑 (680px - 极度专注)</option>
+          <option value="normal" selected>标准 (820px - 黄金比例)</option>
+          <option value="wide">宽屏 (1020px - 大屏图文)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 3. AI 模型与极客 BYOK -->
+    <div class="section-card">
+      <div class="section-header">
+        <span>🧠 AI 提纯引擎与极客配置 (BYOK)</span>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">自定义 DeepSeek / OpenAI API Key (极客 0 成本直连)</span>
+          <span class="setting-desc">配置您自己的 API Key，享受无上限、低延迟直接调用（密钥仅安全保存在您的本地浏览器中）。</span>
+        </div>
+        <input type="password" class="form-control" id="input-api-key" placeholder="sk-..." style="width: 260px;">
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">自定义 API 接口端点 (Endpoint)</span>
+          <span class="setting-desc">支持 DeepSeek、OpenAI、OneAPI 等兼容 /chat/completions 接口。</span>
+        </div>
+        <input type="text" class="form-control" id="input-api-endpoint" placeholder="https://api.deepseek.com/chat/completions" style="width: 260px;">
+      </div>
+      <div style="text-align: right; margin-top: 12px;">
+        <button class="btn btn-primary" id="btn-save-ai">💾 保存 AI 配置</button>
+      </div>
+    </div>
+
+    <!-- 4. 商业授权与 Pro 买断 -->
+    <div class="section-card">
+      <div class="section-header">
+        <span>👑 商业授权与 Pro 终身买断</span>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">当前权益状态</span>
+          <span class="setting-desc" id="license-status-text">🌱 免费版（每日 3 次 AI 提纯，基础阅读与破壁全免费）</span>
+        </div>
+        <button class="btn btn-warning" id="btn-options-buy">💳 $9.9 一次性终身买断</button>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">激活码 / 订单号激活</span>
+          <span class="setting-desc">输入购买后获得的 Waffo 订单号（ORD_...）或终身买断 Key 解锁无限权益。</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" class="form-control" id="input-license-code" placeholder="ORD_..." style="width: 180px; text-transform: uppercase;">
+          <button class="btn btn-primary" id="btn-options-activate">激活</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 规则管理 -->
+    <div class="section-card">
+      <div class="section-header" style="justify-content: space-between;">
+        <span>📋 已配置站点规则</span>
+        <button class="btn btn-outline" id="btn-clear-all" style="color: var(--color-danger); border-color: rgba(239,68,68,0.3);">🗑️ 清空所有规则</button>
+      </div>
+      <div id="rules-table-container">
+        <!-- 表格动态填充 -->
       </div>
     </div>
   </div>

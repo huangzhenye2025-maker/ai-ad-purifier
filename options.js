@@ -1,473 +1,248 @@
-// options.js - AI Ad Purifier 控制面板 (支持 Chrome i18n 多语言)
+// options.js - AI Ad Purifier / AI 深度阅读与提纯助手 控制台逻辑
 document.addEventListener('DOMContentLoaded', () => {
   const CEE = globalThis.CEE;
 
-  const globalToggle = document.getElementById('global-toggle');
-  const globalStatusText = document.getElementById('global-status-text');
-  
-  const statDomains = document.getElementById('stat-domains');
-  const statElements = document.getElementById('stat-elements');
-  
-  const domainListContainer = document.getElementById('domain-list-container');
-  
-  const panelDomainTitle = document.getElementById('panel-domain-title');
-  const panelDomainDesc = document.getElementById('panel-domain-desc');
-  const searchInput = document.getElementById('search-rules');
-  const tableBody = document.getElementById('rules-table-body');
-  
-  const fileInput = document.getElementById('import-file');
-  const btnExport = document.getElementById('btn-export');
+  const toggleGateBuster = document.getElementById('toggle-gate-buster');
+  const toggleEnableCopy = document.getElementById('toggle-enable-copy');
+  const toggleCapsule = document.getElementById('toggle-capsule');
+
+  const selectTheme = document.getElementById('select-theme');
+  const selectFont = document.getElementById('select-font');
+  const selectWidth = document.getElementById('select-width');
+
+  const inputApiKey = document.getElementById('input-api-key');
+  const inputApiEndpoint = document.getElementById('input-api-endpoint');
+  const btnSaveAi = document.getElementById('btn-save-ai');
+
+  const licenseStatusText = document.getElementById('license-status-text');
+  const btnOptionsBuy = document.getElementById('btn-options-buy');
+  const inputLicenseCode = document.getElementById('input-license-code');
+  const btnOptionsActivate = document.getElementById('btn-options-activate');
+
+  const rulesTableContainer = document.getElementById('rules-table-container');
+  const btnExportRules = document.getElementById('btn-export-rules');
+  const btnImportRules = document.getElementById('btn-import-rules');
+  const fileImport = document.getElementById('file-import');
   const btnClearAll = document.getElementById('btn-clear-all');
-  const btnImport = document.getElementById('btn-import');
-  const whitelistContainer = document.getElementById('whitelist-container');
 
-  let allRules = {};
-  let siteDisabled = {};
-  let selectedDomain = '';
+  const WAFFO_BUY_URL = 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=product&currency=USD';
+  const VERIFY_URL = 'https://ai-ad-purifier.onrender.com/verify';
 
-  // ---------- i18n 辅助函数 ----------
+  // ---------- 1. 加载所有设置 ----------
 
-  function t(key, fallback) {
-    return (chrome.i18n && chrome.i18n.getMessage(key)) || fallback || '';
-  }
-
-  function localizeDocument() {
-    document.querySelectorAll('[data-i18n]').forEach((el) => {
-      const key = el.getAttribute('data-i18n');
-      const msg = t(key, el.textContent);
-      if (msg) el.textContent = msg;
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      const msg = t(key, el.placeholder);
-      if (msg) el.placeholder = msg;
-    });
-    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
-      const key = el.getAttribute('data-i18n-title');
-      const msg = t(key, el.title);
-      if (msg) el.title = msg;
-    });
-  }
-
-  localizeDocument();
-  loadSettings();
-
-  // 1. Load data from local storage
   function loadSettings() {
-    chrome.storage.local.get(['rules', 'globalEnabled', 'isPro', 'siteDisabled'], (result) => {
-      allRules = CEE.normalizeRules(result.rules || {});
-      // 归一化（合并 www、去重、容量上限）后若与存储不一致，回写以自愈
-      if (JSON.stringify(allRules) !== JSON.stringify(result.rules || {})) {
-        chrome.storage.local.set({ rules: allRules });
-      }
-      siteDisabled = result.siteDisabled || {};
-      const globalEnabled = result.globalEnabled !== false;
-      const isPro = result.isPro === true;
-      
-      // Update global toggle state
-      globalToggle.checked = globalEnabled;
-      updateGlobalStatusText(globalEnabled);
-      
-      // Update plan status badge
-      const statPlanStatus = document.getElementById('stat-plan-status');
-      const btnUpgradeOptions = document.getElementById('btn-upgrade-options');
-      if (statPlanStatus) {
-        if (isPro) {
-          statPlanStatus.innerHTML = `👑 <b>${t('planPro', '👑 Pro Edition')}</b>`;
-          statPlanStatus.style.color = '#818cf8';
-          if (btnUpgradeOptions) btnUpgradeOptions.style.display = 'none';
-        } else {
-          statPlanStatus.innerHTML = `${t('planFree', '🌱 Free Edition (Standard Shield)')}`;
-          statPlanStatus.style.color = '#a5b4fc';
-          if (btnUpgradeOptions) btnUpgradeOptions.style.display = 'inline-block';
-        }
-      }
-      
-      // Calculate Stats
-      updateStats();
-      
-      // Render Domain list
-      renderDomainList();
+    chrome.storage.local.get([
+      'autoGateBuster', 'enableCopy', 'showFloatingCapsule',
+      'readerTheme', 'readerFontFamily', 'readerWidth',
+      'customApiKey', 'customApiEndpoint',
+      'isPro', 'activationCode', 'rules'
+    ], (res) => {
+      // 破壁设置
+      toggleGateBuster.checked = res.autoGateBuster !== false;
+      toggleEnableCopy.checked = res.enableCopy !== false;
+      toggleCapsule.checked = res.showFloatingCapsule !== false;
 
-      // Render paused-site whitelist
-      renderWhitelist();
-      
-      // If a domain was already selected, refresh its rules. Otherwise select the first one.
-      const domains = Object.keys(allRules).filter(dom => allRules[dom] && allRules[dom].length > 0);
-      if (domains.length > 0) {
-        if (!selectedDomain || !domains.includes(selectedDomain)) {
-          selectedDomain = domains[0];
-        }
-        selectDomain(selectedDomain);
+      // 阅读器设置
+      if (res.readerTheme) selectTheme.value = res.readerTheme;
+      if (res.readerFontFamily) selectFont.value = res.readerFontFamily;
+      if (res.readerWidth) selectWidth.value = res.readerWidth;
+
+      // AI 配置
+      if (res.customApiKey) inputApiKey.value = res.customApiKey;
+      if (res.customApiEndpoint) inputApiEndpoint.value = res.customApiEndpoint;
+
+      // 授权状态
+      if (res.isPro) {
+        licenseStatusText.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版已激活</b> (无限次 AI 提纯、无限导出)';
+        btnOptionsBuy.style.display = 'none';
       } else {
-        panelDomainTitle.textContent = t('panelNoSitesTitle', 'No websites configured yet');
-        panelDomainDesc.textContent = t('panelNoSitesDesc', 'Browse the web and click the extension icon to start blocking ads!');
-        tableBody.innerHTML = `<tr><td colspan="5" class="no-rules-state">${escapeHtml(t('noRulesConfigured', 'No ad blocking rules configured yet.'))}</td></tr>`;
+        licenseStatusText.innerHTML = '🌱 <b>免费版</b>（每日 3 次 AI 提纯，基础阅读与破壁全免费）';
+        btnOptionsBuy.style.display = 'inline-block';
       }
+
+      // 渲染规则表格
+      renderRulesTable(res.rules || {});
     });
   }
 
-  const btnUpgradeOptions = document.getElementById('btn-upgrade-options');
-  if (btnUpgradeOptions) {
-    btnUpgradeOptions.addEventListener('click', () => {
-      chrome.tabs.create({ url: 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=subscription&currency=USD' });
-    });
-  }
+  // ---------- 2. 绑定设置变化 ----------
 
-  function updateGlobalStatusText(enabled) {
-    if (enabled) {
-      globalStatusText.textContent = t('statusEnabled', 'Enabled');
-      globalStatusText.style.color = 'var(--color-success)';
-    } else {
-      globalStatusText.textContent = t('statusDisabled', 'Disabled');
-      globalStatusText.style.color = 'var(--color-accent)';
+  toggleGateBuster.addEventListener('change', (e) => {
+    chrome.storage.local.set({ autoGateBuster: e.target.checked });
+  });
+  toggleEnableCopy.addEventListener('change', (e) => {
+    chrome.storage.local.set({ enableCopy: e.target.checked });
+  });
+  toggleCapsule.addEventListener('change', (e) => {
+    chrome.storage.local.set({ showFloatingCapsule: e.target.checked });
+  });
+
+  selectTheme.addEventListener('change', (e) => {
+    chrome.storage.local.set({ readerTheme: e.target.value });
+  });
+  selectFont.addEventListener('change', (e) => {
+    chrome.storage.local.set({ readerFontFamily: e.target.value });
+  });
+  selectWidth.addEventListener('change', (e) => {
+    chrome.storage.local.set({ readerWidth: e.target.value });
+  });
+
+  btnSaveAi.addEventListener('click', () => {
+    const key = inputApiKey.value.trim();
+    const endpoint = inputApiEndpoint.value.trim();
+    chrome.storage.local.set({
+      customApiKey: key,
+      customApiEndpoint: endpoint
+    }, () => {
+      alert('💾 AI 配置已成功保存！');
+    });
+  });
+
+  // ---------- 3. 购买与激活 ----------
+
+  btnOptionsBuy.addEventListener('click', () => {
+    chrome.tabs.create({ url: WAFFO_BUY_URL });
+  });
+
+  btnOptionsActivate.addEventListener('click', async () => {
+    const code = inputLicenseCode.value.trim().toUpperCase();
+    if (!code) {
+      alert('请输入您的 Waffo 订单号或买断激活码。');
+      return;
     }
-  }
+    btnOptionsActivate.disabled = true;
+    btnOptionsActivate.textContent = '激活中...';
 
-  function updateStats() {
-    const domains = Object.keys(allRules).filter(dom => allRules[dom] && allRules[dom].length > 0);
-    const domainCount = domains.length;
-    let elementCount = 0;
-    domains.forEach(dom => {
-      elementCount += allRules[dom].length;
-    });
-    
-    statDomains.textContent = domainCount;
-    statElements.textContent = elementCount;
-  }
+    try {
+      const res = await CEE.fetchWithTimeout(VERIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: code })
+      }, 15000);
+      const data = await res.json();
+      if (data.valid) {
+        chrome.storage.local.set({
+          isPro: true,
+          activationCode: code,
+          expiresAt: data.expiresAt || null
+        }, () => {
+          alert('🎉 恭喜！Pro 终身买断版已成功激活！');
+          loadSettings();
+        });
+      } else {
+        alert('❌ ' + (data.message || '无效或未支付的订单号。'));
+      }
+    } catch (e) {
+      alert('连接验证服务器失败，请检查网络。');
+    } finally {
+      btnOptionsActivate.disabled = false;
+      btnOptionsActivate.textContent = '激活';
+    }
+  });
 
-  // 2. Render Left Sidebar of Domains
-  function renderDomainList() {
-    domainListContainer.innerHTML = '';
-    const domains = Object.keys(allRules).filter(dom => allRules[dom] && allRules[dom].length > 0);
-    
+  // ---------- 4. 规则管理与导入导出 ----------
+
+  function renderRulesTable(rules) {
+    const domains = Object.keys(rules);
     if (domains.length === 0) {
-      domainListContainer.innerHTML = `<div style="font-size:13px; color:var(--text-muted); padding: 8px;">${escapeHtml(t('noActiveDomains', 'No active domains'))}</div>`;
-      return;
-    }
-    
-    domains.sort().forEach(dom => {
-      const item = document.createElement('div');
-      item.className = `domain-item ${dom === selectedDomain ? 'active' : ''}`;
-      item.innerHTML = `
-        <span>${escapeHtml(dom)}</span>
-        <span class="domain-badge">${allRules[dom].length}</span>
-      `;
-      item.addEventListener('click', () => {
-        selectDomain(dom);
-      });
-      domainListContainer.appendChild(item);
-    });
-  }
-
-  // 3. Select Domain & Display Rules
-  function selectDomain(dom) {
-    selectedDomain = dom;
-    
-    // Highlight sidebar item
-    document.querySelectorAll('.domain-item').forEach(item => {
-      item.classList.remove('active');
-      if (item.querySelector('span').textContent === dom) {
-        item.classList.add('active');
-      }
-    });
-
-    panelDomainTitle.textContent = dom;
-    panelDomainDesc.textContent = t('panelDefaultDesc', 'Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly.');
-    renderRulesTable();
-  }
-
-  // 4. Render Table Rules
-  function renderRulesTable() {
-    const rules = allRules[selectedDomain] || [];
-    const query = searchInput.value.toLowerCase().trim();
-    
-    const filteredRules = rules.filter(rule => {
-      return rule.name.toLowerCase().includes(query) || 
-             rule.selector.toLowerCase().includes(query);
-    });
-
-    tableBody.innerHTML = '';
-
-    if (filteredRules.length === 0) {
-      tableBody.innerHTML = `<tr><td colspan="5" class="no-rules-state">${escapeHtml(t('noMatchingRules', 'No matching rules found.'))}</td></tr>`;
+      rulesTableContainer.innerHTML = '<div style="text-align:center;padding:20px;color:#64748b;">暂无自定义规则</div>';
       return;
     }
 
-    filteredRules.forEach((rule) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="rule-name-cell" id="name-${rule.id}" title="Double click to edit name">${escapeHtml(rule.name)}</td>
-        <td class="rule-selector-cell" id="selector-${rule.id}" title="Double click to edit selector">${escapeHtml(rule.selector)}</td>
-        <td class="rule-date-cell">${escapeHtml(rule.date || 'Unknown')}</td>
-        <td>
-          <label class="switch">
-            <input type="checkbox" id="toggle-${rule.id}" ${rule.enabled !== false ? 'checked' : ''}>
-            <span class="slider"></span>
-          </label>
-        </td>
-        <td class="actions-cell">
-          <button class="action-btn delete" id="delete-${rule.id}" title="${escapeHtml(t('restoreHiddenElement', 'Delete rule'))}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-          </button>
-        </td>
-      `;
-
-      // Double-click to Edit Name
-      const nameCell = tr.querySelector(`#name-${rule.id}`);
-      nameCell.addEventListener('dblclick', () => makeEditable(nameCell, rule.id, 'name', rule.name));
-
-      // Double-click to Edit Selector
-      const selectorCell = tr.querySelector(`#selector-${rule.id}`);
-      selectorCell.addEventListener('dblclick', () => makeEditable(selectorCell, rule.id, 'selector', rule.selector));
-
-      // Switch status Toggle
-      tr.querySelector(`#toggle-${rule.id}`).addEventListener('change', (e) => {
-        toggleRule(rule.id, e.target.checked);
+    let rowsHtml = '';
+    domains.forEach((dom) => {
+      const list = rules[dom] || [];
+      list.forEach((r) => {
+        rowsHtml += `
+          <tr>
+            <td style="font-family:monospace;color:#a5b4fc;">${CEE.escapeHtml(dom)}</td>
+            <td>${CEE.escapeHtml(r.name)}</td>
+            <td style="font-family:monospace;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${CEE.escapeHtml(r.selector)}">${CEE.escapeHtml(r.selector)}</td>
+            <td>
+              <button class="btn btn-outline" style="padding:4px 8px;font-size:11px;color:#ef4444;" data-dom="${CEE.escapeHtml(dom)}" data-id="${CEE.escapeHtml(r.id)}">删除</button>
+            </td>
+          </tr>
+        `;
       });
+    });
 
-      // Delete rule button
-      tr.querySelector(`#delete-${rule.id}`).addEventListener('click', () => {
-        deleteRule(rule.id);
-      });
+    rulesTableContainer.innerHTML = `
+      <table class="rules-table">
+        <thead>
+          <tr>
+            <th>域名</th>
+            <th>规则名称</th>
+            <th>CSS 选择器</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+    `;
 
-      tableBody.appendChild(tr);
+    // 绑定删除
+    rulesTableContainer.querySelectorAll('button[data-id]').forEach((btn) => {
+      btn.onclick = () => {
+        const dom = btn.dataset.dom;
+        const id = btn.dataset.id;
+        chrome.storage.local.get(['rules'], (res) => {
+          const allRules = CEE.normalizeRules(res.rules || {});
+          const list = allRules[dom] || [];
+          const filtered = list.filter(r => r.id !== id);
+          if (filtered.length > 0) allRules[dom] = filtered;
+          else delete allRules[dom];
+          chrome.storage.local.set({ rules: allRules }, () => renderRulesTable(allRules));
+        });
+      };
     });
   }
 
-  // 5. In-Place Inline Editor
-  function makeEditable(cell, ruleId, field, currentValue) {
-    if (cell.querySelector('input')) return; // Already editing
-    
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = currentValue;
-    
-    cell.textContent = '';
-    cell.appendChild(input);
-    input.focus();
-
-    const saveChanges = () => {
-      const newValue = input.value.trim();
-      if (!newValue) {
-        cell.textContent = currentValue; // Revert if blank
-        return;
-      }
-
-      // If editing selector, perform validation
-      if (field === 'selector') {
-        try {
-          if (!CEE.isSafeSelector(newValue)) {
-            throw new Error('Unsafe selector');
-          }
-          document.querySelector(newValue);
-        } catch (e) {
-          alert(t('invalidSelectorAlert', 'Invalid CSS selector format. Please verify the syntax and try again.'));
-          cell.textContent = currentValue; // Revert
-          return;
-        }
-      }
-
-      if (newValue !== currentValue) {
-        updateRuleProperty(ruleId, field, newValue);
-      } else {
-        cell.textContent = currentValue;
-      }
-    };
-
-    // Events
-    input.addEventListener('blur', saveChanges);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        saveChanges();
-      } else if (e.key === 'Escape') {
-        cell.textContent = currentValue; // Cancel
-      }
-    });
-  }
-
-  function updateRuleProperty(ruleId, field, value) {
-    const rules = allRules[selectedDomain] || [];
-    const updated = rules.map(r => r.id === ruleId ? { ...r, [field]: value } : r);
-    allRules[selectedDomain] = updated;
-    saveRulesToStorage();
-  }
-
-  function toggleRule(ruleId, enabled) {
-    const rules = allRules[selectedDomain] || [];
-    const updated = rules.map(r => r.id === ruleId ? { ...r, enabled } : r);
-    allRules[selectedDomain] = updated;
-    saveRulesToStorage();
-  }
-
-  function deleteRule(ruleId) {
-    if (!confirm(t('confirmDeleteRule', 'Are you sure you want to delete this ad-blocking rule?'))) return;
-    
-    const rules = allRules[selectedDomain] || [];
-    const filtered = rules.filter(r => r.id !== ruleId);
-    
-    if (filtered.length === 0) {
-      delete allRules[selectedDomain];
-      selectedDomain = ''; // Reset selected domain if deleted last rule
-    } else {
-      allRules[selectedDomain] = filtered;
-    }
-    
-    saveRulesToStorage();
-  }
-
-  function saveRulesToStorage() {
-    chrome.storage.local.set({ rules: allRules }, () => {
-      loadSettings(); // Reload everything to sync values
-    });
-  }
-
-  // 6. Global Switch & Search Events
-  globalToggle.addEventListener('change', (e) => {
-    const enabled = e.target.checked;
-    chrome.storage.local.set({ globalEnabled: enabled }, () => {
-      updateGlobalStatusText(enabled);
+  // 导出
+  btnExportRules.addEventListener('click', () => {
+    chrome.storage.local.get(['rules'], (res) => {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(res.rules || {}, null, 2));
+      const a = document.createElement('a');
+      a.href = dataStr;
+      a.download = `ai_ad_purifier_rules_${Date.now()}.json`;
+      a.click();
     });
   });
 
-  searchInput.addEventListener('input', renderRulesTable);
-
-  // 7. Backup and Restore Actions
-
-  // Export Rules to JSON file
-  btnExport.addEventListener('click', () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allRules, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `ai-ad-purifier-backup.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-  });
-
-  // Trigger file upload when clicking Import button
-  btnImport.addEventListener('click', () => {
-    fileInput.click();
-  });
-
-  // Read uploaded JSON file and import rules
-  fileInput.addEventListener('change', (e) => {
+  // 导入
+  btnImportRules.addEventListener('click', () => fileImport.click());
+  fileImport.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
         const imported = JSON.parse(event.target.result);
-        
-        // Simple structural validation
-        if (typeof imported !== 'object' || Array.isArray(imported)) {
-          throw new Error(t('importFormatError', 'JSON format does not match rule export structure.'));
-        }
-        
-        if (confirm(t('confirmImport', 'Are you sure you want to import these rules? They will be merged with your existing configuration.'))) {
-          // Merge imported rules with current rules
-          chrome.storage.local.get(['rules'], (result) => {
-            let currentRules = CEE.normalizeRules(result.rules || {});
-            
-            for (const domain in imported) {
-              if (Array.isArray(imported[domain])) {
-                if (!currentRules[domain]) {
-                  currentRules[domain] = [];
-                }
-                
-                imported[domain].forEach(importedRule => {
-                  // 安全过滤：非法/危险选择器一律丢弃（防止导入隐藏 body/#root 的坏规则）
-                  if (!importedRule || typeof importedRule.selector !== 'string') return;
-                  const sel = importedRule.selector.trim();
-                  if (!CEE.isSafeSelector(sel)) return;
-
-                  // Avoid duplicating exact selectors in the same domain
-                  if (!currentRules[domain].some(r => r.selector === sel)) {
-                    // 重新生成 ID，避免与现有规则冲突或包含非法字符
-                    currentRules[domain].push({
-                      id: CEE.makeRuleId('rule_imp_'),
-                      name: importedRule.name || 'Imported Rule',
-                      selector: sel,
-                      enabled: importedRule.enabled !== false,
-                      date: importedRule.date || new Date().toLocaleDateString(),
-                      ts: Date.now()
-                    });
-                  }
-                });
-              }
-            }
-
-            // 容量上限归一化（每域/总数/域名合并 www）
-            currentRules = CEE.normalizeRules(currentRules);
-
-            chrome.storage.local.set({ rules: currentRules }, () => {
-              alert(t('importSuccess', 'Configuration imported successfully!'));
-              loadSettings();
-            });
+        chrome.storage.local.get(['rules'], (res) => {
+          const current = res.rules || {};
+          const merged = Object.assign({}, current, imported);
+          const normalized = CEE.normalizeRules(merged);
+          chrome.storage.local.set({ rules: normalized }, () => {
+            alert('📥 规则已成功导入并合并！');
+            loadSettings();
           });
-        }
+        });
       } catch (err) {
-        alert(t('importParseError', 'Failed to parse backup file: ') + err.message);
+        alert('导入失败：非有效 JSON 格式。');
       }
-      fileInput.value = ''; // Reset file input
     };
     reader.readAsText(file);
   });
 
-  // Clear all rules completely
+  // 清空
   btnClearAll.addEventListener('click', () => {
-    if (confirm(t('confirmClearAll', '⚠️ Warning: This will permanently delete all of your ad blocking rules. This action cannot be undone! Proceed?'))) {
+    if (confirm('确定要清空所有自定义规则吗？内置通用规则仍将继续生效。')) {
       chrome.storage.local.set({ rules: {} }, () => {
-        selectedDomain = '';
         loadSettings();
-        alert(t('allRulesCleared', 'All ad-blocking rules have been cleared.'));
       });
     }
   });
 
-  // Open Chrome Web Store review page
-  const btnRateStoreOptions = document.getElementById('btn-rate-store-options');
-  if (btnRateStoreOptions) {
-    btnRateStoreOptions.addEventListener('click', () => {
-      const extensionId = chrome.runtime.id;
-      const storeReviewUrl = `https://chromewebstore.google.com/detail/${extensionId}`;
-      chrome.tabs.create({ url: storeReviewUrl });
-    });
-  }
-
-  // ---------- 暂停站点（白名单）管理 ----------
-  function renderWhitelist() {
-    if (!whitelistContainer) return;
-    const domains = Object.keys(siteDisabled).sort();
-    if (domains.length === 0) {
-      whitelistContainer.innerHTML = `<div class="no-rules-state" style="padding:16px !important;margin:0;">${escapeHtml(t('whitelistEmpty', "No paused websites. Click 'Pause on Site' in the popup to whitelist a website."))}</div>`;
-      return;
-    }
-    whitelistContainer.innerHTML = '';
-    domains.forEach(dom => {
-      const item = document.createElement('div');
-      item.className = 'whitelist-item';
-      item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;border:1px solid var(--border-color);border-radius:8px;background:rgba(0,0,0,0.1);';
-      item.innerHTML = `
-        <span style="font-family:monospace;font-size:12px;color:var(--text-secondary);word-break:break-all;">${CEE.escapeHtml(dom)}</span>
-        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;white-space:nowrap;" data-whitelist-remove="${CEE.escapeHtml(dom)}">${escapeHtml(t('resumeCleanBtn', 'Resume Shield'))}</button>
-      `;
-      whitelistContainer.appendChild(item);
-    });
-    whitelistContainer.querySelectorAll('[data-whitelist-remove]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        delete siteDisabled[btn.dataset.whitelistRemove];
-        chrome.storage.local.set({ siteDisabled }, renderWhitelist);
-      });
-    });
-  }
-
-  // Helper utility to sanitize HTML output
-  function escapeHtml(str) {
-    return CEE.escapeHtml(str);
-  }
+  loadSettings();
 });
