@@ -31,7 +31,7 @@ app.use('/webhook', (req, res, next) => {
   next();
 });
 
-// JSON parsing
+// JSON parsing (capturing raw body for signature verification)
 app.use(express.json({
   limit: '300kb',
   verify: (req, res, buf) => {
@@ -65,20 +65,46 @@ function safeEqual(a, b) {
   return crypto.timingSafeEqual(bufA, bufB);
 }
 
-// Webhook signature verification
+// Webhook signature verification (Supports Waffo RSA Public Key PEM, HMAC-SHA256, and Plaintext Token)
 function verifyWebhookSignature(req, secret) {
+  if (!secret) return false;
   const signatureHeader = (process.env.WAFFO_SIGNATURE_HEADER || 'x-waffo-signature').toLowerCase();
   const tokenHeader = (process.env.WAFFO_SECRET_HEADER || 'x-webhook-secret').toLowerCase();
 
   const signature = req.headers[signatureHeader];
-  if (signature) {
-    const rawBody = req.rawBody || Buffer.from('');
-    const expected = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
-    if (safeEqual(String(signature).toLowerCase(), expected)) {
-      return true;
+  const rawBody = req.rawBody || Buffer.from('');
+
+  // 1. RSA-SHA256 Public Key Verification (Waffo official RSA PEM public key)
+  if (secret.includes('BEGIN PUBLIC KEY')) {
+    if (!signature) return false;
+    try {
+      let pemKey = secret.trim();
+      if (!pemKey.includes('\n') && pemKey.includes('\\n')) {
+        pemKey = pemKey.replace(/\\n/g, '\n');
+      }
+      const verifier = crypto.createVerify('RSA-SHA256');
+      verifier.update(rawBody);
+      if (verifier.verify(pemKey, signature, 'base64')) return true;
+
+      const verifierHex = crypto.createVerify('RSA-SHA256');
+      verifierHex.update(rawBody);
+      if (verifierHex.verify(pemKey, signature, 'hex')) return true;
+    } catch (rsaErr) {
+      console.warn('[webhook] RSA verification error:', rsaErr.message);
     }
   }
 
+  // 2. HMAC-SHA256 Verification
+  if (signature) {
+    try {
+      const expected = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+      if (safeEqual(String(signature).toLowerCase(), expected)) {
+        return true;
+      }
+    } catch (hmacErr) {}
+  }
+
+  // 3. Plaintext token verification
   const token = req.headers[tokenHeader];
   if (token && safeEqual(String(token), secret)) {
     return true;
