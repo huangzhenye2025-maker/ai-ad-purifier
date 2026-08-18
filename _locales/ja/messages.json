@@ -1,290 +1,281 @@
 {
   "appName": {
-    "message": "AI Ad Purifier - ワンクリック広告ブロッカー"
+    "message": "AI Ad Purifier - AI Deep Reader & Web Purifier"
   },
   "appDesc": {
-    "message": "DeepSeek AIを活用してWeb広告、スポンサーバナー、ポップアップを自動検出・削除し、美しいレイアウトを復元します。"
+    "message": "Bypass annoying overlays & paywall gates, enjoy clean distraction-free reader mode, and extract AI digests, key takeaways & mindmaps with one-click Markdown/Notion export."
   },
   "currentDomain": {
-    "message": "現在のドメイン"
+    "message": "Current Domain"
   },
   "loading": {
-    "message": "読み込み中..."
+    "message": "Loading..."
   },
   "planFree": {
-    "message": "🌱 永久無料版 (標準ブロック)"
+    "message": "🌱 Free Tier (3 AI Digests/day)"
   },
   "planPro": {
-    "message": "👑 プロ版 (DeepSeek AI搭載)"
+    "message": "👑 Pro Lifetime Edition"
   },
   "planProUntil": {
-    "message": "👑 プロ版 · 有効期限: "
+    "message": "👑 Pro Lifetime Edition"
   },
   "upgradeBtn": {
-    "message": "プロ版にアップグレード ($$7.99/月)"
+    "message": "Upgrade Lifetime ($9.9)"
   },
-  "localCleanBtn": {
-    "message": "⚡ 高速ローカルクリーン (無料)"
+  "openReaderBtn": {
+    "message": "📖 Open Reader Mode"
   },
-  "localCleanBtnScanning": {
-    "message": "⚡ 広告要素をスキャン中..."
+  "aiDigestBtn": {
+    "message": "🧠 AI Deep Digest"
   },
-  "aiCleanBtn": {
-    "message": "✨ DeepSeek AI 高度浄化 ($$7.99/月)"
-  },
-  "aiCleanBtnScanning": {
-    "message": "🤖 DeepSeek AI がページを分析中..."
+  "gateBusterBtn": {
+    "message": "🛡️ One-Click Gate Buster"
   },
   "pickerBtn": {
-    "message": "🎯 クリックして非表示"
-  },
-  "pickerBtnActive": {
-    "message": "🎯 隠したい要素をクリック…"
-  },
-  "undoBtn": {
-    "message": "↩ 1つ元に戻す"
+    "message": "🎯 Pick & Hide"
   },
   "sitePauseBtn": {
-    "message": "⏸ このサイトで一時停止"
+    "message": "⏸ Pause on Site"
   },
   "siteResumeBtn": {
-    "message": "▶ 保護を再開"
+    "message": "▶ Resume on Site"
   },
   "blockedElements": {
-    "message": "ブロックされた要素"
+    "message": "Blocked Elements"
   },
   "emptyStateRules": {
-    "message": "このサイトではまだブロックされていません。上のボタンをクリックして開始してください！"
+    "message": "No hidden elements on this website yet. Click a clean button above to start!"
   },
   "rateTitle": {
-    "message": "⭐ AI Ad Purifier を気に入りましたか？"
+    "message": "⭐ Enjoying AI Ad Purifier?"
   },
   "rateDesc": {
-    "message": "Chrome ウェブストアで5つ星の高評価をお願いします！"
+    "message": "Leave us a 5-star review on the Chrome Web Store!"
   },
   "rateBtn": {
-    "message": "★5 レビューを書く ⭐"
+    "message": "Rate 5 Stars ⭐"
   },
   "modalTitle": {
-    "message": "DeepSeek AI プロ版へアップグレード"
+    "message": "Upgrade to AI Deep Reader Pro Lifetime"
   },
   "modalSubtitle": {
-    "message": "月額わずか $$7.99 USD"
+    "message": "One-time purchase for only $9.9, lifetime access"
   },
   "modalFreeTitle": {
-    "message": "🌱 無料版："
+    "message": "🌱 Free Edition:"
   },
   "modalFree1": {
-    "message": "✅ 一般的な広告・ポップアップのブロック (完全無料)"
+    "message": "✅ General ad & overlay/cookie gate blocking (100% Free)"
   },
   "modalFree2": {
-    "message": "✅ ローカル要素非表示ツール"
+    "message": "✅ Clean distraction-free reader mode"
   },
   "modalFree3": {
-    "message": "❌ DeepSeek AI 大規模モデル非対応"
+    "message": "⚡ 3 Free DeepSeek AI deep digests every day"
   },
   "modalProTitle": {
-    "message": "👑 プロ版 ($$7.99/月)："
+    "message": "👑 Pro Lifetime Edition ($9.9):"
   },
   "modalPro1": {
-    "message": "✨ 無料版の全機能を含む"
+    "message": "✨ Includes all Free features"
   },
   "modalPro2": {
-    "message": "✨ DeepSeek AI による高度なDOMレイアウト解析"
+    "message": "✨ Unlimited DeepSeek AI executive summaries & mindmaps"
   },
   "modalPro3": {
-    "message": "✨ 空白グリッドの自動折りたたみとリフロー"
+    "message": "✨ Unlimited export to Markdown, Notion & clean PDF"
   },
   "modalPro4": {
-    "message": "✨ 無制限のAIページ浄化"
+    "message": "✨ Geek BYOK mode: configure custom API key"
   },
   "modalBuyBtn": {
-    "message": "💳 プロ版を購読する ($$7.99/月)"
+    "message": "💳 Buy Pro Lifetime ($9.9)"
   },
   "modalOrderPlaceholder": {
-    "message": "購入済み？注文番号 (ORD_...) を入力"
+    "message": "Purchased? Enter Order ID (ORD_...)"
   },
   "modalActivateBtn": {
-    "message": "有効化"
+    "message": "Activate"
   },
   "modalActivatingBtn": {
-    "message": "有効化中..."
+    "message": "Activating..."
   },
   "unsupportedPageSys": {
-    "message": "ブラウザのシステムページはクリーンアップできません。"
+    "message": "Browser system pages cannot be cleaned or rendered in reader mode."
   },
   "unsupportedPageGen": {
-    "message": "このページは広告クリーンアップに対応していません。"
+    "message": "This page does not support reader mode."
   },
   "sitePausedMsg": {
-    "message": "このサイトでは一時停止中"
+    "message": "Cleaning paused on this site"
   },
   "globalDisabledMsg": {
-    "message": "拡張機能全体が無効です"
+    "message": "Global protection is disabled"
   },
   "undoNoRules": {
-    "message": "元に戻すルールがありません。"
+    "message": "No rules to undo on this website."
   },
   "undoSuccess": {
-    "message": "元に戻しました："
+    "message": "Undone: "
   },
   "enterOrderId": {
-    "message": "Waffo 注文番号を入力してください。"
+    "message": "Please enter your Waffo Order ID."
   },
   "invalidOrderId": {
-    "message": "注文番号の形式が無効です ('ORD_' で始まる番号を入力してください)。"
+    "message": "Invalid Order ID format. Please paste your Waffo Order ID (starting with 'ORD_')."
   },
   "activationSuccess": {
-    "message": "🎉 プロ版が正常に有効化されました！ご購読ありがとうございます。"
+    "message": "🎉 Pro Lifetime access activated successfully! Thank you for supporting AI Ad Purifier."
   },
   "activationFailed": {
-    "message": "無効または未払いの注文番号です。購入レシートをご確認ください。"
+    "message": "Invalid or unpaid Order ID. Please check your purchase receipt."
   },
   "serverConnFailed": {
-    "message": "認証サーバーに接続できませんでした。ネットワークを確認してください。"
+    "message": "Failed to connect to verification server. Please check your network or try again later."
   },
   "subExpired": {
-    "message": "サブスクリプションの有効期限が切れました。更新してください。"
+    "message": "License has expired. Please reactivate."
   },
   "rateLimited": {
-    "message": "リクエストが多すぎます。しばらく待ってから再試行してください。"
+    "message": "Too many requests. Please try again later."
   },
   "subInvalidOrExpired": {
-    "message": "期限切れまたは無効な注文番号です。"
+    "message": "License invalid or expired. Please re-subscribe."
   },
   "serverErrorHttp": {
-    "message": "クラウド分析サーバーエラー (HTTP "
+    "message": "Cloud analysis service error (HTTP "
   },
   "aiCleanApplied": {
-    "message": "🤖 ページ分析完了。広告ブロックルールが適用されました。"
+    "message": "🤖 Page analysis complete. Blocking rules have been applied."
   },
   "smartRulePrefix": {
-    "message": "スマートルール #"
+    "message": "Smart Rule #"
   },
   "restoreHiddenElement": {
-    "message": "隠した要素を復元"
+    "message": "Restore hidden element"
   },
   "optionsTitle": {
-    "message": "コントロールパネル"
+    "message": "Control Panel & Reader Settings"
   },
   "navRateBtn": {
-    "message": "⭐ ★5評価"
+    "message": "⭐ Rate 5 Stars"
   },
   "navImportBtn": {
-    "message": "📥 設定をインポート"
+    "message": "📥 Import Config"
   },
   "navExportBtn": {
-    "message": "📤 設定をエクスポート"
+    "message": "📤 Export Config"
   },
   "navClearAllBtn": {
-    "message": "🗑️ 全ルール削除"
+    "message": "🗑️ Clear All Rules"
   },
   "statProtectedSites": {
-    "message": "保護中のサイト"
+    "message": "Protected Sites"
   },
   "statBlockedElements": {
-    "message": "ブロック要素数"
+    "message": "Blocked Elements"
   },
   "statPlanStatus": {
-    "message": "プラン状態"
+    "message": "Plan Status"
   },
   "statGlobalToggle": {
-    "message": "全体保護スイッチ"
+    "message": "Global Extension Shield"
   },
   "statusEnabled": {
-    "message": "有効"
+    "message": "Enabled"
   },
   "statusDisabled": {
-    "message": "無効"
+    "message": "Disabled"
   },
   "whitelistTitle": {
-    "message": "一時停止中サイト (ホワイトリスト)"
+    "message": "Paused Websites (Whitelist)"
   },
   "whitelistDesc": {
-    "message": "リスト内のサイトでは広告クリーンアップを実行しません"
+    "message": "The extension will not perform any cleaning on these sites."
   },
   "whitelistEmpty": {
-    "message": "一時停止中のサイトはありません。"
+    "message": "No paused websites. Click 'Pause on Site' in the popup to whitelist a website."
   },
   "resumeCleanBtn": {
-    "message": "保護を再開"
+    "message": "Resume Shield"
   },
   "sidebarTitle": {
-    "message": "Webサイト一覧"
+    "message": "Website List"
   },
   "noActiveDomains": {
-    "message": "登録サイトなし"
+    "message": "No active domains"
   },
   "panelDefaultTitle": {
-    "message": "管理するWebサイトを選択"
+    "message": "Select a website to manage"
   },
   "panelDefaultDesc": {
-    "message": "左のリストからサイトを選択してください。ダブルクリックでルール名やセレクタを編集できます。"
+    "message": "Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly."
   },
   "panelNoSitesTitle": {
-    "message": "設定済みサイトがありません"
+    "message": "No websites configured yet"
   },
   "panelNoSitesDesc": {
-    "message": "Webサイト閲覧中に拡張機能アイコンをクリックしてブロックを開始してください！"
+    "message": "Browse the web and click the extension icon to start cleaning!"
   },
   "searchPlaceholder": {
-    "message": "ルールやセレクタを検索..."
+    "message": "Search rules or selectors..."
   },
   "thDisplayName": {
-    "message": "ルール名"
+    "message": "Display Name"
   },
   "thSelector": {
-    "message": "CSS セレクタ"
+    "message": "CSS Selector"
   },
   "thDate": {
-    "message": "ブロック日"
+    "message": "Date Blocked"
   },
   "thStatus": {
-    "message": "状態"
+    "message": "Status"
   },
   "thAction": {
-    "message": "操作"
+    "message": "Action"
   },
   "noMatchingRules": {
-    "message": "一致するルールが見つかりません。"
+    "message": "No matching rules found."
   },
   "noRulesConfigured": {
-    "message": "広告ブロックルールはまだありません。"
+    "message": "No custom rules configured yet."
   },
   "selectSitePrompt": {
-    "message": "左のパネルからWebサイトを選択してください。"
+    "message": "Select a website from the left panel to inspect rules."
   },
   "confirmDeleteRule": {
-    "message": "この広告ブロックルールを削除してもよろしいですか？"
+    "message": "Are you sure you want to delete this rule?"
   },
   "confirmClearAll": {
-    "message": "⚠️ 警告：すべての広告ブロックルールが完全に削除されます。続行しますか？"
+    "message": "⚠️ Warning: This will permanently delete all of your rules. This action cannot be undone! Proceed?"
   },
   "allRulesCleared": {
-    "message": "すべての広告ブロックルールがクリアされました。"
+    "message": "All rules have been cleared."
   },
   "confirmImport": {
-    "message": "これらのルールをインポートしますか？既存の設定とマージされます。"
+    "message": "Are you sure you want to import these rules? They will merge with existing ones."
   },
   "importSuccess": {
-    "message": "設定が正常にインポートされました！"
+    "message": "Configuration imported successfully!"
   },
   "importParseError": {
-    "message": "バックアップファイルの読み込みに失敗しました: "
+    "message": "Failed to parse backup file: "
   },
   "importFormatError": {
-    "message": "JSON形式がルールエクスポート構造と一致しません。"
+    "message": "JSON format does not match rule export structure."
   },
   "invalidSelectorAlert": {
-    "message": "無効なCSSセレクタ形式です。構文を確認してください。"
+    "message": "CSS selector format is invalid."
   },
   "pickerHint": {
-    "message": "非表示にする要素をクリック (Esc でキャンセル)"
+    "message": "Click on element to hide (Esc to cancel)"
   },
   "pickerNoSelector": {
-    "message": "利用可能な class/id がありません。別の要素を選択してください。"
+    "message": "No usable class/id for this element. Please select a smaller element."
   },
   "pickerRuleDefaultName": {
-    "message": "ピックした要素"
+    "message": "Picked Element"
   }
 }

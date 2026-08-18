@@ -1,290 +1,281 @@
 {
   "appName": {
-    "message": "AI Ad Purifier - Intelligenter Werbeblocker"
+    "message": "AI Ad Purifier - AI Deep Reader & Web Purifier"
   },
   "appDesc": {
-    "message": "Erkennt und entfernt Web-Werbung, Banner und Popups mithilfe von DeepSeek AI. Stellt ein sauberes Layout wieder her."
+    "message": "Bypass annoying overlays & paywall gates, enjoy clean distraction-free reader mode, and extract AI digests, key takeaways & mindmaps with one-click Markdown/Notion export."
   },
   "currentDomain": {
-    "message": "Aktuelle Domain"
+    "message": "Current Domain"
   },
   "loading": {
-    "message": "Wird geladen..."
+    "message": "Loading..."
   },
   "planFree": {
-    "message": "🌱 Kostenlose Edition (Standard-Schutz)"
+    "message": "🌱 Free Tier (3 AI Digests/day)"
   },
   "planPro": {
-    "message": "👑 Pro Edition"
+    "message": "👑 Pro Lifetime Edition"
   },
   "planProUntil": {
-    "message": "👑 Pro Edition · Gültig bis "
+    "message": "👑 Pro Lifetime Edition"
   },
   "upgradeBtn": {
-    "message": "Auf Pro upgraden ($$7.99/Monat)"
+    "message": "Upgrade Lifetime ($9.9)"
   },
-  "localCleanBtn": {
-    "message": "⚡ Schnelle lokale Bereinigung (Kostenlos)"
+  "openReaderBtn": {
+    "message": "📖 Open Reader Mode"
   },
-  "localCleanBtnScanning": {
-    "message": "⚡ Werbung wird gescannt..."
+  "aiDigestBtn": {
+    "message": "🧠 AI Deep Digest"
   },
-  "aiCleanBtn": {
-    "message": "✨ DeepSeek AI Bereinigung ($$7.99/Monat)"
-  },
-  "aiCleanBtnScanning": {
-    "message": "🤖 DeepSeek AI analysiert die Seite..."
+  "gateBusterBtn": {
+    "message": "🛡️ One-Click Gate Buster"
   },
   "pickerBtn": {
-    "message": "🎯 Auswählen & Verstecken"
-  },
-  "pickerBtnActive": {
-    "message": "🎯 Klicken Sie auf ein beliebiges Element…"
-  },
-  "undoBtn": {
-    "message": "↩ Letzten Schritt rückgängig"
+    "message": "🎯 Pick & Hide"
   },
   "sitePauseBtn": {
-    "message": "⏸ Auf dieser Website pausieren"
+    "message": "⏸ Pause on Site"
   },
   "siteResumeBtn": {
-    "message": "▶ Schutz fortsetzen"
+    "message": "▶ Resume on Site"
   },
   "blockedElements": {
-    "message": "Blockierte Elemente"
+    "message": "Blocked Elements"
   },
   "emptyStateRules": {
-    "message": "Noch keine Elemente auf dieser Seite versteckt. Klicken Sie oben auf Bereinigen!"
+    "message": "No hidden elements on this website yet. Click a clean button above to start!"
   },
   "rateTitle": {
-    "message": "⭐ Gefällt Ihnen AI Ad Purifier?"
+    "message": "⭐ Enjoying AI Ad Purifier?"
   },
   "rateDesc": {
-    "message": "Hinterlassen Sie uns eine 5-Sterne-Bewertung im Chrome Web Store!"
+    "message": "Leave us a 5-star review on the Chrome Web Store!"
   },
   "rateBtn": {
-    "message": "Mit 5 Sternen bewerten ⭐"
+    "message": "Rate 5 Stars ⭐"
   },
   "modalTitle": {
-    "message": "Upgrade auf DeepSeek AI Pro"
+    "message": "Upgrade to AI Deep Reader Pro Lifetime"
   },
   "modalSubtitle": {
-    "message": "Abonnement für nur $$7.99 USD / Monat"
+    "message": "One-time purchase for only $9.9, lifetime access"
   },
   "modalFreeTitle": {
-    "message": "🌱 Kostenlose Edition:"
+    "message": "🌱 Free Edition:"
   },
   "modalFree1": {
-    "message": "✅ Allgemeine Werbe- und Popup-Blockierung (100% kostenlos)"
+    "message": "✅ General ad & overlay/cookie gate blocking (100% Free)"
   },
   "modalFree2": {
-    "message": "✅ Lokales intelligentes Ausblenden von Elementen"
+    "message": "✅ Clean distraction-free reader mode"
   },
   "modalFree3": {
-    "message": "❌ Keine DeepSeek AI Modellunterstützung"
+    "message": "⚡ 3 Free DeepSeek AI deep digests every day"
   },
   "modalProTitle": {
-    "message": "👑 Kostenpflichtige Pro Edition ($$7.99/Monat):"
+    "message": "👑 Pro Lifetime Edition ($9.9):"
   },
   "modalPro1": {
-    "message": "✨ Enthält alle kostenlosen Funktionen"
+    "message": "✨ Includes all Free features"
   },
   "modalPro2": {
-    "message": "✨ Tiefgehende DOM-Layout-Analyse durch DeepSeek AI"
+    "message": "✨ Unlimited DeepSeek AI executive summaries & mindmaps"
   },
   "modalPro3": {
-    "message": "✨ Automatisches Layout-Reflow & Entfernung leerer Raster"
+    "message": "✨ Unlimited export to Markdown, Notion & clean PDF"
   },
   "modalPro4": {
-    "message": "✨ Unbegrenzte KI-Seitenbereinigungen"
+    "message": "✨ Geek BYOK mode: configure custom API key"
   },
   "modalBuyBtn": {
-    "message": "💳 Pro abonnieren ($$7.99/Monat)"
+    "message": "💳 Buy Pro Lifetime ($9.9)"
   },
   "modalOrderPlaceholder": {
-    "message": "Bereits gekauft? Bestell-ID (ORD_...) eingeben"
+    "message": "Purchased? Enter Order ID (ORD_...)"
   },
   "modalActivateBtn": {
-    "message": "Aktivieren"
+    "message": "Activate"
   },
   "modalActivatingBtn": {
-    "message": "Wird aktiviert..."
+    "message": "Activating..."
   },
   "unsupportedPageSys": {
-    "message": "Browser-Systemseiten können nicht bereinigt werden."
+    "message": "Browser system pages cannot be cleaned or rendered in reader mode."
   },
   "unsupportedPageGen": {
-    "message": "Diese Seite unterstützt keine Werbebereinigung."
+    "message": "This page does not support reader mode."
   },
   "sitePausedMsg": {
-    "message": "Bereinigung auf dieser Website pausiert"
+    "message": "Cleaning paused on this site"
   },
   "globalDisabledMsg": {
-    "message": "Globaler Schutz ist deaktiviert"
+    "message": "Global protection is disabled"
   },
   "undoNoRules": {
-    "message": "Keine Regeln zum Rückgängigmachen auf dieser Seite."
+    "message": "No rules to undo on this website."
   },
   "undoSuccess": {
-    "message": "Rückgängig gemacht: "
+    "message": "Undone: "
   },
   "enterOrderId": {
-    "message": "Bitte geben Sie Ihre Waffo-Bestell-ID ein."
+    "message": "Please enter your Waffo Order ID."
   },
   "invalidOrderId": {
-    "message": "Ungültiges Format (muss mit 'ORD_' beginnen)."
+    "message": "Invalid Order ID format. Please paste your Waffo Order ID (starting with 'ORD_')."
   },
   "activationSuccess": {
-    "message": "🎉 Premium-Zugang erfolgreich aktiviert! Vielen Dank für Ihr Abonnement."
+    "message": "🎉 Pro Lifetime access activated successfully! Thank you for supporting AI Ad Purifier."
   },
   "activationFailed": {
-    "message": "Ungültige oder unbezahlte Bestell-ID."
+    "message": "Invalid or unpaid Order ID. Please check your purchase receipt."
   },
   "serverConnFailed": {
-    "message": "Verbindung zum Validierungsserver fehlgeschlagen."
+    "message": "Failed to connect to verification server. Please check your network or try again later."
   },
   "subExpired": {
-    "message": "Abonnement ist abgelaufen. Bitte erneuern."
+    "message": "License has expired. Please reactivate."
   },
   "rateLimited": {
-    "message": "Zu viele Anfragen. Bitte versuchen Sie es später erneut."
+    "message": "Too many requests. Please try again later."
   },
   "subInvalidOrExpired": {
-    "message": "Abonnement abgelaufen oder ungültige Bestell-ID."
+    "message": "License invalid or expired. Please re-subscribe."
   },
   "serverErrorHttp": {
-    "message": "Cloud-Analysedienstfehler (HTTP "
+    "message": "Cloud analysis service error (HTTP "
   },
   "aiCleanApplied": {
-    "message": "🤖 Seitenanalyse abgeschlossen. Blockierregeln angewendet."
+    "message": "🤖 Page analysis complete. Blocking rules have been applied."
   },
   "smartRulePrefix": {
-    "message": "Intelligente Regel #"
+    "message": "Smart Rule #"
   },
   "restoreHiddenElement": {
-    "message": "Verstecktes Element wiederherstellen"
+    "message": "Restore hidden element"
   },
   "optionsTitle": {
-    "message": "Systemsteuerung"
+    "message": "Control Panel & Reader Settings"
   },
   "navRateBtn": {
-    "message": "⭐ Mit 5 Sternen bewerten"
+    "message": "⭐ Rate 5 Stars"
   },
   "navImportBtn": {
-    "message": "📥 Konfiguration importieren"
+    "message": "📥 Import Config"
   },
   "navExportBtn": {
-    "message": "📤 Konfiguration exportieren"
+    "message": "📤 Export Config"
   },
   "navClearAllBtn": {
-    "message": "🗑️ Alle Regeln löschen"
+    "message": "🗑️ Clear All Rules"
   },
   "statProtectedSites": {
-    "message": "Geschützte Websites"
+    "message": "Protected Sites"
   },
   "statBlockedElements": {
-    "message": "Blockierte Elemente"
+    "message": "Blocked Elements"
   },
   "statPlanStatus": {
-    "message": "Tarifstatus"
+    "message": "Plan Status"
   },
   "statGlobalToggle": {
-    "message": "Globaler Schutzschalter"
+    "message": "Global Extension Shield"
   },
   "statusEnabled": {
-    "message": "Aktiviert"
+    "message": "Enabled"
   },
   "statusDisabled": {
-    "message": "Deaktiviert"
+    "message": "Disabled"
   },
   "whitelistTitle": {
-    "message": "Pausierte Websites (Whitelist)"
+    "message": "Paused Websites (Whitelist)"
   },
   "whitelistDesc": {
-    "message": "Auf diesen Websites führt die Erweiterung keine Bereinigung durch."
+    "message": "The extension will not perform any cleaning on these sites."
   },
   "whitelistEmpty": {
-    "message": "Keine pausierten Websites."
+    "message": "No paused websites. Click 'Pause on Site' in the popup to whitelist a website."
   },
   "resumeCleanBtn": {
-    "message": "Fortsetzen"
+    "message": "Resume Shield"
   },
   "sidebarTitle": {
-    "message": "Website-Liste"
+    "message": "Website List"
   },
   "noActiveDomains": {
-    "message": "Keine aktiven Websites"
+    "message": "No active domains"
   },
   "panelDefaultTitle": {
-    "message": "Website zur Verwaltung auswählen"
+    "message": "Select a website to manage"
   },
   "panelDefaultDesc": {
-    "message": "Klicken Sie links auf eine Website. Doppelklick zum direkten Bearbeiten von Namen oder Selektoren."
+    "message": "Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly."
   },
   "panelNoSitesTitle": {
-    "message": "Noch keine Websites konfiguriert"
+    "message": "No websites configured yet"
   },
   "panelNoSitesDesc": {
-    "message": "Surfen Sie im Web und klicken Sie auf das Icon, um Werbung zu blockieren!"
+    "message": "Browse the web and click the extension icon to start cleaning!"
   },
   "searchPlaceholder": {
-    "message": "Regeln oder Selektoren durchsuchen..."
+    "message": "Search rules or selectors..."
   },
   "thDisplayName": {
-    "message": "Anzeigename"
+    "message": "Display Name"
   },
   "thSelector": {
-    "message": "CSS-Selektor"
+    "message": "CSS Selector"
   },
   "thDate": {
-    "message": "Datum"
+    "message": "Date Blocked"
   },
   "thStatus": {
     "message": "Status"
   },
   "thAction": {
-    "message": "Aktion"
+    "message": "Action"
   },
   "noMatchingRules": {
-    "message": "Keine passenden Regeln gefunden."
+    "message": "No matching rules found."
   },
   "noRulesConfigured": {
-    "message": "Noch keine Regeln konfiguriert."
+    "message": "No custom rules configured yet."
   },
   "selectSitePrompt": {
-    "message": "Wählen Sie eine Website im linken Bereich aus."
+    "message": "Select a website from the left panel to inspect rules."
   },
   "confirmDeleteRule": {
-    "message": "Möchten Sie diese Blockierregel wirklich löschen?"
+    "message": "Are you sure you want to delete this rule?"
   },
   "confirmClearAll": {
-    "message": "⚠️ Warnung: Dadurch werden alle Regeln dauerhaft gelöscht. Fortfahren?"
+    "message": "⚠️ Warning: This will permanently delete all of your rules. This action cannot be undone! Proceed?"
   },
   "allRulesCleared": {
-    "message": "Alle Regeln wurden gelöscht."
+    "message": "All rules have been cleared."
   },
   "confirmImport": {
-    "message": "Möchten Sie diese Regeln importieren? Sie werden mit bestehenden Regeln zusammengeführt."
+    "message": "Are you sure you want to import these rules? They will merge with existing ones."
   },
   "importSuccess": {
-    "message": "Konfiguration erfolgreich importiert!"
+    "message": "Configuration imported successfully!"
   },
   "importParseError": {
-    "message": "Sicherungsdatei konnte nicht analysiert werden: "
+    "message": "Failed to parse backup file: "
   },
   "importFormatError": {
-    "message": "JSON-Format entspricht nicht der erforderlichen Struktur."
+    "message": "JSON format does not match rule export structure."
   },
   "invalidSelectorAlert": {
-    "message": "Ungültiges CSS-Selektorformat."
+    "message": "CSS selector format is invalid."
   },
   "pickerHint": {
-    "message": "Klicken Sie auf das zu versteckende Element (Esc zum Abbrechen)"
+    "message": "Click on element to hide (Esc to cancel)"
   },
   "pickerNoSelector": {
-    "message": "Keine nutzbare Klasse/ID. Bitte wählen Sie ein kleineres Element."
+    "message": "No usable class/id for this element. Please select a smaller element."
   },
   "pickerRuleDefaultName": {
-    "message": "Ausgewähltes Element"
+    "message": "Picked Element"
   }
 }

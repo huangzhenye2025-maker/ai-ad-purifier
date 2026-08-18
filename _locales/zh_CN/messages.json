@@ -3,7 +3,7 @@
     "message": "AI Ad Purifier - 深度阅读与提纯助手"
   },
   "appDesc": {
-    "message": "智能破除各类烦人遮罩与防爬弹窗，一键沉浸阅读排版，DeepSeek AI 秒级提炼文章核心摘要、论点与思维导图，支持一键导出 Markdown 与 Notion。"
+    "message": "智能破除知乎/CSDN/Cookie弹窗遮罩，一键沉浸正文提取，DeepSeek AI 秒级提炼核心摘要、论点与思维导图，支持一键导出 Markdown 与 Notion。"
   },
   "currentDomain": {
     "message": "当前域名"
@@ -17,8 +17,11 @@
   "planPro": {
     "message": "👑 Pro 终身买断版 (无限次)"
   },
+  "planProUntil": {
+    "message": "👑 Pro 终身买断版"
+  },
   "upgradeBtn": {
-    "message": "升级买断版 ($$9.9)"
+    "message": "升级买断版 ($9.9)"
   },
   "openReaderBtn": {
     "message": "📖 开启沉浸阅读模式"
@@ -38,13 +41,241 @@
   "siteResumeBtn": {
     "message": "▶ 恢复此站"
   },
+  "blockedElements": {
+    "message": "已拦截元素"
+  },
+  "emptyStateRules": {
+    "message": "当前网站尚未隐藏元素。点击上方清理按钮开始防护！"
+  },
+  "rateTitle": {
+    "message": "⭐ 喜欢 AI Ad Purifier 吗？"
+  },
+  "rateDesc": {
+    "message": "前往 Chrome 商店为我们点亮 5 星好评！"
+  },
+  "rateBtn": {
+    "message": "给 5 星好评 ⭐"
+  },
   "modalTitle": {
     "message": "升级 AI 深度阅读 Pro 终身买断版"
   },
   "modalSubtitle": {
-    "message": "一次性买断仅需 $$9.9 美元 (约 ¥69)，终身畅享"
+    "message": "一次性买断仅需 $9.9 美元 (约 ¥69)，终身畅享"
+  },
+  "modalFreeTitle": {
+    "message": "🌱 永久免费版："
+  },
+  "modalFree1": {
+    "message": "✅ 通用广告与 Cookie/知乎/CSDN 遮罩自动破除"
+  },
+  "modalFree2": {
+    "message": "✅ 沉浸式阅读模式与基础排版"
+  },
+  "modalFree3": {
+    "message": "⚡ 每日 3 次免费 DeepSeek AI 深度精华提纯"
+  },
+  "modalProTitle": {
+    "message": "👑 Pro 终身买断版 ($9.9 / ¥69)："
+  },
+  "modalPro1": {
+    "message": "✨ 包含免费版全部功能"
+  },
+  "modalPro2": {
+    "message": "✨ 无限次 DeepSeek AI 核心摘要与思维导图提炼"
+  },
+  "modalPro3": {
+    "message": "✨ 无限次一键导出 Markdown / Notion / 纯净 PDF"
+  },
+  "modalPro4": {
+    "message": "✨ 极客 BYOK 模式：支持配置自定义 API Key"
   },
   "modalBuyBtn": {
-    "message": "💳 立即 $$9.9 终身买断"
+    "message": "💳 立即 $9.9 终身买断"
+  },
+  "modalOrderPlaceholder": {
+    "message": "已购买？输入订单号 (ORD_...)"
+  },
+  "modalActivateBtn": {
+    "message": "激活"
+  },
+  "modalActivatingBtn": {
+    "message": "激活中..."
+  },
+  "unsupportedPageSys": {
+    "message": "浏览器系统内部页面无法进行清理与阅读。"
+  },
+  "unsupportedPageGen": {
+    "message": "该页面不支持阅读与清理。"
+  },
+  "sitePausedMsg": {
+    "message": "此站已暂停清理"
+  },
+  "globalDisabledMsg": {
+    "message": "全局开关已关闭"
+  },
+  "undoNoRules": {
+    "message": "当前网站没有可撤销的规则。"
+  },
+  "undoSuccess": {
+    "message": "已撤销："
+  },
+  "enterOrderId": {
+    "message": "请输入您的 Waffo 订单号或买断激活码。"
+  },
+  "invalidOrderId": {
+    "message": "订单号格式有误。请粘贴 Waffo 订单号（以 'ORD_' 开头，例如 ORD_7QH059...）。"
+  },
+  "activationSuccess": {
+    "message": "🎉 Pro 终身买断版激活成功！感谢您支持 AI Ad Purifier。"
+  },
+  "activationFailed": {
+    "message": "无效或未支付的订单号。请检查您的购买凭证。"
+  },
+  "serverConnFailed": {
+    "message": "验证服务器连接失败，请检查网络或稍后再试。"
+  },
+  "subExpired": {
+    "message": "授权已过期，请重新激活。"
+  },
+  "rateLimited": {
+    "message": "请求过于频繁，请稍后再试。"
+  },
+  "subInvalidOrExpired": {
+    "message": "授权无效或已过期，请重新激活。"
+  },
+  "serverErrorHttp": {
+    "message": "云端分析服务异常 (HTTP "
+  },
+  "aiCleanApplied": {
+    "message": "🤖 页面分析完成，已应用当前屏蔽规则。"
+  },
+  "smartRulePrefix": {
+    "message": "智能清理规则 #"
+  },
+  "restoreHiddenElement": {
+    "message": "恢复隐藏元素"
+  },
+  "optionsTitle": {
+    "message": "控制台与阅读设置"
+  },
+  "navRateBtn": {
+    "message": "⭐ 给 5 星好评"
+  },
+  "navImportBtn": {
+    "message": "📥 导入配置"
+  },
+  "navExportBtn": {
+    "message": "📤 导出配置"
+  },
+  "navClearAllBtn": {
+    "message": "🗑️ 清除所有规则"
+  },
+  "statProtectedSites": {
+    "message": "防护网站数"
+  },
+  "statBlockedElements": {
+    "message": "已拦截元素"
+  },
+  "statPlanStatus": {
+    "message": "订阅版本权益"
+  },
+  "statGlobalToggle": {
+    "message": "全局扩展开关"
+  },
+  "statusEnabled": {
+    "message": "已开启"
+  },
+  "statusDisabled": {
+    "message": "已关闭"
+  },
+  "whitelistTitle": {
+    "message": "暂停的网站（白名单）"
+  },
+  "whitelistDesc": {
+    "message": "在这些网站上扩展不执行任何清理"
+  },
+  "whitelistEmpty": {
+    "message": "暂无暂停的网站。在弹窗中点击「⏸ 暂停此站」即可将站点加入白名单。"
+  },
+  "resumeCleanBtn": {
+    "message": "恢复清理"
+  },
+  "sidebarTitle": {
+    "message": "网站列表"
+  },
+  "noActiveDomains": {
+    "message": "暂无已配置网站"
+  },
+  "panelDefaultTitle": {
+    "message": "选择一个网站进行管理"
+  },
+  "panelDefaultDesc": {
+    "message": "在左侧选择一个网站以查看拦截规则。双击规则名称或选择器可直接在线编辑。"
+  },
+  "panelNoSitesTitle": {
+    "message": "暂无已配置网站"
+  },
+  "panelNoSitesDesc": {
+    "message": "在浏览网页时点击插件图标，即可开启标准拦截与清理规则！"
+  },
+  "searchPlaceholder": {
+    "message": "搜索规则或选择器..."
+  },
+  "thDisplayName": {
+    "message": "规则名称"
+  },
+  "thSelector": {
+    "message": "CSS 选择器"
+  },
+  "thDate": {
+    "message": "创建日期"
+  },
+  "thStatus": {
+    "message": "状态"
+  },
+  "thAction": {
+    "message": "操作"
+  },
+  "noMatchingRules": {
+    "message": "未找到匹配的规则。"
+  },
+  "noRulesConfigured": {
+    "message": "暂未配置广告拦截规则。"
+  },
+  "selectSitePrompt": {
+    "message": "从左侧面板选择网站以查看规则。"
+  },
+  "confirmDeleteRule": {
+    "message": "确定要删除这条广告拦截规则吗？"
+  },
+  "confirmClearAll": {
+    "message": "⚠️ 警告：这将永久删除您的所有广告拦截规则，此操作无法撤销！是否继续？"
+  },
+  "allRulesCleared": {
+    "message": "所有广告拦截规则已被清除。"
+  },
+  "confirmImport": {
+    "message": "确定要导入这些规则吗？它们将与您的现有配置合并。"
+  },
+  "importSuccess": {
+    "message": "配置导入成功！"
+  },
+  "importParseError": {
+    "message": "无法解析备份文件："
+  },
+  "importFormatError": {
+    "message": "JSON 格式不匹配规则导出结构。"
+  },
+  "invalidSelectorAlert": {
+    "message": "CSS 选择器格式无效，请检查语法后再试。"
+  },
+  "pickerHint": {
+    "message": "点击要隐藏的元素（Esc 取消）"
+  },
+  "pickerNoSelector": {
+    "message": "该元素没有可用的 class/id，请选择更小的元素"
+  },
+  "pickerRuleDefaultName": {
+    "message": "拾取隐藏"
   }
 }

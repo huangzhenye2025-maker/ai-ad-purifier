@@ -1,9 +1,9 @@
 {
   "appName": {
-    "message": "AI Ad Purifier - 一鍵智能廣告攔截器"
+    "message": "AI Ad Purifier - 深度閱讀與提純助手"
   },
   "appDesc": {
-    "message": "利用 DeepSeek AI 智能識別並去除網頁廣告、贊助橫幅與彈窗，還原整潔網頁佈局。"
+    "message": "智能破除各類煩人遮罩與防爬彈窗，一鍵沉浸正文提取，DeepSeek AI 秒級提煉核心摘要、論點與思維導圖，支援一鍵導出 Markdown 與 Notion。"
   },
   "currentDomain": {
     "message": "當前域名"
@@ -12,37 +12,28 @@
     "message": "載入中..."
   },
   "planFree": {
-    "message": "🌱 永久免費版（標準攔截）"
+    "message": "🌱 免費版 (每日 3 次 AI 提純)"
   },
   "planPro": {
-    "message": "👑 付費高級權益版"
+    "message": "👑 Pro 終身買斷版 (無限次)"
   },
   "planProUntil": {
-    "message": "👑 付費高級權益版 · 至 "
+    "message": "👑 Pro 終身買斷版"
   },
   "upgradeBtn": {
-    "message": "升級高級版 ($$7.99/月)"
+    "message": "升級買斷版 ($9.9)"
   },
-  "localCleanBtn": {
-    "message": "⚡ 本地一鍵清理 (免費版)"
+  "openReaderBtn": {
+    "message": "📖 開啟沉浸閱讀模式"
   },
-  "localCleanBtnScanning": {
-    "message": "⚡ 本地智能掃除中..."
+  "aiDigestBtn": {
+    "message": "🧠 AI 深度精華提純"
   },
-  "aiCleanBtn": {
-    "message": "✨ DeepSeek AI 智能淨化 (高級版 $$7.99/月)"
-  },
-  "aiCleanBtnScanning": {
-    "message": "🤖 DeepSeek AI 正在分析頁面..."
+  "gateBusterBtn": {
+    "message": "🛡️ 一鍵破壁去噪"
   },
   "pickerBtn": {
     "message": "🎯 點選隱藏"
-  },
-  "pickerBtnActive": {
-    "message": "🎯 請在頁面上點擊…"
-  },
-  "undoBtn": {
-    "message": "↩ 撤銷上一條"
   },
   "sitePauseBtn": {
     "message": "⏸ 暫停此站"
@@ -66,106 +57,106 @@
     "message": "給 5 星好評 ⭐"
   },
   "modalTitle": {
-    "message": "升級 DeepSeek AI 高級權益版"
+    "message": "升級 AI 深度閱讀 Pro 終身買斷版"
   },
   "modalSubtitle": {
-    "message": "訂閱僅需 $$7.99 美元 / 月"
+    "message": "一次性買斷僅需 $9.9 美元 (約 NT$310)，終身暢享"
   },
   "modalFreeTitle": {
     "message": "🌱 永久免費版："
   },
   "modalFree1": {
-    "message": "✅ 通用廣告 & 彈窗攔截（100%免費）"
+    "message": "✅ 通用廣告與 Cookie/知乎/CSDN 遮罩自動破除"
   },
   "modalFree2": {
-    "message": "✅ 本地智能元素隱藏"
+    "message": "✅ 沉浸式閱讀模式與基礎排版"
   },
   "modalFree3": {
-    "message": "❌ 無任何 DeepSeek AI 大模型支持"
+    "message": "⚡ 每日 3 次免費 DeepSeek AI 深度精華提純"
   },
   "modalProTitle": {
-    "message": "👑 付費高級權益版 ($$7.99/月)："
+    "message": "👑 Pro 終身買斷版 ($9.9)："
   },
   "modalPro1": {
     "message": "✨ 包含免費版全部功能"
   },
   "modalPro2": {
-    "message": "✨ DeepSeek AI 智能網頁 DOM 深度解析"
+    "message": "✨ 無限次 DeepSeek AI 核心摘要與思維導圖提煉"
   },
   "modalPro3": {
-    "message": "✨ 自動佈局重排與複雜網格空格塌陷"
+    "message": "✨ 無限次一鍵導出 Markdown / Notion / 純淨 PDF"
   },
   "modalPro4": {
-    "message": "✨ 無限次 DeepSeek AI 頁面淨化"
+    "message": "✨ 極客 BYOK 模式：支援配置自訂 API Key"
   },
   "modalBuyBtn": {
-    "message": "💳 立即訂閱高級版 ($$7.99/月)"
+    "message": "💳 立即 $9.9 終身買斷"
   },
   "modalOrderPlaceholder": {
     "message": "已購買？輸入訂單號 (ORD_...)"
   },
   "modalActivateBtn": {
-    "message": "啟用"
+    "message": "啟動"
   },
   "modalActivatingBtn": {
-    "message": "啟用中..."
+    "message": "啟動中..."
   },
   "unsupportedPageSys": {
-    "message": "瀏覽器系統內部頁面無法進行清理。"
+    "message": "瀏覽器系統內部頁面無法進行清理與閱讀。"
   },
   "unsupportedPageGen": {
-    "message": "該頁面不支持廣告清理。"
+    "message": "該頁面不支援閱讀與清理。"
   },
   "sitePausedMsg": {
     "message": "此站已暫停清理"
   },
   "globalDisabledMsg": {
-    "message": "全局開關已關閉"
+    "message": "全域開關已關閉"
   },
   "undoNoRules": {
-    "message": "當前網站沒有可撤銷的規則。"
+    "message": "當前網站沒有可復原的規則。"
   },
   "undoSuccess": {
-    "message": "已撤銷："
+    "message": "已復原："
   },
   "enterOrderId": {
-    "message": "請輸入您的 Waffo 訂閱訂單號。"
+    "message": "請輸入您的 Waffo 訂單號或買斷啟動碼。"
   },
   "invalidOrderId": {
-    "message": "訂單號格式有誤。請貼上 Waffo 訂閱訂單號（以 'ORD_' 開頭，例如 ORD_7QH059...）。"
+    "message": "訂單號格式有誤。請貼上 Waffo 訂單號（以 'ORD_' 開頭）。"
   },
   "activationSuccess": {
-    "message": "🎉 高級權益版啟用成功！感謝您訂閱支持 AI Ad Purifier。"
+    "message": "🎉 Pro 終身買斷版啟動成功！感謝您支援 AI Ad Purifier。"
   },
   "activationFailed": {
     "message": "無效或未支付的訂單號。請檢查您的購買憑證。"
   },
   "serverConnFailed": {
-    "message": "驗證伺服器連接失敗，請檢查網路或稍後重試。"
+    "message": "驗證伺服器連線失敗，請檢查網路或稍後再試。"
   },
   "subExpired": {
-    "message": "訂閱已過期，請續訂後繼續使用高級功能。"
+    "message": "授權已過期，請重新啟動。"
   },
   "rateLimited": {
-    "message": "請求過於頻繁，請稍後重試。"
+    "message": "請求過於頻繁，請稍後再試。"
   },
   "subInvalidOrExpired": {
-    "message": "訂閱已過期或訂單無效，請重新訂閱。"
+    "message": "授權無效或已過期，請重新啟動。"
   },
   "serverErrorHttp": {
     "message": "雲端分析服務異常 (HTTP "
   },
   "aiCleanApplied": {
-    "message": "🤖 頁面分析完成，已應用當前屏蔽規則。"
+    "message": "🤖 頁面分析完成，已套用當前遮蔽規則。"
   },
   "smartRulePrefix": {
-    "message": "智能清理規則 #"
+    "message": "智慧清理規則 #"
   },
   "restoreHiddenElement": {
     "message": "恢復隱藏元素"
   },
   "optionsTitle": {
-    "message": "控制面板"
+    "message": "控制台與閱讀設定"
   },
   "navRateBtn": {
     "message": "⭐ 給 5 星好評"
@@ -189,7 +180,7 @@
     "message": "訂閱版本權益"
   },
   "statGlobalToggle": {
-    "message": "全局擴充開關"
+    "message": "全域擴充套件開關"
   },
   "statusEnabled": {
     "message": "已開啟"
@@ -201,10 +192,10 @@
     "message": "暫停的網站（白名單）"
   },
   "whitelistDesc": {
-    "message": "在這些網站上擴充功能不執行任何清理"
+    "message": "在這些網站上擴充套件不執行任何清理"
   },
   "whitelistEmpty": {
-    "message": "暫無暫停的網站。在彈窗中點擊「⏸ 暫停此站」即可將網站加入白名單。"
+    "message": "暫無暫停的網站。在彈窗中點擊「⏸ 暫停此站」即可將站點加入白名單。"
   },
   "resumeCleanBtn": {
     "message": "恢復清理"
@@ -219,13 +210,13 @@
     "message": "選擇一個網站進行管理"
   },
   "panelDefaultDesc": {
-    "message": "在左側選擇一個網站以查看攔截規則。連按兩下規則名稱或選擇器可直接線上編輯。"
+    "message": "在左側選擇一個網站以檢視攔截規則。按兩下規則名稱或選擇器可直接線上編輯。"
   },
   "panelNoSitesTitle": {
     "message": "暫無已設定網站"
   },
   "panelNoSitesDesc": {
-    "message": "在瀏覽網頁時點擊擴充圖示，即可開啟標準攔截與清理規則！"
+    "message": "在瀏覽網頁時點擊外掛程式圖示，即可開啟標準攔截與清理規則！"
   },
   "searchPlaceholder": {
     "message": "搜尋規則或選擇器..."
@@ -246,13 +237,13 @@
     "message": "操作"
   },
   "noMatchingRules": {
-    "message": "未找到匹配的規則。"
+    "message": "未找到符合的規則。"
   },
   "noRulesConfigured": {
     "message": "暫未設定廣告攔截規則。"
   },
   "selectSitePrompt": {
-    "message": "從左側面板選擇網站以查看規則。"
+    "message": "從左側面板選擇網站以檢視規則。"
   },
   "confirmDeleteRule": {
     "message": "確定要刪除這條廣告攔截規則嗎？"
@@ -273,10 +264,10 @@
     "message": "無法解析備份檔案："
   },
   "importFormatError": {
-    "message": "JSON 格式不匹配規則匯出結構。"
+    "message": "JSON 格式不符合規則匯出結構。"
   },
   "invalidSelectorAlert": {
-    "message": "CSS 選擇器格式無效，請檢查語法後重試。"
+    "message": "CSS 選擇器格式無效，請檢查語法後再試。"
   },
   "pickerHint": {
     "message": "點擊要隱藏的元素（Esc 取消）"
@@ -285,6 +276,6 @@
     "message": "該元素沒有可用的 class/id，請選擇更小的元素"
   },
   "pickerRuleDefaultName": {
-    "message": "選取隱藏"
+    "message": "拾取隱藏"
   }
 }

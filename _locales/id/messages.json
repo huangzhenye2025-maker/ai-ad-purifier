@@ -1,290 +1,281 @@
 {
   "appName": {
-    "message": "AI Ad Purifier - Pemblokir Iklan Sekali Klik"
+    "message": "AI Ad Purifier - AI Deep Reader & Web Purifier"
   },
   "appDesc": {
-    "message": "Mengidentifikasi dan menghapus iklan web, banner bersponsor, dan popup secara cerdas menggunakan DeepSeek AI."
+    "message": "Bypass annoying overlays & paywall gates, enjoy clean distraction-free reader mode, and extract AI digests, key takeaways & mindmaps with one-click Markdown/Notion export."
   },
   "currentDomain": {
-    "message": "Domain saat ini"
+    "message": "Current Domain"
   },
   "loading": {
-    "message": "Memuat..."
+    "message": "Loading..."
   },
   "planFree": {
-    "message": "🌱 Edisi Gratis (Perlindungan Standar)"
+    "message": "🌱 Free Tier (3 AI Digests/day)"
   },
   "planPro": {
-    "message": "👑 Edisi Pro"
+    "message": "👑 Pro Lifetime Edition"
   },
   "planProUntil": {
-    "message": "👑 Edisi Pro · Hingga "
+    "message": "👑 Pro Lifetime Edition"
   },
   "upgradeBtn": {
-    "message": "Tingkatkan ke Pro ($$7.99/bln)"
+    "message": "Upgrade Lifetime ($9.9)"
   },
-  "localCleanBtn": {
-    "message": "⚡ Pembersihan Lokal Cepat (Gratis)"
+  "openReaderBtn": {
+    "message": "📖 Open Reader Mode"
   },
-  "localCleanBtnScanning": {
-    "message": "⚡ Memindai iklan lokal..."
+  "aiDigestBtn": {
+    "message": "🧠 AI Deep Digest"
   },
-  "aiCleanBtn": {
-    "message": "✨ Pemurnian DeepSeek AI ($$7.99/bln)"
-  },
-  "aiCleanBtnScanning": {
-    "message": "🤖 DeepSeek AI sedang menganalisis halaman..."
+  "gateBusterBtn": {
+    "message": "🛡️ One-Click Gate Buster"
   },
   "pickerBtn": {
-    "message": "🎯 Pilih & Sembunyikan"
-  },
-  "pickerBtnActive": {
-    "message": "🎯 Klik pada elemen apa pun…"
-  },
-  "undoBtn": {
-    "message": "↩ Batalkan yang Terakhir"
+    "message": "🎯 Pick & Hide"
   },
   "sitePauseBtn": {
-    "message": "⏸ Jeda di situs ini"
+    "message": "⏸ Pause on Site"
   },
   "siteResumeBtn": {
-    "message": "▶ Lanjutkan perlindungan"
+    "message": "▶ Resume on Site"
   },
   "blockedElements": {
-    "message": "Elemen Diblokir"
+    "message": "Blocked Elements"
   },
   "emptyStateRules": {
-    "message": "Belum ada elemen yang disembunyikan di situs ini. Klik bersihkan di atas untuk memulai!"
+    "message": "No hidden elements on this website yet. Click a clean button above to start!"
   },
   "rateTitle": {
-    "message": "⭐ Menyukai AI Ad Purifier?"
+    "message": "⭐ Enjoying AI Ad Purifier?"
   },
   "rateDesc": {
-    "message": "Beri kami ulasan bintang 5 di Chrome Web Store!"
+    "message": "Leave us a 5-star review on the Chrome Web Store!"
   },
   "rateBtn": {
-    "message": "Beri Bintang 5 ⭐"
+    "message": "Rate 5 Stars ⭐"
   },
   "modalTitle": {
-    "message": "Tingkatkan ke DeepSeek AI Pro"
+    "message": "Upgrade to AI Deep Reader Pro Lifetime"
   },
   "modalSubtitle": {
-    "message": "Langganan hanya $$7.99 USD / bulan"
+    "message": "One-time purchase for only $9.9, lifetime access"
   },
   "modalFreeTitle": {
-    "message": "🌱 Edisi Gratis:"
+    "message": "🌱 Free Edition:"
   },
   "modalFree1": {
-    "message": "✅ Pemblokiran iklan & popup umum (100% Gratis)"
+    "message": "✅ General ad & overlay/cookie gate blocking (100% Free)"
   },
   "modalFree2": {
-    "message": "✅ Penyembunyian elemen cerdas lokal"
+    "message": "✅ Clean distraction-free reader mode"
   },
   "modalFree3": {
-    "message": "❌ Tanpa dukungan model DeepSeek AI"
+    "message": "⚡ 3 Free DeepSeek AI deep digests every day"
   },
   "modalProTitle": {
-    "message": "👑 Edisi Pro Berbayar ($$7.99/bln):"
+    "message": "👑 Pro Lifetime Edition ($9.9):"
   },
   "modalPro1": {
-    "message": "✨ Termasuk semua fitur gratis"
+    "message": "✨ Includes all Free features"
   },
   "modalPro2": {
-    "message": "✨ Analisis tata letak DOM mendalam dengan DeepSeek AI"
+    "message": "✨ Unlimited DeepSeek AI executive summaries & mindmaps"
   },
   "modalPro3": {
-    "message": "✨ Penataan ulang otomatis & perataan ruang kosong"
+    "message": "✨ Unlimited export to Markdown, Notion & clean PDF"
   },
   "modalPro4": {
-    "message": "✨ Pembersihan halaman dengan AI tanpa batas"
+    "message": "✨ Geek BYOK mode: configure custom API key"
   },
   "modalBuyBtn": {
-    "message": "💳 Langganan Pro ($$7.99/bln)"
+    "message": "💳 Buy Pro Lifetime ($9.9)"
   },
   "modalOrderPlaceholder": {
-    "message": "Sudah beli? Masukkan ID Pesanan (ORD_...)"
+    "message": "Purchased? Enter Order ID (ORD_...)"
   },
   "modalActivateBtn": {
-    "message": "Aktifkan"
+    "message": "Activate"
   },
   "modalActivatingBtn": {
-    "message": "Mengaktifkan..."
+    "message": "Activating..."
   },
   "unsupportedPageSys": {
-    "message": "Halaman sistem browser tidak dapat dibersihkan."
+    "message": "Browser system pages cannot be cleaned or rendered in reader mode."
   },
   "unsupportedPageGen": {
-    "message": "Halaman ini tidak mendukung pembersihan iklan."
+    "message": "This page does not support reader mode."
   },
   "sitePausedMsg": {
-    "message": "Pembersihan dijeda di situs ini"
+    "message": "Cleaning paused on this site"
   },
   "globalDisabledMsg": {
-    "message": "Perlindungan global dinonaktifkan"
+    "message": "Global protection is disabled"
   },
   "undoNoRules": {
-    "message": "Tidak ada aturan untuk dibatalkan di situs ini."
+    "message": "No rules to undo on this website."
   },
   "undoSuccess": {
-    "message": "Dibatalkan: "
+    "message": "Undone: "
   },
   "enterOrderId": {
-    "message": "Silakan masukkan ID Pesanan Waffo Anda."
+    "message": "Please enter your Waffo Order ID."
   },
   "invalidOrderId": {
-    "message": "Format ID Pesanan tidak valid (harus diawali dengan 'ORD_')."
+    "message": "Invalid Order ID format. Please paste your Waffo Order ID (starting with 'ORD_')."
   },
   "activationSuccess": {
-    "message": "🎉 Akses Premium berhasil diaktifkan! Terima kasih telah berlangganan."
+    "message": "🎉 Pro Lifetime access activated successfully! Thank you for supporting AI Ad Purifier."
   },
   "activationFailed": {
-    "message": "ID Pesanan tidak valid atau belum dibayar."
+    "message": "Invalid or unpaid Order ID. Please check your purchase receipt."
   },
   "serverConnFailed": {
-    "message": "Gagal terhubung ke server verifikasi."
+    "message": "Failed to connect to verification server. Please check your network or try again later."
   },
   "subExpired": {
-    "message": "Langganan telah berakhir. Silakan perpanjang untuk melanjutkan."
+    "message": "License has expired. Please reactivate."
   },
   "rateLimited": {
-    "message": "Terlalu banyak permintaan. Silakan coba lagi nanti."
+    "message": "Too many requests. Please try again later."
   },
   "subInvalidOrExpired": {
-    "message": "Langganan berakhir atau ID Pesanan tidak valid."
+    "message": "License invalid or expired. Please re-subscribe."
   },
   "serverErrorHttp": {
-    "message": "Kesalahan layanan analisis cloud (HTTP "
+    "message": "Cloud analysis service error (HTTP "
   },
   "aiCleanApplied": {
-    "message": "🤖 Analisis halaman selesai. Aturan pemblokiran telah diterapkan."
+    "message": "🤖 Page analysis complete. Blocking rules have been applied."
   },
   "smartRulePrefix": {
-    "message": "Aturan Cerdas #"
+    "message": "Smart Rule #"
   },
   "restoreHiddenElement": {
-    "message": "Pulihkan elemen tersembunyi"
+    "message": "Restore hidden element"
   },
   "optionsTitle": {
-    "message": "Panel Kontrol"
+    "message": "Control Panel & Reader Settings"
   },
   "navRateBtn": {
-    "message": "⭐ Beri Bintang 5"
+    "message": "⭐ Rate 5 Stars"
   },
   "navImportBtn": {
-    "message": "📥 Impor Konfigurasi"
+    "message": "📥 Import Config"
   },
   "navExportBtn": {
-    "message": "📤 Ekspor Konfigurasi"
+    "message": "📤 Export Config"
   },
   "navClearAllBtn": {
-    "message": "🗑️ Hapus Semua Aturan"
+    "message": "🗑️ Clear All Rules"
   },
   "statProtectedSites": {
-    "message": "Situs Dilindungi"
+    "message": "Protected Sites"
   },
   "statBlockedElements": {
-    "message": "Elemen Diblokir"
+    "message": "Blocked Elements"
   },
   "statPlanStatus": {
-    "message": "Status Paket"
+    "message": "Plan Status"
   },
   "statGlobalToggle": {
-    "message": "Perlindungan Global"
+    "message": "Global Extension Shield"
   },
   "statusEnabled": {
-    "message": "Diaktifkan"
+    "message": "Enabled"
   },
   "statusDisabled": {
-    "message": "Dinonaktifkan"
+    "message": "Disabled"
   },
   "whitelistTitle": {
-    "message": "Situs Dijeda (Daftar Putih)"
+    "message": "Paused Websites (Whitelist)"
   },
   "whitelistDesc": {
-    "message": "Ekstensi tidak akan melakukan pembersihan iklan di situs ini."
+    "message": "The extension will not perform any cleaning on these sites."
   },
   "whitelistEmpty": {
-    "message": "Tidak ada situs yang dijeda."
+    "message": "No paused websites. Click 'Pause on Site' in the popup to whitelist a website."
   },
   "resumeCleanBtn": {
-    "message": "Lanjutkan"
+    "message": "Resume Shield"
   },
   "sidebarTitle": {
-    "message": "Daftar Situs"
+    "message": "Website List"
   },
   "noActiveDomains": {
-    "message": "Belum ada situs aktif"
+    "message": "No active domains"
   },
   "panelDefaultTitle": {
-    "message": "Pilih situs web untuk dikelola"
+    "message": "Select a website to manage"
   },
   "panelDefaultDesc": {
-    "message": "Klik situs untuk melihat aturan. Klik dua kali untuk mengedit nama atau selektor secara langsung."
+    "message": "Click on a website from the sidebar to inspect blocking rules. Double click rule name or selector to edit directly."
   },
   "panelNoSitesTitle": {
-    "message": "Belum ada situs yang dikonfigurasi"
+    "message": "No websites configured yet"
   },
   "panelNoSitesDesc": {
-    "message": "Jelajahi web dan klik ikon ekstensi untuk mulai memblokir iklan!"
+    "message": "Browse the web and click the extension icon to start cleaning!"
   },
   "searchPlaceholder": {
-    "message": "Cari aturan atau selektor..."
+    "message": "Search rules or selectors..."
   },
   "thDisplayName": {
-    "message": "Nama Tampilan"
+    "message": "Display Name"
   },
   "thSelector": {
-    "message": "Selektor CSS"
+    "message": "CSS Selector"
   },
   "thDate": {
-    "message": "Tanggal Diblokir"
+    "message": "Date Blocked"
   },
   "thStatus": {
     "message": "Status"
   },
   "thAction": {
-    "message": "Tindakan"
+    "message": "Action"
   },
   "noMatchingRules": {
-    "message": "Tidak ada aturan yang cocok."
+    "message": "No matching rules found."
   },
   "noRulesConfigured": {
-    "message": "Belum ada aturan pemblokiran iklan yang dikonfigurasi."
+    "message": "No custom rules configured yet."
   },
   "selectSitePrompt": {
-    "message": "Pilih situs dari panel kiri untuk memeriksa aturan."
+    "message": "Select a website from the left panel to inspect rules."
   },
   "confirmDeleteRule": {
-    "message": "Yakin ingin menghapus aturan pemblokiran iklan ini?"
+    "message": "Are you sure you want to delete this rule?"
   },
   "confirmClearAll": {
-    "message": "⚠️ Peringatan: Ini akan menghapus semua aturan Anda secara permanen. Lanjutkan?"
+    "message": "⚠️ Warning: This will permanently delete all of your rules. This action cannot be undone! Proceed?"
   },
   "allRulesCleared": {
-    "message": "Semua aturan pemblokiran iklan telah dihapus."
+    "message": "All rules have been cleared."
   },
   "confirmImport": {
-    "message": "Apakah Anda ingin mengimpor aturan ini? Aturan akan digabungkan."
+    "message": "Are you sure you want to import these rules? They will merge with existing ones."
   },
   "importSuccess": {
-    "message": "Konfigurasi berhasil diimpor!"
+    "message": "Configuration imported successfully!"
   },
   "importParseError": {
-    "message": "Gagal mengurai file cadangan: "
+    "message": "Failed to parse backup file: "
   },
   "importFormatError": {
-    "message": "Format JSON tidak cocok dengan struktur ekspor."
+    "message": "JSON format does not match rule export structure."
   },
   "invalidSelectorAlert": {
-    "message": "Format selektor CSS tidak valid."
+    "message": "CSS selector format is invalid."
   },
   "pickerHint": {
-    "message": "Klik pada elemen untuk menyembunyikan (Esc untuk batal)"
+    "message": "Click on element to hide (Esc to cancel)"
   },
   "pickerNoSelector": {
-    "message": "Tidak ada class/id yang dapat digunakan. Pilih elemen yang lebih kecil."
+    "message": "No usable class/id for this element. Please select a smaller element."
   },
   "pickerRuleDefaultName": {
-    "message": "Elemen Terpilih"
+    "message": "Picked Element"
   }
 }
