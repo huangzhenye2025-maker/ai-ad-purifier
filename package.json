@@ -1,6 +1,6 @@
 {
   "name": "ai-ad-purifier-backend",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "Render serverless backend for AI Ad Purifier",
   "main": "server.js",
   "scripts": {
