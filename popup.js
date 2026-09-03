@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const WAFFO_BUY_URL = 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=product&currency=USD';
   const SUPABASE_URL = 'https://emsdrhllxuorcaxbejtw.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
+  const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
   const VERIFY_URL = SUPABASE_URL + '/rest/v1/rpc/verify_license';
 
   let activeTab = null;
@@ -62,7 +62,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
     bindEvents();
 
     chrome.storage.onChanged.addListener((changes) => {
-      if (changes.rules || changes.siteDisabled || changes.isPro || changes.aiDailyQuota || changes.customApiKey) {
+      if (changes.rules || changes.siteDisabled || changes.isPro || changes.customApiKey) {
         refreshQuotaUI();
         refreshSiteStatus();
         loadRules();
@@ -83,14 +83,14 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
 
   function refreshQuotaUI() {
     chrome.storage.local.get(['isPro', 'customApiKey'], (res) => {
-      if (res.customApiKey) {
-        quotaDisplay.innerHTML = '🧠 <b style="color:#6ee7b7;">已启用 DeepSeek 自备 Key</b>';
-        btnShowUpgrade.style.display = res.isPro ? 'none' : 'inline-block';
-      } else if (res.isPro) {
-        quotaDisplay.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版 (全功能)</b>';
+      if (res.isPro) {
+        quotaDisplay.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版已激活</b>';
         btnShowUpgrade.style.display = 'none';
+      } else if (res.customApiKey) {
+        quotaDisplay.innerHTML = '🧠 <b style="color:#6ee7b7;">已配置 Key</b> · AI 提纯需 Pro';
+        btnShowUpgrade.style.display = 'inline-block';
       } else {
-        quotaDisplay.innerHTML = '⚡ <b>本地离线提纯 (可自备Key开启大模型)</b>';
+        quotaDisplay.innerHTML = '⚡ <b>本地离线</b> · AI 提纯需 Pro';
         btnShowUpgrade.style.display = 'inline-block';
       }
     });
@@ -145,9 +145,9 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
             <div class="rule-name">${CEE.escapeHtml(r.name)}</div>
             <div class="rule-selector">${CEE.escapeHtml(r.selector)}</div>
           </div>
-          <button class="icon-btn" style="width:24px;height:24px;color:#f87171;" id="del-${CEE.escapeHtml(r.id)}" title="删除规则">✕</button>
+          <button class="icon-btn" style="width:24px;height:24px;color:#f87171;" title="删除规则">✕</button>
         `;
-        item.querySelector(`#del-${CSS.escape(r.id)}`).addEventListener('click', () => deleteRule(r.id));
+        item.querySelector('.icon-btn').addEventListener('click', () => deleteRule(r.id));
         rulesContainer.appendChild(item);
       });
     });
@@ -178,7 +178,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
     // AI 深度提纯
     btnAiPurify.addEventListener('click', () => {
       if (!activeTab || !activeTab.id) return;
-      chrome.tabs.sendMessage(activeTab.id, { action: 'open-reader-mode' }, () => {
+      chrome.tabs.sendMessage(activeTab.id, { action: 'open-reader-ai' }, () => {
         window.close();
       });
     });
@@ -234,7 +234,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
   async function handleActivate() {
     const code = modalOrderId.value.trim().toUpperCase();
     if (!code) {
-      alert('请输入您的 Waffo 订单号或买断激活码。');
+      alert('请输入您的订单号或买断激活码。');
       return;
     }
     modalActivateBtn.disabled = true;
@@ -257,7 +257,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
           activationCode: code,
           expiresAt: data.expires_at || null
         }, () => {
-          alert('🎉 恭喜！Pro 终身买断版已成功激活，已解锁无限次 AI 提纯与导出！');
+          alert('🎉 恭喜！Pro 终身买断版已成功激活！');
           upgradeModal.style.display = 'none';
           refreshQuotaUI();
         });

@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const WAFFO_BUY_URL = 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=product&currency=USD';
   const SUPABASE_URL = 'https://emsdrhllxuorcaxbejtw.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
+  const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
   const VERIFY_URL = SUPABASE_URL + '/rest/v1/rpc/verify_license';
 
   // ---------- 1. 加载所有设置 ----------
@@ -55,11 +55,11 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
 
       // 授权状态
       if (res.isPro) {
-        licenseStatusText.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版已激活</b> (无限次 AI 提纯、无限导出)';
+        licenseStatusText.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版已激活</b>（AI 精华提纯已解锁）';
         btnOptionsBuy.style.display = 'none';
       } else {
-        licenseStatusText.innerHTML = '🌱 <b>免费版</b>（每日 3 次 AI 提纯，基础阅读与破壁全免费）';
-        btnOptionsBuy.style.display = 'inline-block';
+        licenseStatusText.innerHTML = '🌱 <b>免费版</b>（AI 精华提纯为 Pro 专属，去广告 / 破壁 / 阅读 / 导出全免费）';
+        btnOptionsBuy.style.display = 'inline-flex';
       }
 
       // 渲染规则表格
@@ -150,7 +150,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
   btnOptionsActivate.addEventListener('click', async () => {
     const code = inputLicenseCode.value.trim().toUpperCase();
     if (!code) {
-      alert('请输入您的 Waffo 订单号或买断激活码。');
+      alert('请输入您的订单号或买断激活码。');
       return;
     }
     btnOptionsActivate.disabled = true;

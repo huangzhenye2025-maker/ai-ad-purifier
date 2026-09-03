@@ -7,18 +7,13 @@
  *   - background service worker：importScripts('shared.js')
  *
  * 维护核心逻辑：
- * 1. 每日免费 AI 配额管理（每日 3 次，跨天自动重置）
- * 2. 选择器安全校验（防误删 root / body / main 容器）
- * 3. 规则库归一化、容量控制与域名清洗
- * 4. Markdown 转换与 Frontmatter 元数据生成
- * 5. HTML 转义与安全清洗
- * 6. 激活码 / 订单号校验 ($9.9 买断版兼容)
+ * 1. 选择器安全校验（防误删 root / body / main 容器）
+ * 2. 规则库归一化、容量控制与域名清洗
+ * 3. Markdown 转换与 Frontmatter 元数据生成
+ * 4. HTML 转义与安全清洗
  */
 (function (global) {
   'use strict';
-
-  // 免费版每日 AI 额度上限
-  var FREE_DAILY_AI_LIMIT = 3;
 
   // 危险根节点黑名单：这些选择器绝不能用于整块隐藏
   var DANGEROUS_ROOTS = [
@@ -180,59 +175,6 @@
   }
 
   /**
-   * 激活码 / 订单号校验：
-   * 兼容 Waffo 订单号（ORD_...）、买断激活码（PRO-LIFETIME-... / PURIFIER-...）
-   */
-  function isPlausibleKey(code) {
-    if (!code || typeof code !== 'string') return false;
-    var c = code.trim().toUpperCase();
-    if (!/^(ORD_|PURIFIER-|PRO-|LIFETIME-)/.test(c)) return false;
-    return c.length >= 6;
-  }
-
-  /**
-   * 获取今日日期字符串 YYYY-MM-DD
-   */
-  function getTodayDateStr() {
-    var now = new Date();
-    var year = now.getFullYear();
-    var month = String(now.getMonth() + 1).padStart(2, '0');
-    var day = String(now.getDate()).padStart(2, '0');
-    return year + '-' + month + '-' + day;
-  }
-
-  /**
-   * 计算每日 AI 配额状态：
-   * @param {Object} quotaStorage { date: string, count: number }
-   * @param {boolean} isPro 是否为 Pro 买断用户
-   * @returns {{ isPro: boolean, used: number, total: number, remaining: number, canUse: boolean }}
-   */
-  function computeAiQuota(quotaStorage, isPro) {
-    if (isPro) {
-      return {
-        isPro: true,
-        used: 0,
-        total: 999999,
-        remaining: 999999,
-        canUse: true
-      };
-    }
-    var today = getTodayDateStr();
-    var used = 0;
-    if (quotaStorage && quotaStorage.date === today && typeof quotaStorage.count === 'number') {
-      used = Math.max(0, quotaStorage.count);
-    }
-    var remaining = Math.max(0, FREE_DAILY_AI_LIMIT - used);
-    return {
-      isPro: false,
-      used: used,
-      total: FREE_DAILY_AI_LIMIT,
-      remaining: remaining,
-      canUse: remaining > 0
-    };
-  }
-
-  /**
    * 将提取的文章对象转换为带 YAML Frontmatter 的标准 Markdown
    * @param {Object} article { title, author, date, url, contentMarkdown, aiSummary }
    */
@@ -271,7 +213,6 @@
   }
 
   var CEE = {
-    FREE_DAILY_AI_LIMIT: FREE_DAILY_AI_LIMIT,
     isSafeSelector: isSafeSelector,
     DANGEROUS_ROOTS: DANGEROUS_ROOTS,
     SAFE_AD_TAGS: SAFE_AD_TAGS,
@@ -280,9 +221,6 @@
     makeRuleId: makeRuleId,
     escapeHtml: escapeHtml,
     fetchWithTimeout: fetchWithTimeout,
-    isPlausibleKey: isPlausibleKey,
-    getTodayDateStr: getTodayDateStr,
-    computeAiQuota: computeAiQuota,
     formatArticleToMarkdown: formatArticleToMarkdown
   };
 

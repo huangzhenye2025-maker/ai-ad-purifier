@@ -149,38 +149,8 @@ test('normalizeRules maxTotal keeps smaller domains first; maxDomains truncates 
 });
 
 // ---------------------------------------------------------------------------
-// CEE.computeAiQuota & CEE.formatArticleToMarkdown
+// CEE.formatArticleToMarkdown
 // ---------------------------------------------------------------------------
-
-test('computeAiQuota computes free daily quota and pro unlimited quota correctly', () => {
-  const today = CEE.getTodayDateStr();
-
-  // Free tier with 0 used
-  const q0 = CEE.computeAiQuota(null, false);
-  assert.equal(q0.isPro, false);
-  assert.equal(q0.remaining, 3);
-  assert.equal(q0.canUse, true);
-
-  // Free tier with 2 used today
-  const q2 = CEE.computeAiQuota({ date: today, count: 2 }, false);
-  assert.equal(q2.remaining, 1);
-  assert.equal(q2.canUse, true);
-
-  // Free tier with 3 used today
-  const q3 = CEE.computeAiQuota({ date: today, count: 3 }, false);
-  assert.equal(q3.remaining, 0);
-  assert.equal(q3.canUse, false);
-
-  // Free tier yesterday quota resets today
-  const qOld = CEE.computeAiQuota({ date: '2020-01-01', count: 3 }, false);
-  assert.equal(qOld.remaining, 3);
-  assert.equal(qOld.canUse, true);
-
-  // Pro tier is unlimited
-  const qPro = CEE.computeAiQuota({ date: today, count: 50 }, true);
-  assert.equal(qPro.isPro, true);
-  assert.equal(qPro.canUse, true);
-});
 
 test('formatArticleToMarkdown formats article with YAML frontmatter correctly', () => {
   const article = {
@@ -203,21 +173,11 @@ test('formatArticleToMarkdown formats article with YAML frontmatter correctly', 
 });
 
 // ---------------------------------------------------------------------------
-// CEE.escapeHtml & isPlausibleKey
+// CEE.escapeHtml
 // ---------------------------------------------------------------------------
 
 test('escapeHtml escapes all special characters', () => {
   assert.equal(CEE.escapeHtml('&<>"\''), '&amp;&lt;&gt;&quot;&#039;');
   assert.equal(CEE.escapeHtml('<a href="x">&'), '&lt;a href=&quot;x&quot;&gt;&amp;');
   assert.equal(CEE.escapeHtml(null), '');
-});
-
-test('isPlausibleKey accepts ORD_, PURIFIER-, PRO-, LIFETIME- keys', () => {
-  assert.equal(CEE.isPlausibleKey('ORD_ABC123'), true);
-  assert.equal(CEE.isPlausibleKey('purifier-xyz1'), true);
-  assert.equal(CEE.isPlausibleKey('PRO-LIFETIME-01'), true);
-  assert.equal(CEE.isPlausibleKey('LIFETIME-VIP'), true);
-  assert.equal(CEE.isPlausibleKey('foo'), false);
-  assert.equal(CEE.isPlausibleKey(''), false);
-  assert.equal(CEE.isPlausibleKey(null), false);
 });

@@ -54,6 +54,7 @@
   let styleElement = null;
   let activeSelectors = [];
   let hiddenCount = 0;
+  let gateBusterEnabled = false;
   let picker = null;
   let readerOverlay = null;
   let capsuleEl = null;
@@ -208,7 +209,8 @@
       styleElement.textContent = css;
       refreshStats(true);
 
-      if (enabled && result.autoGateBuster !== false) {
+      gateBusterEnabled = enabled && result.autoGateBuster !== false;
+      if (gateBusterEnabled) {
         runGateBuster();
       }
     });
@@ -239,7 +241,9 @@
     setTimeout(function () {
       statsPending = false;
       refreshStats(false);
-      runGateBuster();
+      if (gateBusterEnabled) {
+        runGateBuster();
+      }
     }, 800);
   }
 
@@ -576,7 +580,7 @@
   let currentWidth = 'normal';
   let aiDigestData = null;
 
-  function openReaderMode(articleData) {
+  function openReaderMode(articleData, autoDigest) {
     if (!IS_TOP) return;
     if (readerOverlay) {
       readerOverlay.remove();
@@ -591,6 +595,7 @@
       if (res.readerFontFamily) currentFontFamily = res.readerFontFamily;
       if (res.readerWidth) currentWidth = res.readerWidth;
       renderReaderOverlay();
+      if (autoDigest) runAiDigestInsideReader();
     });
   }
 
@@ -1037,7 +1042,28 @@
     runBtn.innerText = '🤖 正在提纯...';
     aiContentBox.innerHTML = '<div style="color:#6366f1;font-weight:600;">✨ 正在解析正文并提炼核心主旨、逻辑论点与思维导图...</div>';
 
-    chrome.storage.local.get(['customApiKey', 'customApiEndpoint'], async (storage) => {
+    chrome.storage.local.get(['isPro'], (proRes) => {
+      if (!proRes.isPro) {
+        tabBar.style.display = 'none';
+        modeBadge.innerText = '🔒 Pro 专属';
+        aiContentBox.innerHTML = `
+          <div style="text-align:center;padding:16px 8px;">
+            <div style="font-size:30px;margin-bottom:8px;">👑</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:6px;">AI 精华提纯为 Pro 终身买断版专属功能</div>
+            <div style="font-size:12px;opacity:0.78;margin-bottom:14px;line-height:1.6;">一次性 $9.9 永久解锁（自备 DeepSeek Key，无额外费用）</div>
+            <button id="cee-upgrade-btn" style="background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-weight:700;cursor:pointer;">💳 升级 / 激活</button>
+          </div>
+        `;
+        runBtn.innerText = '👑 升级解锁';
+        runBtn.disabled = false;
+        const upBtn = aiContentBox.querySelector('#cee-upgrade-btn');
+        if (upBtn) {
+          upBtn.onclick = () => chrome.runtime.sendMessage({ action: 'open-options' });
+        }
+        return;
+      }
+
+      chrome.storage.local.get(['customApiKey', 'customApiEndpoint'], async (storage) => {
       const promptText = `请对以下文章进行深度精华提纯，并严格按如下 JSON 结构返回（不要包裹多余 markdown 代码块）：
 {
   "summary": "3-5句话精准提炼核心主旨",
@@ -1121,6 +1147,7 @@ ${currentArticle.text.slice(0, 4500)}`;
           renderAiTabContent(btn.dataset.tab, keyNotice);
         };
       });
+    });
     });
   }
 
@@ -1356,6 +1383,13 @@ ${currentArticle.text.slice(0, 4500)}`;
     if (message.action === 'open-reader-mode') {
       if (!IS_TOP) return;
       openReaderMode();
+      sendResponse({ ok: true });
+      return;
+    }
+
+    if (message.action === 'open-reader-ai') {
+      if (!IS_TOP) return;
+      openReaderMode(null, true);
       sendResponse({ ok: true });
       return;
     }
