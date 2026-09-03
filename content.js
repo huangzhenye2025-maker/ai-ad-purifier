@@ -1024,7 +1024,7 @@
     }
   }
 
-  // ---------- 8. 🧠 AI 提纯执行逻辑 (云端 / BYOK / 本地智能 NLP 兜底) ----------
+  // ---------- 8. 🧠 AI 提纯执行逻辑 (自备 Key 直连 / 本地智能 NLP 兜底) ----------
 
   async function runAiDigestInsideReader() {
     const aiContentBox = readerOverlay.querySelector('#cee-ai-content-box');
@@ -1035,9 +1035,9 @@
 
     runBtn.disabled = true;
     runBtn.innerText = '🤖 正在提纯...';
-    aiContentBox.innerHTML = '<div style="color:#6366f1;font-weight:600;">✨ 正在深度解析正文并提炼核心主旨、逻辑论点与思维导图...</div>';
+    aiContentBox.innerHTML = '<div style="color:#6366f1;font-weight:600;">✨ 正在解析正文并提炼核心主旨、逻辑论点与思维导图...</div>';
 
-    chrome.storage.local.get(['isPro', 'aiDailyQuota', 'activationCode', 'customApiKey', 'customApiEndpoint'], async (storage) => {
+    chrome.storage.local.get(['customApiKey', 'customApiEndpoint'], async (storage) => {
       const promptText = `请对以下文章进行深度精华提纯，并严格按如下 JSON 结构返回（不要包裹多余 markdown 代码块）：
 {
   "summary": "3-5句话精准提炼核心主旨",
@@ -1053,8 +1053,9 @@ ${currentArticle.text.slice(0, 4500)}`;
 
       let digestJson = null;
       let usedLocalFallback = false;
+      let keyNotice = '';
 
-      // 1. 如果用户配置了自定义 API Key (BYOK 直连)
+      // 1. 若用户配置了自备 API Key (BYOK 极客直连模式)
       if (storage.customApiKey) {
         try {
           const endpoint = storage.customApiEndpoint || 'https://api.deepseek.com/chat/completions';
@@ -1070,61 +1071,46 @@ ${currentArticle.text.slice(0, 4500)}`;
               temperature: 0.2
             })
           }, 25000);
+
+          if (!res.ok) {
+            const errJson = await res.json().catch(() => ({}));
+            const msg = (errJson.error && errJson.error.message) || `HTTP ${res.status}`;
+            throw new Error(msg);
+          }
+
           const raw = await res.json();
           const content = raw.choices[0].message.content;
           const match = content.match(/\{[\s\S]*\}/);
           digestJson = JSON.parse(match ? match[0] : content);
-          modeBadge.innerText = '🧠 DeepSeek AI 极客直连';
+          modeBadge.innerText = '🧠 DeepSeek AI 深度提纯';
         } catch (e) {
-          console.warn('BYOK AI failed, falling back to local NLP:', e);
+          console.warn('Custom API Key call failed, falling back to local NLP:', e);
+          keyNotice = `<div style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:8px 12px;margin-bottom:12px;color:#fca5a5;font-size:12px;">⚠️ 自定义 API Key 响应异常 (${CEE.escapeHtml(e.message)})，已为您自动切换为本地智能提纯。</div>`;
         }
       }
 
-      // 2. 如果未配置自定义 Key 或 BYOK 失败，尝试云端服务
-      if (!digestJson) {
-        try {
-          const serverUrl = 'https://ai-ad-purifier.onrender.com/summarize';
-          const res = await CEE.fetchWithTimeout(serverUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              key: storage.activationCode || 'FREE_GUEST',
-              text: currentArticle.text.slice(0, 4500),
-              title: currentArticle.title
-            })
-          }, 15000);
-
-          if (res.ok) {
-            const data = await res.json();
-            digestJson = data.digest || data;
-            modeBadge.innerText = '🧠 DeepSeek 云端大模型提炼';
-          }
-        } catch (e) {
-          console.warn('Cloud AI failed, triggering local smart extractor:', e);
-        }
-      }
-
-      // 3. 本地智能 NLP 兜底 (零网络依赖，永不 404，秒级即达)
+      // 2. 若未配置 API Key 或调用失败，无缝启用本地纯前端智能 NLP 提纯引擎
       if (!digestJson || !digestJson.summary) {
         digestJson = generateLocalSmartDigest(currentArticle);
         usedLocalFallback = true;
         modeBadge.innerText = '⚡ 本地智能提纯 (秒级即达)';
         if (configBtn) configBtn.style.display = 'inline-flex';
+
+        if (!keyNotice) {
+          keyNotice = `
+            <div style="background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.3);border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;font-size:12px;">
+              <span>💡 当前为<b>本地离线提纯</b>。想要开启 DeepSeek 大模型万字逻辑链与导图？</span>
+              <button id="cee-key-setup-btn" style="background:#6366f1;color:#fff;border:none;padding:5px 12px;border-radius:6px;font-weight:600;cursor:pointer;white-space:nowrap;">👉 1分钟配置 Key</button>
+            </div>
+          `;
+        }
       }
 
       aiDigestData = digestJson;
       currentArticle.aiSummary = digestJson.summary;
 
-      // 扣减每日免费配额 (仅在成功调用云端大模型时)
-      if (!usedLocalFallback && !storage.isPro && !storage.customApiKey) {
-        const today = CEE.getTodayDateStr();
-        const currentQuota = storage.aiDailyQuota || { date: today, count: 0 };
-        const newCount = (currentQuota.date === today ? currentQuota.count : 0) + 1;
-        chrome.storage.local.set({ aiDailyQuota: { date: today, count: newCount } });
-      }
-
       tabBar.style.display = 'flex';
-      renderAiTabContent('summary');
+      renderAiTabContent('summary', keyNotice);
       runBtn.innerText = '✅ 提纯完成';
       runBtn.disabled = false;
 
@@ -1132,30 +1118,40 @@ ${currentArticle.text.slice(0, 4500)}`;
         btn.onclick = () => {
           tabBar.querySelectorAll('.cee-ai-tab-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          renderAiTabContent(btn.dataset.tab);
+          renderAiTabContent(btn.dataset.tab, keyNotice);
         };
       });
     });
   }
 
-  function renderAiTabContent(tabKey) {
+  function renderAiTabContent(tabKey, keyNotice) {
     if (!aiDigestData || !readerOverlay) return;
     const box = readerOverlay.querySelector('#cee-ai-content-box');
     if (!box) return;
 
+    let inner = '';
     if (tabKey === 'summary') {
-      box.innerHTML = `<p style="font-weight:500;margin:0;line-height:1.75;">${CEE.escapeHtml(aiDigestData.summary || '暂无摘要')}</p>`;
+      inner = `<p style="font-weight:500;margin:0;line-height:1.75;">${CEE.escapeHtml(aiDigestData.summary || '暂无摘要')}</p>`;
     } else if (tabKey === 'keypoints') {
       const list = aiDigestData.keypoints || [];
-      box.innerHTML = list.length ? `<ul style="padding-left:20px;margin:0;line-height:1.75;">${list.map(pt => `<li>${CEE.escapeHtml(pt)}</li>`).join('')}</ul>` : '暂无核心论点';
+      inner = list.length ? `<ul style="padding-left:20px;margin:0;line-height:1.75;">${list.map(pt => `<li>${CEE.escapeHtml(pt)}</li>`).join('')}</ul>` : '暂无核心论点';
     } else if (tabKey === 'insights') {
       const list = aiDigestData.insights || [];
-      box.innerHTML = list.length ? `<ul style="padding-left:20px;margin:0;line-height:1.75;">${list.map(ins => `<li>💡 ${CEE.escapeHtml(ins)}</li>`).join('')}</ul>` : '暂无行动启发';
+      inner = list.length ? `<ul style="padding-left:20px;margin:0;line-height:1.75;">${list.map(ins => `<li>💡 ${CEE.escapeHtml(ins)}</li>`).join('')}</ul>` : '暂无行动启发';
     } else if (tabKey === 'glossary') {
       const list = aiDigestData.glossary || [];
-      box.innerHTML = list.length ? `<div style="display:flex;flex-direction:column;gap:8px;">${list.map(item => `<div><b>${CEE.escapeHtml(item.term)}</b>: <span style="opacity:0.85;">${CEE.escapeHtml(item.def)}</span></div>`).join('')}</div>` : '无生僻术语';
+      inner = list.length ? `<div style="display:flex;flex-direction:column;gap:8px;">${list.map(item => `<div><b>${CEE.escapeHtml(item.term)}</b>: <span style="opacity:0.85;">${CEE.escapeHtml(item.def)}</span></div>`).join('')}</div>` : '无生僻术语';
     } else if (tabKey === 'mindmap') {
-      box.innerHTML = `<pre style="font-family:monospace;white-space:pre-wrap;background:rgba(0,0,0,0.04);padding:12px;border-radius:6px;margin:0;line-height:1.6;">${CEE.escapeHtml(aiDigestData.mindmap || '')}</pre>`;
+      inner = `<pre style="font-family:monospace;white-space:pre-wrap;background:rgba(0,0,0,0.04);padding:12px;border-radius:6px;margin:0;line-height:1.6;">${CEE.escapeHtml(aiDigestData.mindmap || '')}</pre>`;
+    }
+
+    box.innerHTML = (keyNotice || '') + inner;
+
+    const keySetupBtn = box.querySelector('#cee-key-setup-btn');
+    if (keySetupBtn) {
+      keySetupBtn.onclick = () => {
+        chrome.runtime.sendMessage({ action: 'open-options' });
+      };
     }
   }
 

@@ -296,26 +296,38 @@
       </div>
     </div>
 
-    <!-- 3. AI 模型与极客 BYOK -->
+    <!-- 3. AI 模型与自备 Key 配置 (BYOK 模式) -->
     <div class="section-card">
       <div class="section-header">
-        <span>🧠 AI 提纯引擎与极客配置 (BYOK)</span>
+        <span>🧠 AI 提纯引擎配置 (自备 API Key 模式)</span>
+      </div>
+
+      <!-- 新手 1 分钟指引 -->
+      <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.25); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 14px; font-size: 12px; line-height: 1.6;">
+        <div style="font-weight: 700; color: #818cf8; margin-bottom: 6px;">💡 为什么推荐用户自备 DeepSeek API Key？</div>
+        <div style="color: #cbd5e1; margin-bottom: 4px;">• <b>极致省钱</b>：无中间商赚差价！DeepSeek 官方个人充值 5~10 元人民币，通常足够深度提纯阅读几千篇长文。</div>
+        <div style="color: #cbd5e1; margin-bottom: 4px;">• <b>100% 隐私安全</b>：您的 API Key 仅保存在您本地浏览器的 Storage 中，请求直接从您的浏览器发往 DeepSeek 官方，不经过任何第三方服务器中转。</div>
+        <div style="color: #38bdf8; margin-top: 6px;">
+          👉 <b>如何获取？</b> 访问 <a href="https://platform.deepseek.com/api_keys" target="_blank" style="color: #60a5fa; text-decoration: underline; font-weight: 600;">DeepSeek 开放平台 (platform.deepseek.com)</a> 注册登录 ➔ 点击左侧「API keys」创建密钥 ➔ 复制下方粘贴保存即可！
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <span class="setting-label">DeepSeek / OpenAI API Key</span>
+          <span class="setting-desc">输入您的 API Key（如 sk-...），享受无上限、秒级极速深度解析。</span>
+        </div>
+        <input type="password" class="form-control" id="input-api-key" placeholder="sk-..." style="width: 280px;">
       </div>
       <div class="setting-item">
         <div class="setting-info">
-          <span class="setting-label">自定义 DeepSeek / OpenAI API Key (极客 0 成本直连)</span>
-          <span class="setting-desc">配置您自己的 API Key，享受无上限、低延迟直接调用（密钥仅安全保存在您的本地浏览器中）。</span>
+          <span class="setting-label">API 接口端点 (Endpoint)</span>
+          <span class="setting-desc">默认直连 DeepSeek 官方接口，亦可切换为 OpenAI 或 OneAPI 兼容地址。</span>
         </div>
-        <input type="password" class="form-control" id="input-api-key" placeholder="sk-..." style="width: 260px;">
+        <input type="text" class="form-control" id="input-api-endpoint" placeholder="https://api.deepseek.com/chat/completions" style="width: 280px;">
       </div>
-      <div class="setting-item">
-        <div class="setting-info">
-          <span class="setting-label">自定义 API 接口端点 (Endpoint)</span>
-          <span class="setting-desc">支持 DeepSeek、OpenAI、OneAPI 等兼容 /chat/completions 接口。</span>
-        </div>
-        <input type="text" class="form-control" id="input-api-endpoint" placeholder="https://api.deepseek.com/chat/completions" style="width: 260px;">
-      </div>
-      <div style="text-align: right; margin-top: 12px;">
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;">
+        <button class="btn btn-outline" id="btn-test-ai">🧪 测试连接</button>
         <button class="btn btn-primary" id="btn-save-ai">💾 保存 AI 配置</button>
       </div>
     </div>

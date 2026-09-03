@@ -67,14 +67,15 @@ AI Ad Purifier - AI 深度阅读与提纯助手
 🌱 【永久免费版】：
 • 基础广告与 Cookie/知乎/CSDN 遮罩自动破除 100% 免费
 • 纯净沉浸式阅读器与排版调节 100% 免费
-• 每日赠送 3 次免费 DeepSeek AI 深度提纯（每日 00:00 自动重置）
-• 极客 BYOK 模式：支持在控制台填入自己的 DeepSeek / OpenAI API Key，享受 0 成本无限提纯！
+• 本地离线智能提纯引擎（零网络依赖，秒级提炼）
+• 极客自备 Key 直连：支持在控制台填入自己的 DeepSeek / OpenAI API Key，无中间商赚差价，充值几元可用几个月！
 
 👑 【Pro 终身买断版 ($9.9 / ¥69 一次性买断)】：
 • 告别恶心的月度订阅！一次性买断，终身享有
-• 解锁无限次 DeepSeek AI 深度精华提纯与思维导图
-• 解锁无限次 Markdown / Notion / PDF 一键导出
-• 解锁极简墨水屏、羊皮纸等全套高级阅读主题
+• 解锁 DeepSeek / OpenAI 大模型直连面板与全套专业工业级 Prompt
+• 解锁无限次深度精华提纯、逻辑链条剖析与思维导图
+• 解锁无限次 Markdown (含 YAML 元数据) / Notion / PDF 一键导出
+• 解锁极简墨水屏、护眼复古羊皮纸等全套高级阅读主题
 
 ---
 
@@ -152,13 +153,14 @@ With one click, dismiss all modal distractions, extract a pristine distraction-f
 🌱 【Free Edition】:
 • General ad blocking & overlay / cookie gate removal (100% Free)
 • Distraction-free Reader Mode with font & theme customization (100% Free)
-• 3 Free DeepSeek AI deep digests every single day (resets daily at 00:00)
-• Geek BYOK (Bring Your Own Key): Paste your own DeepSeek / OpenAI API Key in settings for unlimited free AI digests!
+• Built-in local offline extractive summarizer (Zero latency, 100% offline)
+• Geek BYOK (Bring Your Own Key): Enter your personal DeepSeek / OpenAI API Key in settings with no middleman markup!
 
 👑 【Pro Lifetime License ($9.9 One-Time Purchase)】:
 • Say goodbye to annoying monthly subscriptions!
-• Unlimited DeepSeek AI executive summaries, takeaways & mindmaps
-• Unlimited 1-click exports to Markdown, Notion & clean PDF
+• Unlock DeepSeek / OpenAI / OneAPI LLM direct connection panel with industrial-grade structured Prompts
+• Unlimited deep executive digests, argument chains & hierarchical mindmaps
+• Unlimited 1-click exports to Markdown (with YAML frontmatter), Notion & clean PDF
 • Access all premium reading themes (Minimalist E-Ink, Warm Sepia)
 
 ---

@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClearAll = document.getElementById('btn-clear-all');
 
   const WAFFO_BUY_URL = 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=product&currency=USD';
-  const VERIFY_URL = 'https://ai-ad-purifier.onrender.com/verify';
+  const SUPABASE_URL = 'https://emsdrhllxuorcaxbejtw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
+  const VERIFY_URL = SUPABASE_URL + '/rest/v1/rpc/verify_license';
 
   // ---------- 1. 加载所有设置 ----------
 
@@ -87,6 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.set({ readerWidth: e.target.value });
   });
 
+  const btnTestAi = document.getElementById('btn-test-ai');
+
   btnSaveAi.addEventListener('click', () => {
     const key = inputApiKey.value.trim();
     const endpoint = inputApiEndpoint.value.trim();
@@ -97,6 +101,45 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('💾 AI 配置已成功保存！');
     });
   });
+
+  if (btnTestAi) {
+    btnTestAi.addEventListener('click', async () => {
+      const key = inputApiKey.value.trim();
+      const endpoint = inputApiEndpoint.value.trim() || 'https://api.deepseek.com/chat/completions';
+      if (!key) {
+        alert('⚠️ 请先输入您的 DeepSeek / OpenAI API Key 再进行测试。');
+        return;
+      }
+      btnTestAi.disabled = true;
+      btnTestAi.textContent = '⏳ 测试中...';
+      try {
+        const res = await CEE.fetchWithTimeout(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${key}`
+          },
+          body: JSON.stringify({
+            model: 'deepseek-chat',
+            messages: [{ role: 'user', content: 'Hi' }],
+            max_tokens: 5
+          })
+        }, 12000);
+        if (res.ok) {
+          alert('🎉 恭喜！API Key 连接测试成功，DeepSeek 大模型已就绪！');
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          const errMsg = (errData.error && errData.error.message) || `HTTP ${res.status}`;
+          alert(`❌ 连接失败: ${errMsg}。\n请确认 Key 是否正确或账户是否有可用余额。`);
+        }
+      } catch (err) {
+        alert(`❌ 连接异常: ${err.message}。\n请检查网络连接或接口端点。`);
+      } finally {
+        btnTestAi.disabled = false;
+        btnTestAi.textContent = '🧪 测试连接';
+      }
+    });
+  }
 
   // ---------- 3. 购买与激活 ----------
 
@@ -116,15 +159,19 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await CEE.fetchWithTimeout(VERIFY_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: code })
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({ p_key: code })
       }, 15000);
       const data = await res.json();
       if (data.valid) {
         chrome.storage.local.set({
           isPro: true,
           activationCode: code,
-          expiresAt: data.expiresAt || null
+          expiresAt: data.expires_at || null
         }, () => {
           alert('🎉 恭喜！Pro 终身买断版已成功激活！');
           loadSettings();

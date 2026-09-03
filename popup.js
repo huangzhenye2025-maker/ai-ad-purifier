@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const modalActivateBtn = document.getElementById('modal-activate-btn');
 
   const WAFFO_BUY_URL = 'https://pancake.waffo.ai/store/xmaker-studio-p7o0nfzy/product/PROD_0BT62Y3uxafpZyoOITOO7E?type=product&currency=USD';
-  const VERIFY_URL = 'https://ai-ad-purifier.onrender.com/verify';
+  const SUPABASE_URL = 'https://emsdrhllxuorcaxbejtw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_MIUNy-qIOpOrcjGOYVqRFA_tzo0qgnB';
+  const VERIFY_URL = SUPABASE_URL + '/rest/v1/rpc/verify_license';
 
   let activeTab = null;
   let domain = '';
@@ -60,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     bindEvents();
 
     chrome.storage.onChanged.addListener((changes) => {
-      if (changes.rules || changes.siteDisabled || changes.isPro || changes.aiDailyQuota) {
+      if (changes.rules || changes.siteDisabled || changes.isPro || changes.aiDailyQuota || changes.customApiKey) {
         refreshQuotaUI();
         refreshSiteStatus();
         loadRules();
@@ -80,13 +82,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ---------- 配额与状态展示 ----------
 
   function refreshQuotaUI() {
-    chrome.storage.local.get(['isPro', 'aiDailyQuota'], (res) => {
-      const quota = CEE.computeAiQuota(res.aiDailyQuota, res.isPro);
-      if (quota.isPro) {
-        quotaDisplay.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版 (无限次提纯)</b>';
+    chrome.storage.local.get(['isPro', 'customApiKey'], (res) => {
+      if (res.customApiKey) {
+        quotaDisplay.innerHTML = '🧠 <b style="color:#6ee7b7;">已启用 DeepSeek 自备 Key</b>';
+        btnShowUpgrade.style.display = res.isPro ? 'none' : 'inline-block';
+      } else if (res.isPro) {
+        quotaDisplay.innerHTML = '👑 <b style="color:#a5b4fc;">Pro 终身买断版 (全功能)</b>';
         btnShowUpgrade.style.display = 'none';
       } else {
-        quotaDisplay.innerHTML = `🌱 免费版 · 今日剩余提纯: <b>${quota.remaining}/${quota.total}</b> 次`;
+        quotaDisplay.innerHTML = '⚡ <b>本地离线提纯 (可自备Key开启大模型)</b>';
         btnShowUpgrade.style.display = 'inline-block';
       }
     });
@@ -239,15 +243,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       const res = await CEE.fetchWithTimeout(VERIFY_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: code })
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({ p_key: code })
       }, 15000);
       const data = await res.json();
       if (data.valid) {
         chrome.storage.local.set({
           isPro: true,
           activationCode: code,
-          expiresAt: data.expiresAt || null
+          expiresAt: data.expires_at || null
         }, () => {
           alert('🎉 恭喜！Pro 终身买断版已成功激活，已解锁无限次 AI 提纯与导出！');
           upgradeModal.style.display = 'none';
